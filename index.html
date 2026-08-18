@@ -1,42 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" name="viewport" content="device-width,inital-scale=1.0" />
-        <title> first squid game</title>
-        <link rel="stylesheet" href="rock-paper-scissor.css">
-    </head>
-    <body>
-        <h1> </h1>
-        <DIV id="throne">
-        <div id="options">
-            <div class=option id="stark">
-                <image src="stark.png"> </image>
-            </div>
-            <div class=option id="dragon">
-                <image src="dragon.png"></image>
-            </div>
-            <div class=option id="lann">
-                <image src="lann.png"></image>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game of Thrones - Battle for Westeros</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="got-theme.css">
+</head>
+<body>
+    <!-- Audio Elements -->
+    <audio id="bg-music" src="got-theme.mp3" loop></audio>
+    <audio id="sfx-sword" src="sword-clash.mp3"></audio>
+    <audio id="sfx-win" src="victory.mp3"></audio>
+
+    <div id="live-bg"></div>
+    <div id="particles-container"></div>
+    
+    <div class="content">
+        <h1 id="main-title">GAME OF THRONES</h1>
+
+        <!-- Settings Icon -->
+        <div id="settings-icon">⚙</div>
+
+        <!-- Info Modal -->
+        <div id="info-modal" class="hidden">
+            <div id="info-modal-content">
+                <span id="close-modal">&times;</span>
+                <h2>FACTION TIERS & PRICING</h2>
+                <table class="info-table">
+                    <tr><th>Faction</th><th>Category</th><th>Tier</th><th>Price</th></tr>
+                    <tr><td>Targaryen (Dragons)</td><td>Attack</td><td>1 (High)</td><td>1000</td></tr>
+                    <tr><td>Dothraki Khalasar</td><td>Attack</td><td>2 (Mid)</td><td>600</td></tr>
+                    <tr><td>Dornish Spearmen</td><td>Attack</td><td>3 (Low)</td><td>300</td></tr>
+                    <tr><td>Unsullied</td><td>Defense</td><td>1 (High)</td><td>900</td></tr>
+                    <tr><td>Night's Watch</td><td>Defense</td><td>2 (Mid)</td><td>550</td></tr>
+                    <tr><td>Riverlands Levies</td><td>Defense</td><td>3 (Low)</td><td>250</td></tr>
+                    <tr><td>Stormlanders (Baratheon)</td><td>Mix</td><td>1 (High)</td><td>800</td></tr>
+                    <tr><td>Iron Fleet (Greyjoy)</td><td>Mix</td><td>2 (Mid)</td><td>550</td></tr>
+                    <tr><td>Knights of the Vale</td><td>Mix</td><td>3 (Low)</td><td>300</td></tr>
+                </table>
+
+                <h2 style="margin-top: 20px;">STANDARD COMBOS</h2>
+                <table class="info-table">
+                    <tr><th>Mode</th><th>Team</th><th>Total Price</th><th>Power</th></tr>
+                    <tr><td>Pure Attack</td><td>A1, A2, A3</td><td>1900</td><td>6</td></tr>
+                    <tr><td>Pure Defense</td><td>D1, D2, D3</td><td>1700</td><td>6</td></tr>
+                    <tr><td>Pure Mix</td><td>M1, M2, M3</td><td>1650</td><td>6</td></tr>
+                </table>
             </div>
         </div>
-        <span id="msg">
-                WHO WON THRONE ?
-        </span>
-        <div id="score">
-            <div id="my">
-                <p id="userval"> 0 </p>
-                YOU
-            </div>
-            <div id="cmp">
-                <p id=cmpval> 0</p> 
-                ENEMY
+
+        <!-- Screen 1: Start Game -->
+        <div id="start-screen">
+            <button id="claim-btn">JOIN THE WORLD WAR</button>
+        </div>
+
+        <!-- Screen 2: War Hall (Battle Phase) -->
+        <div id="battle-phase" class="hidden">
+            <div id="battle-location-display">THE WAR ROOM</div>
+            
+            <div id="war-hall">
+                <!-- Player Roster -->
+                <div class="roster-side" id="player-side">
+                    <h3>YOUR ALLIANCE</h3>
+                    <div id="gold-display">BUDGET: <span id="player-gold">1900</span>G</div>
+                    <div id="player-codeword" class="codeword-text hidden"></div>
+                    <div class="roster" id="player-roster">
+                        <!-- Slots populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Drafting Board -->
+                <div id="drafting-board">
+                    <h3>AVAILABLE HOUSES</h3>
+                    <div id="draft-options">
+                        <!-- Populated by JS -->
+                    </div>
+                    <p id="battle-log" style="color:#ff4444; margin:10px 0; font-size:1.2rem; min-height: 25px;"></p>
+                    <button id="btn-battle" class="hidden">PREPARE FOR WAR</button>
+                    <button id="btn-fight" class="hidden">FIGHT!</button>
+                </div>
+
+                <!-- Enemy Roster -->
+                <div class="roster-side" id="enemy-side">
+                    <h3>ENEMY ALLIANCE</h3>
+                    <div id="enemy-codeword" class="codeword-text hidden"></div>
+                    <div class="roster" id="enemy-roster">
+                        <!-- Slots populated by JS (Hidden until battle) -->
+                    </div>
+                </div>
             </div>
         </div>
         
-        <button id="playbutton">
-            FIGHT 
-        </button><br><br>
-        </DIV>
-    <script src="rock-paper-scissor.js"> </script>
-    </body>
+        <div id="blood-splatter"></div>
+    </div>
+
+    <!-- Post Battle Overlay -->
+    <div id="post-battle-screen" class="hidden">
+        <h1 id="end-result-text">VICTORY</h1>
+        <div class="post-battle-actions">
+            <button id="btn-go-back">RETURN TO HALL</button>
+            <button id="btn-play-again">BATTLE AGAIN</button>
+        </div>
+    </div>
+
+    <script src="battle-logic.js"></script>
+</body>
 </html>
