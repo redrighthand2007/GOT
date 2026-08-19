@@ -17,7 +17,7 @@ const settingsIcon = document.getElementById('settings-icon');
 const infoModal = document.getElementById('info-modal');
 const closeModal = document.getElementById('close-modal');
 
-settingsIcon.addEventListener('click', () => infoModal.classList.remove('hidden'));
+settingsIcon.addEventListener('mouseenter', () => infoModal.classList.remove('hidden'));
 closeModal.addEventListener('click', () => infoModal.classList.add('hidden'));
 
 // War Hall Elements

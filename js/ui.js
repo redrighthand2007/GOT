@@ -1,7 +1,7 @@
 // --- Screen 1: Start Game ---
 const btnBackNav = document.getElementById('btn-back-nav');
 btnBackNav.addEventListener('click', () => {
-    document.getElementById('main-title').classList.remove('hidden');
+    document.getElementById('main-title').style.visibility = 'visible';
     startScreen.classList.remove('hidden');
     battlePhase.classList.add('hidden');
     btnBackNav.classList.add('hidden');
@@ -9,7 +9,7 @@ btnBackNav.addEventListener('click', () => {
 });
 
 claimBtn.addEventListener('click', () => {
-    document.getElementById('main-title').classList.add('hidden');
+    document.getElementById('main-title').style.visibility = 'hidden';
     startScreen.classList.add('hidden');
     battlePhase.classList.remove('hidden');
     if (bgMusic) bgMusic.play().catch(e => console.log("Audio play failed:", e));
@@ -129,4 +129,11 @@ playAgainBtn.addEventListener('click', () => {
     resetDraftingUI();
     initWarHall();
     btnBackNav.classList.remove('hidden'); // Restarts the drafting phase directly
+});
+const soundIcon = document.getElementById('sound-icon');
+let isMuted = false;
+soundIcon.addEventListener('click', () => {
+    isMuted = !isMuted;
+    soundIcon.innerHTML = isMuted ? '&#128263;' : '&#128266;';
+    document.querySelectorAll('audio').forEach(audio => audio.muted = isMuted);
 });
