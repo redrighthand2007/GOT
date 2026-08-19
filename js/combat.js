@@ -70,7 +70,7 @@ btnBattle.addEventListener('click', () => {
     
     // Hide the draft options entirely
     draftOptionsContainer.style.visibility = 'hidden';
-    draftingBoardTitle.style.visibility = 'hidden';
+    
     
     // Ensure background is transparent so the buttons look nice
     draftingBoard.classList.add('transparent-board');

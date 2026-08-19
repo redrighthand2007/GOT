@@ -38,7 +38,7 @@ const draftingBoard = document.getElementById('drafting-board');
 const playerSideTitle = playerSide.querySelector('h3');
 const enemySideTitle = enemySide.querySelector('h3');
 const goldDisplayContainer = document.getElementById('gold-display');
-const draftingBoardTitle = draftingBoard.querySelector('h3');
+
 
 // Post Battle
 const postBattleScreen = document.getElementById('post-battle-screen');
