@@ -62,49 +62,55 @@ btnBattle.addEventListener('click', () => {
         return;
     }
     
+    // Fade the 'Prepare for War' button instead of hiding it
     btnBattle.disabled = true;
+    btnBattle.style.opacity = '0.5';
+    btnBattle.style.cursor = 'default';
     
-    logMsg("The enemy reveals their alliance!");
-    generateEnemyRoster();
+    // Hide the draft options entirely
+    draftOptionsContainer.classList.add('hidden');
+    draftingBoardTitle.classList.add('hidden');
     
-    setTimeout(() => {
-        // Reveal enemy cards
-        enemyRosterContainer.innerHTML = "";
-        enemyRoster.forEach(h => {
-            const slot = document.createElement('div');
-            slot.className = 'roster-slot';
-            slot.innerHTML = `<img src="${h.img}">`;
-            enemyRosterContainer.appendChild(slot);
-        });
-        
-        if (sfxSword) sfxSword.play().catch(e=>e);
-        
-        // Hide selecting infos
-        playerSideTitle.classList.add('hidden');
-        enemySideTitle.classList.add('hidden');
-        goldDisplayContainer.classList.add('hidden');
-        draftOptionsContainer.classList.add('hidden');
-        draftingBoardTitle.classList.add('hidden');
-        
-        // Make drafting board transparent (just holds the fight button)
-        draftingBoard.classList.add('transparent-board');
-        
-        playerCodeword.innerText = getCodewordString(playerRoster);
-        enemyCodeword.innerText = getCodewordString(enemyRoster);
-        playerCodeword.classList.remove('hidden');
-        enemyCodeword.classList.remove('hidden');
-        
-        // Hide Prepare, Show Fight
-        btnBattle.classList.add('hidden');
-        btnFight.classList.remove('hidden');
-        
-        logMsg("Two alliances clash!");
-    }, 1500);
+    // Ensure background is transparent so the buttons look nice
+    draftingBoard.classList.add('transparent-board');
+    
+    logMsg("Two alliances clash!");
+    generateEnemyRoster(); // Still generates the mystery slots technically, but we immediately overwrite below
+    
+    // INSTANT REVEAL:
+    enemyRosterContainer.innerHTML = "";
+    enemyRoster.forEach(h => {
+        const slot = document.createElement('div');
+        slot.className = 'roster-slot';
+        slot.innerHTML = `<img src="${h.img}">`;
+        enemyRosterContainer.appendChild(slot);
+    });
+    
+    if (sfxSword) sfxSword.play().catch(e=>e);
+    
+    // Display Codewords
+    playerCodeword.innerText = getCodewordString(playerRoster);
+    enemyCodeword.innerText = getCodewordString(enemyRoster);
+    playerCodeword.classList.remove('hidden');
+    enemyCodeword.classList.remove('hidden');
+    
+    // Add Fight button just below Prepare for War
+    btnFight.classList.remove('hidden');
+    btnFight.style.opacity = '1';
 });
 
 btnFight.addEventListener('click', () => {
     btnFight.disabled = true;
-    resolveBattle();
+    
+    // Fade the Fight button after 1 sec
+    setTimeout(() => {
+        btnFight.style.opacity = '0.5';
+    }, 1000);
+    
+    // Display results after 3 secs
+    setTimeout(() => {
+        resolveBattle();
+    }, 3000);
 });
 
 function resolveBattle() {
@@ -116,9 +122,9 @@ function resolveBattle() {
     enemyPower *= (0.85 + Math.random() * 0.3);
     
     if (playerPower >= enemyPower) {
-        endGame(true);
+        endGameInline(true);
     } else {
-        endGame(false);
+        endGameInline(false);
     }
 }
 
@@ -144,23 +150,34 @@ function logMsg(txt) {
     battleLog.innerText = txt;
 }
 
-function endGame(playerWon) {
-    btnFight.classList.add('hidden');
+function endGameInline(playerWon) {
+    const inlineResult = document.getElementById('inline-result');
+    inlineResult.classList.remove('hidden');
+    
+    let resultHTML = "";
     if(playerWon) {
         logMsg("VICTORY! YOUR ALLIANCE PREVAILS!");
         if (sfxWin) sfxWin.play().catch(e=>e);
         spawnParticles('snow');
-        endResultText.innerText = "VICTORY";
-        endResultText.style.color = "#32cd32";
+        resultHTML = `
+            <h2 style='color:#32cd32; font-size: 3rem; margin-bottom:10px; letter-spacing: 5px; text-shadow: 0 0 20px rgba(50,205,50,0.8);'>VICTORY</h2>
+            <button id='btn-restart-inline' style='font-size: 1.2rem; padding: 10px 20px;'>BATTLE AGAIN</button>
+        `;
     } else {
         logMsg("DEFEAT. YOUR HOUSE FALLS INTO RUIN.");
         flashBlood();
         spawnParticles('fire');
-        endResultText.innerText = "DEFEAT";
-        endResultText.style.color = "#ff0000";
+        resultHTML = `
+            <h2 style='color:#ff0000; font-size: 3rem; margin-bottom:10px; letter-spacing: 5px; text-shadow: 0 0 20px rgba(255,0,0,0.8);'>DEFEAT</h2>
+            <button id='btn-restart-inline' style='font-size: 1.2rem; padding: 10px 20px;'>BATTLE AGAIN</button>
+        `;
     }
     
-    setTimeout(() => {
-        postBattleScreen.classList.remove('hidden');
-    }, 2000);
+    inlineResult.innerHTML = resultHTML;
+    
+    document.getElementById('btn-restart-inline').addEventListener('click', () => {
+        inlineResult.classList.add('hidden');
+        resetDraftingUI(); // Assuming resetDraftingUI is available via ui.js
+        initWarHall();
+    });
 }

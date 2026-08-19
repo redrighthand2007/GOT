@@ -1,9 +1,18 @@
 // --- Screen 1: Start Game ---
+const btnBackNav = document.getElementById('btn-back-nav');
+btnBackNav.addEventListener('click', () => {
+    startScreen.classList.remove('hidden');
+    battlePhase.classList.add('hidden');
+    btnBackNav.classList.add('hidden');
+    resetDraftingUI();
+});
+
 claimBtn.addEventListener('click', () => {
     startScreen.classList.add('hidden');
     battlePhase.classList.remove('hidden');
     if (bgMusic) bgMusic.play().catch(e => console.log("Audio play failed:", e));
     initWarHall();
+    btnBackNav.classList.remove('hidden');
 });
 
 // --- Screen 2: War Hall Drafting ---
@@ -111,5 +120,6 @@ btnGoBack.addEventListener('click', () => {
 playAgainBtn.addEventListener('click', () => {
     postBattleScreen.classList.add('hidden');
     resetDraftingUI();
-    initWarHall(); // Restarts the drafting phase directly
+    initWarHall();
+    btnBackNav.classList.remove('hidden'); // Restarts the drafting phase directly
 });
