@@ -91,8 +91,8 @@ function resetDraftingUI() {
     playerSideTitle.classList.remove('hidden');
     enemySideTitle.classList.remove('hidden');
     goldDisplayContainer.classList.remove('hidden');
-    draftOptionsContainer.classList.remove('hidden');
-    draftingBoardTitle.classList.remove('hidden');
+    draftOptionsContainer.style.visibility = 'visible';
+    draftingBoardTitle.style.visibility = 'visible';
 
     document.getElementById('drafting-board').style.opacity = '1';
     document.getElementById('drafting-board').style.pointerEvents = 'auto';

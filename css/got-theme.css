@@ -523,6 +523,7 @@ img {
     padding: 15px 40px;
     background: linear-gradient(45deg, #8b0000, #ff4500);
     animation: fire-flicker 1s infinite alternate;
+    margin-top: 15px;
 }
 
 #btn-surrender {
