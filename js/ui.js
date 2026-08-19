@@ -1,6 +1,7 @@
 // --- Screen 1: Start Game ---
 const btnBackNav = document.getElementById('btn-back-nav');
 btnBackNav.addEventListener('click', () => {
+    document.getElementById('main-title').classList.remove('hidden');
     startScreen.classList.remove('hidden');
     battlePhase.classList.add('hidden');
     btnBackNav.classList.add('hidden');
@@ -8,6 +9,7 @@ btnBackNav.addEventListener('click', () => {
 });
 
 claimBtn.addEventListener('click', () => {
+    document.getElementById('main-title').classList.add('hidden');
     startScreen.classList.add('hidden');
     battlePhase.classList.remove('hidden');
     if (bgMusic) bgMusic.play().catch(e => console.log("Audio play failed:", e));
@@ -30,6 +32,7 @@ function initWarHall() {
     
     btnBattle.classList.add('hidden');
     btnFight.classList.add('hidden');
+    document.getElementById('inline-result').classList.add('hidden');
     
     btnBattle.disabled = false;
     btnFight.disabled = false;
@@ -87,6 +90,7 @@ function updateGoldDisplay() {
 }
 // --- Navigation Flow ---
 function resetDraftingUI() {
+    document.getElementById('battle-location-display').innerHTML = "MAKE YOUR ARMY";
     draftingBoard.classList.remove('transparent-board');
     playerSideTitle.classList.remove('hidden');
     enemySideTitle.classList.remove('hidden');
@@ -99,6 +103,7 @@ function resetDraftingUI() {
     particlesContainer.innerHTML = "";
     btnBattle.classList.add('hidden');
     btnFight.classList.add('hidden');
+    document.getElementById('inline-result').classList.add('hidden');
     
     playerCodeword.classList.add('hidden');
     enemyCodeword.classList.add('hidden');

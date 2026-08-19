@@ -75,7 +75,7 @@ btnBattle.addEventListener('click', () => {
     // Ensure background is transparent so the buttons look nice
     draftingBoard.classList.add('transparent-board');
     
-    logMsg("Two alliances clash!");
+    
     generateEnemyRoster(); // Still generates the mystery slots technically, but we immediately overwrite below
     
     // INSTANT REVEAL:
@@ -153,32 +153,39 @@ function logMsg(txt) {
 
 function endGameInline(playerWon) {
     const inlineResult = document.getElementById('inline-result');
-    inlineResult.classList.remove('hidden');
+    const titleDisplay = document.getElementById('battle-location-display');
     
-    let resultHTML = "";
+    inlineResult.classList.remove('hidden');
+    btnFight.classList.add('hidden');
+    btnBattle.classList.add('hidden');
+    
     if(playerWon) {
         logMsg("VICTORY! YOUR ALLIANCE PREVAILS!");
         if (sfxWin) sfxWin.play().catch(e=>e);
         spawnParticles('snow');
-        resultHTML = `
-            <h2 style='color:#32cd32; font-size: 3rem; margin-bottom:10px; letter-spacing: 5px; text-shadow: 0 0 20px rgba(50,205,50,0.8);'>VICTORY</h2>
-            <button id='btn-restart-inline' style='font-size: 1.2rem; padding: 10px 20px;'>BATTLE AGAIN</button>
-        `;
+        titleDisplay.innerHTML = "<span style='color:#32cd32; font-size: 3.5rem; letter-spacing: 5px; text-shadow: 0 0 20px rgba(50,205,50,0.8); font-weight:bold;'>VICTORY</span>";
     } else {
         logMsg("DEFEAT. YOUR HOUSE FALLS INTO RUIN.");
         flashBlood();
         spawnParticles('fire');
-        resultHTML = `
-            <h2 style='color:#ff0000; font-size: 3rem; margin-bottom:10px; letter-spacing: 5px; text-shadow: 0 0 20px rgba(255,0,0,0.8);'>DEFEAT</h2>
-            <button id='btn-restart-inline' style='font-size: 1.2rem; padding: 10px 20px;'>BATTLE AGAIN</button>
-        `;
+        titleDisplay.innerHTML = "<span style='color:#ff0000; font-size: 3.5rem; letter-spacing: 5px; text-shadow: 0 0 20px rgba(255,0,0,0.8); font-weight:bold;'>DEFEAT</span>";
     }
     
-    inlineResult.innerHTML = resultHTML;
+    inlineResult.innerHTML = `
+        <button id='btn-restart-inline' style='font-size: 1.2rem; padding: 15px 30px; border-radius: 4px; margin-right: 15px; background: linear-gradient(45deg, #4b0082, #8b0000); color: white; cursor: pointer; border: 2px solid #ffcc00;'>BATTLE AGAIN</button>
+        <button id='btn-home-inline' style='font-size: 1.2rem; padding: 15px 30px; border-radius: 4px; background: #333; color: white; cursor: pointer; border: 2px solid #555;'>HOME</button>
+    `;
     
     document.getElementById('btn-restart-inline').addEventListener('click', () => {
         inlineResult.classList.add('hidden');
+        titleDisplay.innerHTML = "MAKE YOUR ARMY";
         resetDraftingUI(); // Assuming resetDraftingUI is available via ui.js
         initWarHall();
+    });
+
+    document.getElementById('btn-home-inline').addEventListener('click', () => {
+        inlineResult.classList.add('hidden');
+        titleDisplay.innerHTML = "MAKE YOUR ARMY";
+        document.getElementById('btn-back-nav').click(); // Re-use home logic
     });
 }
