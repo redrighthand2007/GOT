@@ -62,22 +62,21 @@
 
         <!-- Screen 2: War Hall (Battle Phase) -->
         <div id="battle-phase" class="hidden">
-            <div id="battle-location-display">THE WAR ROOM</div>
+            <div id="battle-location-display" style="font-size:2rem; letter-spacing:8px; margin-bottom: 20px; color:#ffd700; text-shadow: 0 0 10px #b8860b; font-weight:bold;">MAKE YOUR ARMY</div>
             
             <div id="war-hall">
                 <!-- Player Roster -->
                 <div class="roster-side" id="player-side">
                     <h3>YOUR ALLIANCE</h3>
                     <div id="gold-display" style="color: #ccc; margin-bottom: 10px;">BUDGET: <span id="player-gold" style="color: #d4af37; font-weight: bold;">999</span>G</div>
-                    <div id="player-codeword" class="codeword-text hidden"></div>
                     <div class="roster" id="player-roster">
                         <!-- Slots populated by JS -->
                     </div>
+                    <div id="player-codeword" class="codeword-text hidden" style="margin-top: 15px;"></div>
                 </div>
 
                 <!-- Drafting Board -->
-                <div id="drafting-board">
-                    <h3>AVAILABLE HOUSES</h3>
+                <div id="drafting-board" style="background: transparent; border: none; box-shadow: none;">
                     <div id="draft-options">
                         <!-- Populated by JS -->
                     </div>
@@ -90,10 +89,10 @@
                 <div class="roster-side" id="enemy-side">
                     <h3>ENEMY ALLIANCE</h3>
                     <div id="enemy-gold-display" style="color: #ccc; margin-bottom: 10px;">BUDGET: <span id="enemy-gold" style="color: #d4af37; font-weight: bold;">999</span>G</div>
-                    <div id="enemy-codeword" class="codeword-text hidden"></div>
                     <div class="roster" id="enemy-roster">
                         <!-- Slots populated by JS (Hidden until battle) -->
                     </div>
+                    <div id="enemy-codeword" class="codeword-text hidden" style="margin-top: 15px;"></div>
                 </div>
             </div>
         </div>
