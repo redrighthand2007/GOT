@@ -40,6 +40,7 @@ function generateEnemyRoster() {
     selectedCombo.forEach(id => {
         const house = HOUSES_DATA.find(h => h.id === id);
         enemyRoster.push(house);
+        enemyGold -= house.cost;
     });
 
     // Render Mystery Slots initially

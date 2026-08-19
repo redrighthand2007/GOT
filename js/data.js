@@ -47,22 +47,23 @@ const btnGoBack = document.getElementById('btn-go-back');
 const playAgainBtn = document.getElementById('btn-play-again');
 
 // State
-let playerGold = 1900;
+let playerGold = 999;
+let enemyGold = 999;
 let playerRoster = [];
 let enemyRoster = [];
 
 const HOUSES_DATA = [
-    { id: "targ", name: "Targaryen", role: "A", tier: 1, cost: 1000, power: 3, img: "assets/house-targaryen.png" },
-    { id: "doth", name: "Dothraki", role: "A", tier: 2, cost: 600, power: 2, img: "assets/got-title.png" },
-    { id: "dorn", name: "Dornish", role: "A", tier: 3, cost: 300, power: 1, img: "assets/got-title.png" },
+    { id: "targ", name: "Targaryen", role: "A", tier: 1, cost: 500, power: 3, img: "assets/house-targaryen.png" },
+    { id: "doth", name: "Dothraki", role: "A", tier: 2, cost: 300, power: 2, img: "assets/got-title.png" },
+    { id: "dorn", name: "Dornish", role: "A", tier: 3, cost: 150, power: 1, img: "assets/got-title.png" },
     
-    { id: "unsu", name: "Unsullied", role: "D", tier: 1, cost: 900, power: 3, img: "assets/got-title.png" },
-    { id: "night", name: "Night's Watch", role: "D", tier: 2, cost: 550, power: 2, img: "assets/got-title.png" },
-    { id: "rive", name: "Riverlands", role: "D", tier: 3, cost: 250, power: 1, img: "assets/house-stark.png" },
+    { id: "unsu", name: "Unsullied", role: "D", tier: 1, cost: 450, power: 3, img: "assets/got-title.png" },
+    { id: "night", name: "Night's Watch", role: "D", tier: 2, cost: 280, power: 2, img: "assets/got-title.png" },
+    { id: "rive", name: "Riverlands", role: "D", tier: 3, cost: 130, power: 1, img: "assets/house-stark.png" },
     
-    { id: "storm", name: "Stormlanders", role: "M", tier: 1, cost: 800, power: 3, img: "assets/got-title.png" },
-    { id: "iron", name: "Iron Fleet", role: "M", tier: 2, cost: 550, power: 2, img: "assets/got-title.png" },
-    { id: "vale", name: "Vale", role: "M", tier: 3, cost: 300, power: 1, img: "assets/got-title.png" }
+    { id: "storm", name: "Stormlanders", role: "M", tier: 1, cost: 400, power: 3, img: "assets/got-title.png" },
+    { id: "iron", name: "Iron Fleet", role: "M", tier: 2, cost: 280, power: 2, img: "assets/got-title.png" },
+    { id: "vale", name: "Vale", role: "M", tier: 3, cost: 150, power: 1, img: "assets/got-title.png" }
 ];
 
 // Audio Setup

@@ -17,7 +17,9 @@ claimBtn.addEventListener('click', () => {
 
 // --- Screen 2: War Hall Drafting ---
 function initWarHall() {
-    playerGold = 1900;
+    playerGold = 999;
+    enemyGold = 999;
+    document.getElementById('enemy-gold').innerText = enemyGold;
     playerRoster = [];
     enemyRoster = [];
     playerGoldDisplay.innerText = playerGold;
