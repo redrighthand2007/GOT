@@ -681,7 +681,10 @@ img {
     #draft-options { margin-bottom: 0px; gap: 4px; }
     .draft-card { height: 95px; width: 80px; }
     .roster-slot img { max-height: 70px; }
-    #btn-battle, #btn-fight { margin-top: 5px !important; padding: 10px 20px; font-size: 1.2rem; }
+    #btn-battle, #action-buttons-container, #inline-result { margin-top: 3vh !important; }
+    #btn-battle, #btn-fight, #btn-surrender, #btn-home-inline, #btn-restart-inline { padding: 10px 20px; font-size: 1.2rem; }
     .theme-btn { padding: 10px 20px; font-size: 1.2rem; }
 }
+
+
 
