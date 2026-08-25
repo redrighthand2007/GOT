@@ -27,6 +27,7 @@ document.addEventListener('click', startMusicWithFade);
 // --- Screen 1: Start Game ---
 const btnBackNav = document.getElementById('btn-back-nav');
 btnBackNav.addEventListener('click', () => {
+    if (typeof bgMusic !== 'undefined' && bgMusic && !isMuted) bgMusic.volume = 0.4;
     document.getElementById('main-title').style.visibility = 'visible';
     startScreen.classList.remove('hidden');
     battlePhase.classList.add('hidden');
@@ -185,3 +186,4 @@ document.getElementById('btn-restart-inline').addEventListener('click', () => {
     resetDraftingUI();
     initWarHall();
 });
+

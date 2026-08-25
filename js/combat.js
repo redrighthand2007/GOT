@@ -102,6 +102,7 @@ btnBattle.addEventListener('click', () => {
 
 btnFight.addEventListener('click', () => {
     btnFight.disabled = true;
+    if (typeof bgMusic !== 'undefined' && bgMusic && typeof isMuted !== 'undefined' && !isMuted) bgMusic.volume = 0.15;
     
     let pPower = calculatePower(playerRoster);
     let ePower = calculatePower(enemyRoster);
@@ -150,6 +151,7 @@ btnFight.addEventListener('click', () => {
 });
 
 function endGameInline(playerWon) {
+    if (typeof bgMusic !== 'undefined' && bgMusic && typeof isMuted !== 'undefined' && !isMuted) bgMusic.volume = 0.4;
     const inlineResult = document.getElementById('inline-result');
     const titleDisplay = document.getElementById('battle-location-display');
     
@@ -182,6 +184,7 @@ function flashBlood() {
 function calculatePower(roster) {
     return roster.reduce((sum, h) => sum + h.power, 0);
 }
+
 
 
 
