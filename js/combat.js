@@ -64,8 +64,8 @@ btnBattle.addEventListener('click', () => {
     
     // Fade the 'Prepare for War' button instead of hiding it
     btnBattle.disabled = true;
-    btnBattle.style.opacity = '0.5';
-    btnBattle.style.cursor = 'default';
+    btnBattle.classList.add('hidden');
+    
     
     document.getElementById('battle-location-display').innerHTML = "GET READY TO FIGHT.";
     
@@ -164,4 +164,7 @@ function flashBlood() {
     const bloodSplatter = document.getElementById('blood-splatter');
     bloodSplatter.classList.add('splatter-active');
     setTimeout(() => bloodSplatter.classList.remove('splatter-active'), 500);
+}
+function calculatePower(roster) {
+    return roster.reduce((sum, h) => sum + h.power, 0);
 }
