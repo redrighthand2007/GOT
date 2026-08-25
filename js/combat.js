@@ -18,9 +18,7 @@ function removeHouse(index) {
     playerGold += house.cost;
     updateGoldDisplay();
     
-    if (playerRoster.length === 0) {
-        btnBattle.style.opacity = '0.5';
-    }
+    if (playerRoster.length === 0) { btnBattle.classList.add('hidden'); }
     
     battleLog.innerText = "";
     renderDraftingBoard();
@@ -64,7 +62,7 @@ btnBattle.addEventListener('click', () => {
     
     // Fade the 'Prepare for War' button instead of hiding it
     btnBattle.disabled = true;
-    btnBattle.style.opacity = '0.5';
+    btnBattle.style.visibility = 'hidden';
     
     
     document.getElementById('battle-location-display').innerHTML = "GET READY TO FIGHT.";
@@ -99,7 +97,7 @@ btnBattle.addEventListener('click', () => {
     document.getElementById('enemy-gold').innerText = enemyGold;
 
     // Show Fight button inline directly below Prepare for War
-    btnFight.classList.remove('hidden');
+    document.getElementById('action-buttons-container').classList.remove('hidden');
 });
 
 btnFight.addEventListener('click', () => {
@@ -156,38 +154,25 @@ function endGameInline(playerWon) {
     const titleDisplay = document.getElementById('battle-location-display');
     
     inlineResult.classList.remove('hidden');
-    btnFight.classList.add('hidden');
-    btnBattle.style.opacity = '0.5';
+    document.getElementById('action-buttons-container').classList.add('hidden');
+    btnBattle.style.visibility = 'hidden';
     
-    let resultText = "";
+    
     if(playerWon) {
         if (sfxWin) sfxWin.play().catch(e=>e);
         titleDisplay.innerHTML = "<span style='color:#32cd32; font-size: 3.5rem; letter-spacing: 5px; text-shadow: 0 0 20px rgba(50,205,50,0.8); font-weight:bold;'>VICTORY</span>";
-        resultText = "VICTORY! YOUR ALLIANCE PREVAILS.";
+        
     } else {
         flashBlood();
         titleDisplay.innerHTML = "<span style='color:#ff0000; font-size: 3.5rem; letter-spacing: 5px; text-shadow: 0 0 20px rgba(255,0,0,0.8); font-weight:bold;'>DEFEAT</span>";
-        resultText = "DEFEAT. YOUR HOUSE FALLS INTO RUIN.";
+        
     }
     
-    inlineResult.innerHTML = `
-        <div style="font-size: 1.5rem; color: #fff; margin-bottom: 20px; letter-spacing: 2px;">${resultText}</div>
-        <button id='btn-restart-inline' class='theme-btn' style='margin-right: 15px;'>BATTLE AGAIN</button>
-        <button id='btn-home-inline' class='theme-btn'>HOME</button>
-    `;
     
-    document.getElementById('btn-restart-inline').addEventListener('click', () => {
-        inlineResult.classList.add('hidden');
-        titleDisplay.innerHTML = "MAKE YOUR ARMY";
-        resetDraftingUI(); // Assuming resetDraftingUI is available via ui.js
-        initWarHall();
-    });
+    
+    
 
-    document.getElementById('btn-home-inline').addEventListener('click', () => {
-        inlineResult.classList.add('hidden');
-        titleDisplay.innerHTML = "MAKE YOUR ARMY";
-        document.getElementById('btn-back-nav').click(); // Re-use home logic
-    });
+    
 }
 function flashBlood() {
     const bloodSplatter = document.getElementById('blood-splatter');
@@ -197,3 +182,6 @@ function flashBlood() {
 function calculatePower(roster) {
     return roster.reduce((sum, h) => sum + h.power, 0);
 }
+
+
+

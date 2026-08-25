@@ -56,8 +56,8 @@ function initWarHall() {
     enemyRosterContainer.innerHTML = "";
     battleLog.innerText = "";
     
-    btnBattle.classList.add('hidden'); btnBattle.style.opacity = '1'; btnBattle.disabled = false;
-    btnFight.classList.add('hidden');
+    btnBattle.classList.add('hidden'); btnBattle.style.opacity = '1'; btnBattle.style.visibility = 'visible'; btnBattle.disabled = false;
+    btnFight.classList.add('hidden'); document.getElementById('action-buttons-container').classList.add('hidden'); btnFight.disabled = false;
     document.getElementById('player-health-container').classList.add('hidden');
     document.getElementById('enemy-health-container').classList.add('hidden');
     document.getElementById('player-health-bar').style.width = '100%';
@@ -131,8 +131,8 @@ function resetDraftingUI() {
     document.getElementById('drafting-board').style.opacity = '1';
     document.getElementById('drafting-board').style.pointerEvents = 'auto';
     particlesContainer.innerHTML = "";
-    btnBattle.classList.add('hidden'); btnBattle.style.opacity = '1'; btnBattle.disabled = false;
-    btnFight.classList.add('hidden');
+    btnBattle.classList.add('hidden'); btnBattle.style.opacity = '1'; btnBattle.style.visibility = 'visible'; btnBattle.disabled = false;
+    btnFight.classList.add('hidden'); document.getElementById('action-buttons-container').classList.add('hidden'); btnFight.disabled = false;
     document.getElementById('player-health-container').classList.add('hidden');
     document.getElementById('enemy-health-container').classList.add('hidden');
     document.getElementById('player-health-bar').style.width = '100%';
@@ -170,4 +170,18 @@ soundIcon.addEventListener('click', () => {
     isMuted = !isMuted;
     soundIcon.innerHTML = isMuted ? '&#128263;' : '&#128266;';
     document.querySelectorAll('audio').forEach(audio => audio.muted = isMuted);
+});
+document.getElementById('btn-surrender').addEventListener('click', () => {
+    document.getElementById('btn-back-nav').click();
+});
+document.getElementById('btn-home-inline').addEventListener('click', () => {
+    document.getElementById('inline-result').classList.add('hidden');
+    document.getElementById('battle-location-display').innerHTML = "MAKE YOUR ARMY";
+    document.getElementById('btn-back-nav').click();
+});
+document.getElementById('btn-restart-inline').addEventListener('click', () => {
+    document.getElementById('inline-result').classList.add('hidden');
+    document.getElementById('battle-location-display').innerHTML = "MAKE YOUR ARMY";
+    resetDraftingUI();
+    initWarHall();
 });
