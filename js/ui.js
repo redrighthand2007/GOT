@@ -1,3 +1,29 @@
+let musicStarted = false;
+function startMusicWithFade() {
+    if (musicStarted || isMuted || !bgMusic) return;
+    musicStarted = true;
+    bgMusic.volume = 0;
+    let playPromise = bgMusic.play();
+    if (playPromise !== undefined) {
+        playPromise.then(() => {
+            let vol = 0;
+            let fadeInterval = setInterval(() => {
+                if(isMuted) { clearInterval(fadeInterval); return; }
+                vol += 0.05;
+                if (vol >= 0.4) {
+                    bgMusic.volume = 0.4;
+                    clearInterval(fadeInterval);
+                } else {
+                    bgMusic.volume = vol;
+                }
+            }, 200);
+        }).catch(e => {
+            musicStarted = false; 
+        });
+    }
+}
+document.addEventListener('click', startMusicWithFade);
+
 // --- Screen 1: Start Game ---
 const btnBackNav = document.getElementById('btn-back-nav');
 btnBackNav.addEventListener('click', () => {
