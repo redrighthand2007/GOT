@@ -30,7 +30,7 @@ btnBackNav.addEventListener('click', () => {
     document.getElementById('main-title').style.visibility = 'visible';
     startScreen.classList.remove('hidden');
     battlePhase.classList.add('hidden');
-    btnBackNav.classList.add('hidden');
+    
     resetDraftingUI();
 });
 
@@ -40,7 +40,7 @@ claimBtn.addEventListener('click', () => {
     battlePhase.classList.remove('hidden');
     if (bgMusic) bgMusic.play().catch(e => console.log("Audio play failed:", e));
     initWarHall();
-    btnBackNav.classList.remove('hidden');
+    
 });
 
 // --- Screen 2: War Hall Drafting ---
@@ -154,7 +154,7 @@ playAgainBtn.addEventListener('click', () => {
     postBattleScreen.classList.add('hidden');
     resetDraftingUI();
     initWarHall();
-    btnBackNav.classList.remove('hidden'); // Restarts the drafting phase directly
+     // Restarts the drafting phase directly
 });
 const soundIcon = document.getElementById('sound-icon');
 let isMuted = false;
