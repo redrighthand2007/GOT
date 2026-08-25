@@ -673,3 +673,12 @@ img {
     transform: scale(1.05);
     border-color: #ffaaaa;
 }
+@media (max-height: 850px) {
+    #main-title { margin-top: 1vh; font-size: 4rem; }
+    #battle-location-display { margin-bottom: 5px !important; }
+    #draft-options { margin-bottom: 0px; gap: 4px; }
+    .draft-card { height: 95px; width: 80px; }
+    .roster-slot img { max-height: 70px; }
+    #btn-battle, #btn-fight { margin-top: 5px !important; padding: 10px 20px; font-size: 1.2rem; }
+    .theme-btn { padding: 10px 20px; font-size: 1.2rem; }
+}

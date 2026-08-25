@@ -56,8 +56,8 @@ function initWarHall() {
     enemyRosterContainer.innerHTML = "";
     battleLog.innerText = "";
     
-    btnBattle.classList.add('hidden');
-    btnFight.classList.add('hidden');
+    btnBattle.classList.add('hidden'); btnBattle.style.opacity = '1'; btnBattle.disabled = false;
+    btnFight.classList.add('hidden'); btnFight.disabled = false;
     document.getElementById('inline-result').classList.add('hidden');
     
     btnBattle.disabled = false;
@@ -121,14 +121,14 @@ function resetDraftingUI() {
     playerSideTitle.classList.remove('hidden');
     enemySideTitle.classList.remove('hidden');
     goldDisplayContainer.classList.remove('hidden');
-    draftOptionsContainer.classList.remove('hidden');
+    draftOptionsContainer.style.visibility = 'visible';
     
 
     document.getElementById('drafting-board').style.opacity = '1';
     document.getElementById('drafting-board').style.pointerEvents = 'auto';
     particlesContainer.innerHTML = "";
-    btnBattle.classList.add('hidden');
-    btnFight.classList.add('hidden');
+    btnBattle.classList.add('hidden'); btnBattle.style.opacity = '1'; btnBattle.disabled = false;
+    btnFight.classList.add('hidden'); btnFight.disabled = false;
     document.getElementById('inline-result').classList.add('hidden');
     
     playerCodeword.classList.add('hidden');

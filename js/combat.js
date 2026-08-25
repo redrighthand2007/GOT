@@ -19,7 +19,7 @@ function removeHouse(index) {
     updateGoldDisplay();
     
     if (playerRoster.length === 0) {
-        btnBattle.classList.add('hidden');
+        btnBattle.style.opacity = '0.5';
     }
     
     battleLog.innerText = "";
@@ -64,13 +64,13 @@ btnBattle.addEventListener('click', () => {
     
     // Fade the 'Prepare for War' button instead of hiding it
     btnBattle.disabled = true;
-    btnBattle.classList.add('hidden');
+    btnBattle.style.opacity = '0.5';
     
     
     document.getElementById('battle-location-display').innerHTML = "GET READY TO FIGHT.";
     
     // Hide the draft options entirely
-    draftOptionsContainer.classList.add('hidden');
+    draftOptionsContainer.style.visibility = 'hidden';
     
     // Ensure background is transparent so the buttons look nice
     draftingBoard.classList.add('transparent-board');
@@ -128,7 +128,7 @@ function endGameInline(playerWon) {
     
     inlineResult.classList.remove('hidden');
     btnFight.classList.add('hidden');
-    btnBattle.classList.add('hidden');
+    btnBattle.style.opacity = '0.5';
     
     let resultText = "";
     if(playerWon) {
