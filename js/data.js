@@ -15,11 +15,11 @@ const particlesContainer = document.getElementById('particles-container');
 // Settings & Modal
 const settingsIcon = document.getElementById('settings-icon');
 const infoModal = document.getElementById('info-modal');
-const closeModal = document.getElementById('close-modal');
+
 
 settingsIcon.addEventListener('mouseenter', () => infoModal.classList.remove('hidden'));
 settingsIcon.addEventListener('mouseleave', () => infoModal.classList.add('hidden'));
-closeModal.addEventListener('click', () => infoModal.classList.add('hidden'));
+
 
 // War Hall Elements
 const playerGoldDisplay = document.getElementById('player-gold');
