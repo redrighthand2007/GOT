@@ -145,7 +145,8 @@ button:active {
     padding: 20px 50px;
     border-radius: 4px;
     letter-spacing: 5px;
-    background: linear-gradient(135deg, #8b0000 0%, #4a0000 100%);
+    background: linear-gradient(135deg, rgba(139,0,0,0.6) 0%, rgba(74,0,0,0.6) 100%);
+    backdrop-filter: blur(4px);
     border: 2px solid #ff4444;
     color: #ffd700;
     text-shadow: 0 0 10px #ff0000;
@@ -658,7 +659,8 @@ img {
     padding: 15px 30px;
     border-radius: 4px;
     letter-spacing: 3px;
-    background: linear-gradient(135deg, #8b0000 0%, #4a0000 100%);
+    background: linear-gradient(135deg, rgba(139,0,0,0.6) 0%, rgba(74,0,0,0.6) 100%);
+    backdrop-filter: blur(4px);
     border: 2px solid #ff4444;
     color: #ffd700;
     text-shadow: 0 0 10px #ff0000;
@@ -682,3 +684,4 @@ img {
     #btn-battle, #btn-fight { margin-top: 5px !important; padding: 10px 20px; font-size: 1.2rem; }
     .theme-btn { padding: 10px 20px; font-size: 1.2rem; }
 }
+
