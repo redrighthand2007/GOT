@@ -70,7 +70,7 @@ btnBattle.addEventListener('click', () => {
     document.getElementById('battle-location-display').innerHTML = "GET READY TO FIGHT.";
     
     // Hide the draft options entirely
-    draftOptionsContainer.style.visibility = 'hidden';
+    draftOptionsContainer.classList.add('hidden');
     
     // Ensure background is transparent so the buttons look nice
     draftingBoard.classList.add('transparent-board');
@@ -119,7 +119,7 @@ btnFight.addEventListener('click', () => {
     
     setTimeout(() => {
         endGameInline(pFinal >= eFinal);
-    }, 3000);
+    }, 500);
 });
 
 function endGameInline(playerWon) {
