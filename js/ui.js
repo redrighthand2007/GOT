@@ -57,7 +57,11 @@ function initWarHall() {
     battleLog.innerText = "";
     
     btnBattle.classList.add('hidden'); btnBattle.style.opacity = '1'; btnBattle.disabled = false;
-    btnFight.classList.add('hidden'); btnFight.disabled = false;
+    btnFight.classList.add('hidden');
+    document.getElementById('player-health-container').classList.add('hidden');
+    document.getElementById('enemy-health-container').classList.add('hidden');
+    document.getElementById('player-health-bar').style.width = '100%';
+    document.getElementById('enemy-health-bar').style.width = '100%'; btnFight.disabled = false;
     document.getElementById('inline-result').classList.add('hidden');
     
     btnBattle.disabled = false;
@@ -128,7 +132,11 @@ function resetDraftingUI() {
     document.getElementById('drafting-board').style.pointerEvents = 'auto';
     particlesContainer.innerHTML = "";
     btnBattle.classList.add('hidden'); btnBattle.style.opacity = '1'; btnBattle.disabled = false;
-    btnFight.classList.add('hidden'); btnFight.disabled = false;
+    btnFight.classList.add('hidden');
+    document.getElementById('player-health-container').classList.add('hidden');
+    document.getElementById('enemy-health-container').classList.add('hidden');
+    document.getElementById('player-health-bar').style.width = '100%';
+    document.getElementById('enemy-health-bar').style.width = '100%'; btnFight.disabled = false;
     document.getElementById('inline-result').classList.add('hidden');
     
     playerCodeword.classList.add('hidden');

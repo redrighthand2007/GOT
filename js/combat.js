@@ -104,10 +104,6 @@ btnBattle.addEventListener('click', () => {
 
 btnFight.addEventListener('click', () => {
     btnFight.disabled = true;
-    if (sfxSword) {
-        sfxSword.currentTime = 0;
-        sfxSword.play().catch(e=>e);
-    }
     
     let pPower = calculatePower(playerRoster);
     let ePower = calculatePower(enemyRoster);
@@ -117,9 +113,42 @@ btnFight.addEventListener('click', () => {
     const pFinal = Math.floor(pPower * pRoll);
     const eFinal = Math.floor(ePower * eRoll);
     
+    const playerWon = pFinal >= eFinal;
+    
+    document.getElementById('player-health-container').classList.remove('hidden');
+    document.getElementById('enemy-health-container').classList.remove('hidden');
+    
+    const pBar = document.getElementById('player-health-bar');
+    const eBar = document.getElementById('enemy-health-bar');
+    
+    const playClash = () => {
+        if (sfxSword) {
+            sfxSword.currentTime = 0;
+            sfxSword.play().catch(e=>e);
+        }
+    };
+    
     setTimeout(() => {
-        endGameInline(pFinal >= eFinal);
-    }, 500);
+        playClash();
+        pBar.style.width = playerWon ? '75%' : '60%';
+        eBar.style.width = playerWon ? '60%' : '75%';
+    }, 400);
+    
+    setTimeout(() => {
+        playClash();
+        pBar.style.width = playerWon ? '45%' : '25%';
+        eBar.style.width = playerWon ? '25%' : '45%';
+    }, 1100);
+    
+    setTimeout(() => {
+        playClash();
+        pBar.style.width = playerWon ? '15%' : '0%';
+        eBar.style.width = playerWon ? '0%' : '15%';
+    }, 1800);
+    
+    setTimeout(() => {
+        endGameInline(playerWon);
+    }, 2600);
 });
 
 function endGameInline(playerWon) {
