@@ -172,7 +172,10 @@ button:active {
     margin: 30px 0 15px 0;
 }
 
-#options, #battlefield-options {`n    display: flex;`n    justify-content: center;`n    gap: 25px;
+#options, #battlefield-options {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
     margin: 10px 0 30px 0;
     flex-wrap: wrap;
 }
@@ -459,7 +462,11 @@ img {
     text-shadow: 2px 2px 10px rgba(0,0,0,0.9);
 }
 
-#draft-options {`n    display: grid;`n    grid-template-columns: repeat(3, 1fr);`n    gap: 15px;`n    justify-content: center;
+#draft-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    justify-content: center;
     margin-bottom: 5px;
 }
 
@@ -666,6 +673,7 @@ img {
     transform: scale(1.05);
     border-color: #ffffff;
 }
+
 
 
 
