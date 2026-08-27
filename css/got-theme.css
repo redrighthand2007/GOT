@@ -480,8 +480,8 @@ img {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 3%;
-    width: 45%;
-    max-width: 420px;
+    width: 450px;
+    max-width: 95%;
     justify-content: center;
     margin-bottom: 2%;
 }
@@ -690,6 +690,7 @@ img {
     transform: scale(1.05);
     border-color: #ffffff;
 }
+
 
 
 
