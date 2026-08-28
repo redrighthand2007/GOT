@@ -65,7 +65,7 @@ btnBattle.addEventListener('click', () => {
     btnBattle.style.visibility = 'hidden';
     
     
-    document.getElementById('battle-location-display').innerHTML = "GET READY TO FIGHT.";
+    document.getElementById('battle-location-display').innerHTML = "";
     
     // Hide the draft options entirely
     draftOptionsContainer.style.visibility = 'hidden';
@@ -184,6 +184,7 @@ function flashBlood() {
 function calculatePower(roster) {
     return roster.reduce((sum, h) => sum + h.power, 0);
 }
+
 
 
 
