@@ -270,7 +270,7 @@ img {
     align-items: flex-start;
     width: 95%;
     max-width: none;
-    margin-top: 5px;
+    margin: 5px auto 0 auto;
 }
 
 #war-hall.fight-layout {
@@ -689,6 +689,7 @@ img {
     transform: scale(1.05);
     border-color: #ffffff;
 }
+
 
 
 
