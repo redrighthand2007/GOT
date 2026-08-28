@@ -253,7 +253,16 @@ img {
 }
 
 /* Battle Phase */
-#battle-phase {`r`n    display: flex;`r`n    flex-direction: column;`r`n    align-items: center;`r`n    justify-content: center;`r`n    gap: 4%;`r`n    width: 100%;`r`n    height: 100%;`r`n    box-sizing: border-box;`r`n}
+#battle-phase {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    gap: 4%;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
 
 #battle-location-display {
     font-size: 1.2rem;
@@ -689,6 +698,7 @@ img {
     transform: scale(1.05);
     border-color: #ffffff;
 }
+
 
 
 
