@@ -21,13 +21,19 @@
 
 <hr />
 
-## 🏰 The Concept
+## ?? Project Overview
+
+### What is it?
+A beautifully crafted Single Page Application (SPA) testing your strategic drafting skills as a military tactician.
+
+### Why did you build it?
+To prove that complex, state-driven interactive web applications can be built without heavy frontend frameworks (like React or Vue).
 
 **Battle for Westeros** is a beautifully crafted Single Page Application (SPA) testing your strategic drafting skills as a military tactician. Given a strict budget of **999G**, your objective is to assemble an elite three-house alliance from the iconic factions of Westeros. 
 
 Once forged, your army clashes against a fully automated AI opponent in a sudden-death calculation of raw power, strategy, and a slight RNG factor to determine the fate of the realm.
 
-## ✨ Core Features
+### What does it do?
 
 - **Dynamic Economy & Strategy:** Strategically draft units balancing your 999G budget across 9 different houses, categorized by Role (Attack, Defense, Mix) and Tier (1-3).
 - **Automated Master-Tactician AI:** The computer adversary intelligently selects from pre-programmed, mathematically flawless formations to counter your alliance.
@@ -35,7 +41,7 @@ Once forged, your army clashes against a fully automated AI opponent in a sudden
 - **Cinematic UI/UX:** Thematic dark aesthetics featuring glowing gold/crimson accents, custom glassmorphism panels, interactive hover modals, and inline combat result animations.
 - **Custom Audio Engine:** Fully integrated background themes, sword clashes, and battle effects, controlled dynamically via a minimalist top-right overlay.
 
-## 🛠️ Technology & Architecture
+### Tech Stack
 
 This project is a masterclass in DOM manipulation, state management, and CSS layout architecture—proving that complex, state-driven interactive web applications can be built **without heavy frontend frameworks** (like React or Vue).
 
@@ -46,14 +52,18 @@ This project is a masterclass in DOM manipulation, state management, and CSS lay
     *   `combat.js`: AI generation, battle math, and inline DOM result injection.
 *   **Advanced CSS3:** Features responsive mathematical scaling, flexbox shrink-to-fit logic, CSS Grid architecture, text-clipping gradients, and custom particle animations.
 
-## ⚔️ How to Play
+### How does it work?
 
 1.  **Enter the War Room:** Review your starting budget of 999G.
 2.  **Draft Your Alliance:** Select up to 3 house cards to spend your gold. Hover over the info gear for a pricing reference table.
 3.  **Prepare for War:** Finalize your draft. The AI will instantly reveal its own mystery drafted houses.
 4.  **The Clash:** Hit **FIGHT!** The JavaScript engine calculates raw power scores, applies RNG modifiers (0.85x to 1.15x), and determines the victor inline.
 
-## 📁 Repository Structure
+## ?? Screenshots & Demo
+
+**?? Demo � Coming Soon!**
+
+### Repository Structure
 
 ```text
 .
@@ -68,3 +78,4 @@ This project is a masterclass in DOM manipulation, state management, and CSS lay
 <div align="center">
   <p>Forged in fire by <b>Kush Aghera (redrighthand2007)</b></p>
 </div>
+
