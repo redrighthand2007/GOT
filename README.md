@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="assets/got-bg.jpg" alt="Game of Thrones: Battle for Westeros" width="100%" style="border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.6); margin-bottom: 20px;">
+  <img src="assets/images/iron-throne-bg-v2.jpg" alt="Game of Thrones: Battle for Westeros" width="100%" style="border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.6); margin-bottom: 20px;">
   
   <h1>⚔️ Battle for Westeros ⚔️</h1>
   

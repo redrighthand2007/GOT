@@ -54,17 +54,17 @@ let playerRoster = [];
 let enemyRoster = [];
 
 const HOUSES_DATA = [
-    { id: "targ", name: "Targaryen", role: "A", tier: 1, cost: 500, power: 3, img: "assets/house-targaryen.png" },
-    { id: "doth", name: "Dothraki", role: "A", tier: 2, cost: 300, power: 2, img: "assets/got-title.png" },
-    { id: "dorn", name: "Dornish", role: "A", tier: 3, cost: 150, power: 1, img: "assets/got-title.png" },
+    { id: "targ", name: "Targaryen", role: "A", tier: 1, cost: 500, power: 3, img: "assets/images/house-targaryen.png" },
+    { id: "doth", name: "Dothraki", role: "A", tier: 2, cost: 300, power: 2, img: "assets/images/got-title.png" },
+    { id: "dorn", name: "Dornish", role: "A", tier: 3, cost: 150, power: 1, img: "assets/images/got-title.png" },
     
-    { id: "unsu", name: "Unsullied", role: "D", tier: 1, cost: 450, power: 3, img: "assets/got-title.png" },
-    { id: "night", name: "Night's Watch", role: "D", tier: 2, cost: 280, power: 2, img: "assets/got-title.png" },
-    { id: "rive", name: "Riverlands", role: "D", tier: 3, cost: 130, power: 1, img: "assets/house-stark.png" },
+    { id: "unsu", name: "Unsullied", role: "D", tier: 1, cost: 450, power: 3, img: "assets/images/got-title.png" },
+    { id: "night", name: "Night's Watch", role: "D", tier: 2, cost: 280, power: 2, img: "assets/images/got-title.png" },
+    { id: "rive", name: "Riverlands", role: "D", tier: 3, cost: 130, power: 1, img: "assets/images/house-stark.png" },
     
-    { id: "storm", name: "Stormlanders", role: "M", tier: 1, cost: 400, power: 3, img: "assets/got-title.png" },
-    { id: "iron", name: "Iron Fleet", role: "M", tier: 2, cost: 280, power: 2, img: "assets/got-title.png" },
-    { id: "vale", name: "Vale", role: "M", tier: 3, cost: 150, power: 1, img: "assets/got-title.png" }
+    { id: "storm", name: "Stormlanders", role: "M", tier: 1, cost: 400, power: 3, img: "assets/images/got-title.png" },
+    { id: "iron", name: "Iron Fleet", role: "M", tier: 2, cost: 280, power: 2, img: "assets/images/got-title.png" },
+    { id: "vale", name: "Vale", role: "M", tier: 3, cost: 150, power: 1, img: "assets/images/got-title.png" }
 ];
 
 // Audio Setup
