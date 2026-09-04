@@ -21,7 +21,7 @@
 
 <hr />
 
-## ?? Project Overview
+## 📖 Project Overview
 
 ### What is it?
 A beautifully crafted Single Page Application (SPA) testing your strategic drafting skills as a military tactician.
@@ -59,9 +59,9 @@ This project is a masterclass in DOM manipulation, state management, and CSS lay
 3.  **Prepare for War:** Finalize your draft. The AI will instantly reveal its own mystery drafted houses.
 4.  **The Clash:** Hit **FIGHT!** The JavaScript engine calculates raw power scores, applies RNG modifiers (0.85x to 1.15x), and determines the victor inline.
 
-## ?? Screenshots & Demo
+## 📸 Screenshots & Demo
 
-**?? Demo � Coming Soon!**
+**▶️ Demo — Coming Soon!**
 
 ### Repository Structure
 
