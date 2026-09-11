@@ -1,7 +1,7 @@
 <div align="center">
   <img src="assets/images/iron-throne-bg-v2.jpg" alt="Game of Thrones: Battle for Westeros" width="100%" style="border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.6); margin-bottom: 20px;">
   
-  <h1>⚔️ Battle for Westeros ⚔️</h1>
+  <h1>⚔️ Game Of Thrones ⚔️</h1>
   
   <p>
     <strong>A sleek, fast-paced strategy web game built entirely with pure Vanilla Web Technologies.</strong>
