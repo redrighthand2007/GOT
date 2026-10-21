@@ -28,7 +28,7 @@ document.addEventListener('click', startMusicWithFade);
 const btnBackNav = document.getElementById('btn-back-nav');
 btnBackNav.addEventListener('click', () => {
     if (typeof bgMusic !== 'undefined' && bgMusic && !isMuted) bgMusic.volume = 0.4;
-    document.getElementById('main-title').style.visibility = 'visible';
+    document.getElementById('main-title').classList.remove('hidden');
     startScreen.classList.remove('hidden');
     battlePhase.classList.add('hidden');
     
@@ -36,7 +36,7 @@ btnBackNav.addEventListener('click', () => {
 });
 
 claimBtn.addEventListener('click', () => {
-    document.getElementById('main-title').style.visibility = 'hidden';
+    document.getElementById('main-title').classList.add('hidden');
     startScreen.classList.add('hidden');
     battlePhase.classList.remove('hidden');
     if (bgMusic) bgMusic.play().catch(e => console.log("Audio play failed:", e));
@@ -121,6 +121,11 @@ function updateGoldDisplay() {
 }
 // --- Navigation Flow ---
 function resetDraftingUI() {
+    // Leaving mid-fight: stop the fight's pending steps so they can't change the next game
+    battleTimers.forEach(clearTimeout);
+    battleTimers = [];
+    document.getElementById('blood-splatter').classList.remove('splatter-active');
+
     document.getElementById('battle-location-display').innerHTML = "MAKE YOUR ARMY";
     draftingBoard.classList.remove('transparent-board');
     playerSideTitle.classList.remove('hidden');
@@ -148,13 +153,9 @@ function resetDraftingUI() {
 btnGoBack.addEventListener('click', () => {
     postBattleScreen.classList.add('hidden');
     battlePhase.classList.add('hidden');
-    selectionPhase.classList.add('hidden');
     startScreen.classList.remove('hidden');
-    
-    fieldOptions.forEach(o => o.classList.remove('selected'));
-    fieldChoice = "";
-    playButton.classList.add('hidden');
-    
+    document.getElementById('main-title').classList.remove('hidden');
+
     resetDraftingUI();
 });
 

@@ -13,6 +13,7 @@ function draftHouse(house) {
 }
 
 function removeHouse(index) {
+    if (btnBattle.disabled) return; // army is locked once the battle starts
     const house = playerRoster[index];
     playerRoster.splice(index, 1);
     playerGold += house.cost;
@@ -57,8 +58,10 @@ function getCodewordString(roster) {
 // --- Battle Resolution ---
 btnBattle.addEventListener('click', () => {
     if (playerGold < 0) {
+        battleLog.innerText = "NOT ENOUGH GOLD - REMOVE A HOUSE";
         return;
     }
+    battleLog.innerText = "";
     
     // Fade the 'Prepare for War' button instead of hiding it
     btnBattle.disabled = true;
@@ -127,27 +130,28 @@ btnFight.addEventListener('click', () => {
         }
     };
     
-    setTimeout(() => {
+    battleTimers.push(setTimeout(() => {
         playClash();
         pBar.style.width = playerWon ? '75%' : '60%';
         eBar.style.width = playerWon ? '60%' : '75%';
-    }, 400);
-    
-    setTimeout(() => {
+    }, 400));
+
+    battleTimers.push(setTimeout(() => {
         playClash();
         pBar.style.width = playerWon ? '45%' : '25%';
         eBar.style.width = playerWon ? '25%' : '45%';
-    }, 1100);
-    
-    setTimeout(() => {
+    }, 1100));
+
+    battleTimers.push(setTimeout(() => {
         playClash();
         pBar.style.width = playerWon ? '15%' : '0%';
         eBar.style.width = playerWon ? '0%' : '15%';
-    }, 1800);
-    
-    setTimeout(() => {
+    }, 1800));
+
+    battleTimers.push(setTimeout(() => {
+        battleTimers = [];
         endGameInline(playerWon);
-    }, 2600);
+    }, 2600));
 });
 
 function endGameInline(playerWon) {
@@ -179,7 +183,7 @@ function endGameInline(playerWon) {
 function flashBlood() {
     const bloodSplatter = document.getElementById('blood-splatter');
     bloodSplatter.classList.add('splatter-active');
-    setTimeout(() => bloodSplatter.classList.remove('splatter-active'), 500);
+    battleTimers.push(setTimeout(() => bloodSplatter.classList.remove('splatter-active'), 500));
 }
 function calculatePower(roster) {
     return roster.reduce((sum, h) => sum + h.power, 0);
