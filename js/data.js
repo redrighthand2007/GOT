@@ -75,6 +75,48 @@ const HOUSES_DATA = [
     { id: "vale", name: "Vale", role: "M", tier: 3, cost: 150, power: 1, img: "assets/images/got-title.png" }
 ];
 
+// --- Smooth zoom & layout changes ---
+const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+const contentEl = document.querySelector('.content');
+
+// Browser zoom (Ctrl + / Ctrl -) changes devicePixelRatio and redraws
+// instantly. Start the page at its old on-screen size and ease it to the new one.
+let lastPixelRatio = window.devicePixelRatio;
+window.addEventListener('resize', () => {
+    const ratio = window.devicePixelRatio;
+    if (ratio === lastPixelRatio) return;
+    const startScale = lastPixelRatio / ratio;
+    lastPixelRatio = ratio;
+    if (reducedMotion.matches) return;
+
+    contentEl.style.transition = 'none';
+    contentEl.style.transformOrigin = `50% ${window.scrollY + window.innerHeight / 2}px`;
+    contentEl.style.transform = `scale(${startScale})`;
+    contentEl.getBoundingClientRect(); // apply the start scale before animating
+    contentEl.style.transition = 'transform 0.35s ease';
+    contentEl.style.transform = '';
+});
+contentEl.addEventListener('transitionend', (e) => {
+    if (e.target === contentEl && e.propertyName === 'transform') contentEl.style.transition = '';
+});
+
+// PC (three columns) <-> phone (one column). Same query as the inline
+// script in index.html. The switch morphs instead of snapping.
+const narrowQuery = matchMedia('(max-width: 56em)');
+narrowQuery.addEventListener('change', (e) => {
+    const applyLayout = () => document.documentElement.classList.toggle('narrow', e.matches);
+    if (!document.startViewTransition || reducedMotion.matches) {
+        applyLayout();
+        return;
+    }
+    // Drop any running zoom animation; the view transition animates this change
+    contentEl.style.transition = 'none';
+    contentEl.style.transform = '';
+    contentEl.getBoundingClientRect();
+    contentEl.style.transition = '';
+    document.startViewTransition(applyLayout);
+});
+
 // Audio Setup
 if (bgMusic) bgMusic.volume = 0.4;
 if (sfxSword) sfxSword.volume = 0.7;

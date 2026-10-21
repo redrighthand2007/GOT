@@ -9,7 +9,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/got-theme.css?v=41">
+    <link rel="stylesheet" href="css/got-theme.css?v=42">
+    <!-- Set the PC / phone layout before first paint (js/data.js keeps it updated) -->
+    <script>
+        document.documentElement.classList.toggle('narrow', matchMedia('(max-width: 56em)').matches);
+    </script>
 </head>
 <body>
     <!-- Audio Elements -->
@@ -21,10 +25,7 @@
         <div id="live-bg"></div>
         <div id="particles-container"></div>
     
-    <div class="content">
-        <h1 id="main-title">GAME OF THRONES</h1>
-
-        <!-- Settings & Home Icons -->
+        <!-- Settings & Home Icons (kept outside .content so the zoom animation doesn't move them) -->
         <div id="sound-icon">&#128266;</div>
         <div id="settings-icon">&#9881;</div>
         <div id="btn-back-nav">&#8962;</div>
@@ -56,6 +57,9 @@
                 </table>
             </div>
         </div>
+
+    <div class="content">
+        <h1 id="main-title">GAME OF THRONES</h1>
 
         <!-- Screen 1: Start Game -->
         <div id="start-screen">
@@ -126,9 +130,9 @@
         </div>
     </div>
 
-    <script src="js/data.js?v=41"></script>
-    <script src="js/ui.js?v=41"></script>
-    <script src="js/combat.js?v=41"></script>
+    <script src="js/data.js?v=42"></script>
+    <script src="js/ui.js?v=42"></script>
+    <script src="js/combat.js?v=42"></script>
 </div>
 </body>
 </html>
