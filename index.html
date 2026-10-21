@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/got-theme.css?v=36">
+    <link rel="stylesheet" href="css/got-theme.css?v=37">
 </head>
 <body>
     <!-- Audio Elements -->
@@ -47,7 +47,7 @@
                     <tr><td>Knights of the Vale</td><td>Mix</td><td>3 (Low)</td><td>150</td></tr>
                 </table>
 
-                <h2 style="margin-top: 20px;">STANDARD COMBOS</h2>
+                <h2>STANDARD COMBOS</h2>
                 <table class="info-table">
                     <tr><th>Mode</th><th>Team</th><th>Total Price</th><th>Power</th></tr>
                     <tr><td>Pure Attack</td><td>A1, A2, A3</td><td>950</td><td>6</td></tr>
@@ -64,37 +64,37 @@
 
         <!-- Screen 2: War Hall (Battle Phase) -->
         <div id="battle-phase" class="hidden">
-            <div id="battle-location-display"style="position: absolute; top: 12%; left: 50%; transform: translateX(-50%);white-space: nowrap; font-size:2rem; letter-spacing:8px;background: linear-gradient(#ff4444, #8b0000);background-clip: text;-webkit-background-clip: text;-webkit-text-fill-color: transparent;filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.8));font-weight:bold;">MAKE YOUR ARMY</div>
-            
+            <div id="battle-location-display">MAKE YOUR ARMY</div>
+
             <div id="war-hall">
                 <!-- Player Roster -->
                 <div class="roster-side" id="player-side">
                     <h3>YOUR ALLIANCE</h3>
-                    <div id="gold-display" style="color: #ccc; margin-bottom: 10px;">BUDGET: <span id="player-gold" style="color: #d4af37; font-weight: bold;">999</span>G</div>
+                    <div id="gold-display" class="gold-display">BUDGET: <span id="player-gold">999</span>G</div>
                     <div class="roster" id="player-roster">
                         <!-- Slots populated by JS -->
                     </div>
-                    <div id="player-codeword" class="codeword-text hidden" style="margin-top: 15px;"></div>
-                    <div id="player-health-container" class="health-container hidden" style="width: 100%; height: 20px; background: #111; border: 2px solid #444; border-radius: 10px; margin-top: 15px; overflow: hidden; box-shadow: 0 0 10px #000 inset;">
-                        <div id="player-health-bar" style="width: 100%; height: 100%; background: linear-gradient(90deg, #8b0000, #ff4444); transition: width 0.5s ease-in-out;"></div>
+                    <div id="player-codeword" class="codeword-text hidden"></div>
+                    <div id="player-health-container" class="health-container hidden">
+                        <div id="player-health-bar" class="health-bar"></div>
                     </div>
                 </div>
 
                 <!-- Drafting Board -->
-                <div id="drafting-board" style="background: transparent; border: none; box-shadow: none;">
+                <div id="drafting-board">
                     <div id="draft-options">
                         <!-- Populated by JS -->
                     </div>
-                    <p id="battle-log" style="color:#ff4444; margin:10px 0; font-size:1.2rem; min-height: 25px;"></p>
-                    <div style="position: relative; width: 100%; max-width: 420px; height: 50px; margin: 0 auto;">
-                        <button id="btn-battle" class="theme-btn hidden" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; margin: 0;">PREPARE FOR WAR</button>
-                        <div id="action-buttons-container" class="hidden" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; gap: 10px; margin: 0;">
-                            <button id="btn-surrender" class="theme-btn" style="flex: 1; height: 100%; font-size: 1.1rem; margin: 0; padding-left: 0; padding-right: 0; white-space: nowrap;">SURRENDER</button>
-                            <button id="btn-fight" class="theme-btn" style="flex: 1; height: 100%; font-size: 1.1rem; margin: 0; padding-left: 0; padding-right: 0; white-space: nowrap;">FIGHT!</button>
+                    <p id="battle-log"></p>
+                    <div class="action-bar">
+                        <button id="btn-battle" class="theme-btn hidden">PREPARE FOR WAR</button>
+                        <div id="action-buttons-container" class="action-row hidden">
+                            <button id="btn-surrender" class="theme-btn">SURRENDER</button>
+                            <button id="btn-fight" class="theme-btn">FIGHT!</button>
                         </div>
-                        <div id="inline-result" class="hidden" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; gap: 10px; margin: 0;">
-                            <button id="btn-home-inline" class="theme-btn" style="flex: 1; height: 100%; font-size: 1.1rem; margin: 0; padding-left: 0; padding-right: 0; white-space: nowrap;">HOME</button>
-                            <button id="btn-restart-inline" class="theme-btn" style="flex: 1; height: 100%; font-size: 1.1rem; margin: 0; padding-left: 0; padding-right: 0; white-space: nowrap;">BATTLE AGAIN</button>
+                        <div id="inline-result" class="action-row hidden">
+                            <button id="btn-home-inline" class="theme-btn">HOME</button>
+                            <button id="btn-restart-inline" class="theme-btn">BATTLE AGAIN</button>
                         </div>
                     </div>
                 </div>
@@ -102,13 +102,13 @@
                 <!-- Enemy Roster -->
                 <div class="roster-side" id="enemy-side">
                     <h3>ENEMY ALLIANCE</h3>
-                    <div id="enemy-gold-display" style="color: #ccc; margin-bottom: 10px;">BUDGET: <span id="enemy-gold" style="color: #d4af37; font-weight: bold;">999</span>G</div>
+                    <div id="enemy-gold-display" class="gold-display">BUDGET: <span id="enemy-gold">999</span>G</div>
                     <div class="roster" id="enemy-roster">
                         <!-- Slots populated by JS (Hidden until battle) -->
                     </div>
-                    <div id="enemy-codeword" class="codeword-text hidden" style="margin-top: 15px;"></div>
-                    <div id="enemy-health-container" class="health-container hidden" style="width: 100%; height: 20px; background: #111; border: 2px solid #444; border-radius: 10px; margin-top: 15px; overflow: hidden; box-shadow: 0 0 10px #000 inset;">
-                        <div id="enemy-health-bar" style="width: 100%; height: 100%; background: linear-gradient(90deg, #8b0000, #ff4444); transition: width 0.5s ease-in-out;"></div>
+                    <div id="enemy-codeword" class="codeword-text hidden"></div>
+                    <div id="enemy-health-container" class="health-container hidden">
+                        <div id="enemy-health-bar" class="health-bar"></div>
                     </div>
                 </div>
             </div>
@@ -126,9 +126,9 @@
         </div>
     </div>
 
-    <script src="js/data.js?v=36"></script>
-    <script src="js/ui.js?v=36"></script>
-    <script src="js/combat.js?v=36"></script>
+    <script src="js/data.js?v=37"></script>
+    <script src="js/ui.js?v=37"></script>
+    <script src="js/combat.js?v=37"></script>
 </div>
 </body>
 </html>
