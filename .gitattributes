@@ -1,0 +1,7 @@
+# Store text files with LF line endings everywhere
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.webp binary
+*.mp3 binary
