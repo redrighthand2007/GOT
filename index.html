@@ -4,13 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#050505">
-    <title>Game of Thrones - Battle for Westeros</title>
-    <!-- Add Favicon (The tab icon) -->
-    <link rel="icon" href="assets/images/got-title.png" type="image/png">
+    <title>Battle for Westeros - a Game of Thrones fan game</title>
+    <meta name="description" content="Draft three houses with 999 gold, out-think the enemy alliance and win the war for Westeros. A free browser strategy game that works on phones and PCs.">
+
+    <!-- Link previews (WhatsApp, Discord, LinkedIn, X) -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Battle for Westeros">
+    <meta property="og:description" content="Draft three houses, counter the enemy alliance, win the war. Free to play in your browser.">
+    <meta property="og:url" content="https://redrighthand2007.github.io/GOT/">
+    <meta property="og:image" content="https://redrighthand2007.github.io/GOT/assets/images/iron-throne-bg-v2.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9A%94%EF%B8%8F%3C/text%3E%3C/svg%3E">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/got-theme.css?v=48">
+    <link rel="stylesheet" href="css/got-theme.css?v=50">
     <!-- Set the PC / phone layout before first paint (js/data.js keeps it updated),
          and keep the page hidden until the Cinzel font is ready so text doesn't jump -->
     <script>
@@ -30,46 +39,56 @@
     </script>
 </head>
 <body>
-    <!-- Audio Elements -->
     <!-- Preloaded so the theme can start the moment JOIN THE WORLD WAR is tapped -->
     <audio id="bg-music" src="assets/audio/got-theme.mp3" loop preload="auto"></audio>
     <audio id="sfx-sword" src="assets/audio/sword-clash.mp3" preload="auto"></audio>
-    
 
     <div id="game-container">
         <div id="live-bg"></div>
-        <div id="particles-container"></div>
-    
-        <!-- Settings & Home Icons (kept outside .content so the zoom animation doesn't move them) -->
-        <div id="sound-icon">&#128266;</div>
-        <div id="settings-icon">&#9881;</div>
-        <div id="btn-back-nav">&#8962;</div>
 
-        <!-- Info Modal -->
-        <div id="info-modal" class="hidden">
+        <!-- Corner buttons (kept outside .content so the zoom animation doesn't move them) -->
+        <button type="button" id="btn-back-nav" class="icon-btn" aria-label="Home" title="Home">&#8962;</button>
+        <button type="button" id="sound-icon" class="icon-btn" aria-label="Mute or unmute sound">&#128266;</button>
+        <button type="button" id="settings-icon" class="icon-btn" aria-label="Rules and prices" title="Rules and prices"
+                aria-controls="info-modal" aria-expanded="false">&#128220;</button>
+
+        <!-- Rules & prices panel -->
+        <div id="info-modal" class="hidden" role="dialog" aria-label="Rules and prices">
             <div id="info-modal-content">
-                
-                <h2>FACTION TIERS & PRICING</h2>
+                <h2>HOW TO WIN</h2>
+                <ul class="info-rules">
+                    <li>Pick <strong>3 houses</strong> with your <strong>999G</strong> budget.</li>
+                    <li>Strength = total power (Tier 1 = 3, Tier 2 = 2, Tier 3 = 1).</li>
+                    <li><strong>Attack</strong> beats <strong>Mix</strong>, <strong>Mix</strong> beats <strong>Defense</strong>,
+                        <strong>Defense</strong> beats <strong>Attack</strong>: every winning matchup between two houses
+                        gives +5% strength, every losing one -5%.</li>
+                    <li>Each side then rolls luck between 0.85x and 1.15x.</li>
+                    <li>On <strong>Hard</strong> the enemy picks the alliance that counters yours.</li>
+                </ul>
+
+                <h2>HOUSES</h2>
                 <table class="info-table">
-                    <tr><th>Faction</th><th>Category</th><th>Tier</th><th>Price</th></tr>
-                    <tr><td>Targaryen (Dragons)</td><td>Attack</td><td>1 (High)</td><td>500</td></tr>
-                    <tr><td>Dothraki Khalasar</td><td>Attack</td><td>2 (Mid)</td><td>300</td></tr>
-                    <tr><td>Dornish Spearmen</td><td>Attack</td><td>3 (Low)</td><td>150</td></tr>
-                    <tr><td>Unsullied</td><td>Defense</td><td>1 (High)</td><td>450</td></tr>
-                    <tr><td>Night's Watch</td><td>Defense</td><td>2 (Mid)</td><td>280</td></tr>
-                    <tr><td>Riverlands Levies</td><td>Defense</td><td>3 (Low)</td><td>130</td></tr>
-                    <tr><td>Stormlanders (Baratheon)</td><td>Mix</td><td>1 (High)</td><td>400</td></tr>
-                    <tr><td>Iron Fleet (Greyjoy)</td><td>Mix</td><td>2 (Mid)</td><td>280</td></tr>
-                    <tr><td>Knights of the Vale</td><td>Mix</td><td>3 (Low)</td><td>150</td></tr>
+                    <tr><th>House</th><th>Type</th><th>Tier</th><th>Price</th></tr>
+                    <tr><td>Targaryen Dragons</td><td>Attack</td><td>1</td><td>500</td></tr>
+                    <tr><td>Dothraki Riders</td><td>Attack</td><td>2</td><td>300</td></tr>
+                    <tr><td>Dornish Spears</td><td>Attack</td><td>3</td><td>150</td></tr>
+                    <tr><td>Unsullied</td><td>Defense</td><td>1</td><td>450</td></tr>
+                    <tr><td>Night's Watch</td><td>Defense</td><td>2</td><td>280</td></tr>
+                    <tr><td>Riverlands Levies</td><td>Defense</td><td>3</td><td>130</td></tr>
+                    <tr><td>Stormlanders</td><td>Mix</td><td>1</td><td>400</td></tr>
+                    <tr><td>Iron Fleet</td><td>Mix</td><td>2</td><td>280</td></tr>
+                    <tr><td>Knights of the Vale</td><td>Mix</td><td>3</td><td>150</td></tr>
                 </table>
 
-                <h2>STANDARD COMBOS</h2>
+                <h2>ENEMY ALLIANCES</h2>
                 <table class="info-table">
-                    <tr><th>Mode</th><th>Team</th><th>Total Price</th><th>Power</th></tr>
-                    <tr><td>Pure Attack</td><td>A1, A2, A3</td><td>950</td><td>6</td></tr>
-                    <tr><td>Pure Defense</td><td>D1, D2, D3</td><td>860</td><td>6</td></tr>
-                    <tr><td>Pure Mix</td><td>M1, M2, M3</td><td>830</td><td>6</td></tr>
+                    <tr><th>Alliance</th><th>Houses</th><th>Price</th><th>Power</th></tr>
+                    <tr><td>Pure Attack</td><td>Targaryen, Dothraki, Dornish</td><td>950</td><td>6</td></tr>
+                    <tr><td>Pure Defense</td><td>Unsullied, Night's Watch, Riverlands</td><td>860</td><td>6</td></tr>
+                    <tr><td>Pure Mix</td><td>Stormlanders, Iron Fleet, Vale</td><td>830</td><td>6</td></tr>
                 </table>
+
+                <p class="fan-note">Unofficial fan project, not affiliated with HBO.</p>
             </div>
         </div>
 
@@ -78,21 +97,21 @@
 
         <!-- Screen 1: Start Game -->
         <div id="start-screen">
-            <button id="claim-btn">JOIN THE WORLD WAR</button>
+            <button type="button" id="claim-btn">JOIN THE WORLD WAR</button>
+            <button type="button" id="difficulty-btn" class="text-btn" aria-pressed="false">Difficulty: Normal</button>
+            <p id="stats-line" class="stats-line"></p>
         </div>
 
         <!-- Screen 2: War Hall (Battle Phase) -->
         <div id="battle-phase" class="hidden">
-            <div id="battle-location-display">MAKE YOUR ARMY</div>
+            <div id="battle-location-display" aria-live="polite">MAKE YOUR ARMY</div>
 
             <div id="war-hall">
                 <!-- Player Roster -->
                 <div class="roster-side" id="player-side">
                     <h3>YOUR ALLIANCE</h3>
-                    <div id="gold-display" class="gold-display">BUDGET: <span id="player-gold">999</span>G</div>
-                    <div class="roster" id="player-roster">
-                        <!-- Slots populated by JS -->
-                    </div>
+                    <div class="gold-display">BUDGET: <span id="player-gold">999</span>G</div>
+                    <div class="roster" id="player-roster"></div>
                     <div id="player-codeword" class="codeword-text hidden"></div>
                     <div id="player-health-container" class="health-container hidden">
                         <div id="player-health-bar" class="health-bar"></div>
@@ -101,19 +120,17 @@
 
                 <!-- Drafting Board -->
                 <div id="drafting-board">
-                    <div id="draft-options">
-                        <!-- Populated by JS -->
-                    </div>
-                    <p id="battle-log"></p>
+                    <div id="draft-options"></div>
+                    <p id="battle-log" aria-live="polite"></p>
                     <div class="action-bar">
-                        <button id="btn-battle" class="theme-btn hidden">PREPARE FOR WAR</button>
+                        <button type="button" id="btn-battle" class="theme-btn hidden">PREPARE FOR WAR</button>
                         <div id="action-buttons-container" class="action-row hidden">
-                            <button id="btn-surrender" class="theme-btn">SURRENDER</button>
-                            <button id="btn-fight" class="theme-btn">FIGHT!</button>
+                            <button type="button" id="btn-surrender" class="theme-btn">SURRENDER</button>
+                            <button type="button" id="btn-fight" class="theme-btn">FIGHT!</button>
                         </div>
                         <div id="inline-result" class="action-row hidden">
-                            <button id="btn-home-inline" class="theme-btn">HOME</button>
-                            <button id="btn-restart-inline" class="theme-btn">BATTLE AGAIN</button>
+                            <button type="button" id="btn-home-inline" class="theme-btn">HOME</button>
+                            <button type="button" id="btn-restart-inline" class="theme-btn">BATTLE AGAIN</button>
                         </div>
                     </div>
                 </div>
@@ -121,10 +138,8 @@
                 <!-- Enemy Roster -->
                 <div class="roster-side" id="enemy-side">
                     <h3>ENEMY ALLIANCE</h3>
-                    <div id="enemy-gold-display" class="gold-display">BUDGET: <span id="enemy-gold">999</span>G</div>
-                    <div class="roster" id="enemy-roster">
-                        <!-- Slots populated by JS (Hidden until battle) -->
-                    </div>
+                    <div class="gold-display">BUDGET: <span id="enemy-gold">???</span>G</div>
+                    <div class="roster" id="enemy-roster"></div>
                     <div id="enemy-codeword" class="codeword-text hidden"></div>
                     <div id="enemy-health-container" class="health-container hidden">
                         <div id="enemy-health-bar" class="health-bar"></div>
@@ -132,63 +147,14 @@
                 </div>
             </div>
         </div>
-        
+
         <div id="blood-splatter"></div>
     </div>
 
-    <!-- Post Battle Overlay -->
-    <div id="post-battle-screen" class="hidden">
-        <h1 id="end-result-text">VICTORY</h1>
-        <div class="post-battle-actions">
-            <button id="btn-go-back">RETURN TO HALL</button>
-            <button id="btn-play-again">BATTLE AGAIN</button>
-        </div>
-    </div>
-
-    <script src="js/data.js?v=48"></script>
-    <script src="js/audio.js?v=48"></script>
-    <script src="js/ui.js?v=48"></script>
-    <script src="js/combat.js?v=48"></script>
+    <script src="js/data.js?v=50"></script>
+    <script src="js/audio.js?v=50"></script>
+    <script src="js/ui.js?v=50"></script>
+    <script src="js/combat.js?v=50"></script>
 </div>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
