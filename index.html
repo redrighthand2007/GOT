@@ -2,17 +2,31 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#050505">
     <title>Game of Thrones - Battle for Westeros</title>
     <!-- Add Favicon (The tab icon) -->
     <link rel="icon" href="assets/images/got-title.png" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/got-theme.css?v=42">
-    <!-- Set the PC / phone layout before first paint (js/data.js keeps it updated) -->
+    <link rel="stylesheet" href="css/got-theme.css?v=47">
+    <!-- Set the PC / phone layout before first paint (js/data.js keeps it updated),
+         and keep the page hidden until the Cinzel font is ready so text doesn't jump -->
     <script>
-        document.documentElement.classList.toggle('narrow', matchMedia('(max-width: 56em)').matches);
+        (function () {
+            var root = document.documentElement;
+            root.classList.toggle('narrow', matchMedia('(max-width: 56em)').matches);
+            root.classList.add('fonts-loading');
+            var show = function () { root.classList.remove('fonts-loading'); };
+            if (document.fonts && document.fonts.load) {
+                Promise.all([document.fonts.load('400 1em Cinzel'), document.fonts.load('700 1em Cinzel')])
+                    .then(show, show);
+            } else {
+                show();
+            }
+            setTimeout(show, 2500); // slow network: show anyway with the fallback font
+        })();
     </script>
 </head>
 <body>
@@ -130,9 +144,9 @@
         </div>
     </div>
 
-    <script src="js/data.js?v=42"></script>
-    <script src="js/ui.js?v=42"></script>
-    <script src="js/combat.js?v=42"></script>
+    <script src="js/data.js?v=47"></script>
+    <script src="js/ui.js?v=47"></script>
+    <script src="js/combat.js?v=47"></script>
 </div>
 </body>
 </html>

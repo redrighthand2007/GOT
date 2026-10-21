@@ -60,6 +60,7 @@ let playerGold = 999;
 let enemyGold = 999;
 let playerRoster = [];
 let enemyRoster = [];
+let battleTimers = []; // pending fight steps, cleared when the player leaves mid-fight
 
 const HOUSES_DATA = [
     { id: "targ", name: "Targaryen", role: "A", tier: 1, cost: 500, power: 3, img: "assets/images/house-targaryen.png" },
@@ -102,20 +103,48 @@ contentEl.addEventListener('transitionend', (e) => {
 
 // PC (three columns) <-> phone (one column). Same query as the inline
 // script in index.html. The switch morphs instead of snapping.
+// Checked on resize too, since some browsers don't fire the query's change event.
 const narrowQuery = matchMedia('(max-width: 56em)');
-narrowQuery.addEventListener('change', (e) => {
-    const applyLayout = () => document.documentElement.classList.toggle('narrow', e.matches);
-    if (!document.startViewTransition || reducedMotion.matches) {
+const MORPH_TARGETS = ['#player-side', '#enemy-side', '#draft-options', '.action-bar', '#battle-location-display'];
+
+// Fallback for browsers without view transitions (e.g. Firefox): note where
+// each panel was, switch the layout, then slide each panel from old to new spot.
+function morphWithoutViewTransition(applyLayout) {
+    const panels = MORPH_TARGETS
+        .map(sel => document.querySelector(sel))
+        .filter(el => el && el.getClientRects().length > 0);
+    const before = panels.map(el => el.getBoundingClientRect());
+    applyLayout();
+    panels.forEach((el, i) => {
+        const after = el.getBoundingClientRect();
+        const dx = before[i].left - after.left;
+        const dy = before[i].top - after.top;
+        if (!dx && !dy) return;
+        el.animate(
+            [{ transform: `translate(${dx}px, ${dy}px)` }, { transform: 'none' }],
+            { duration: 450, easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)' }
+        );
+    });
+}
+
+function syncLayout() {
+    const narrow = narrowQuery.matches;
+    if (document.documentElement.classList.contains('narrow') === narrow) return;
+    const applyLayout = () => document.documentElement.classList.toggle('narrow', narrow);
+    if (reducedMotion.matches || document.hidden) {
         applyLayout();
         return;
     }
-    // Drop any running zoom animation; the view transition animates this change
+    // Drop any running zoom animation; the layout morph animates this change
     contentEl.style.transition = 'none';
     contentEl.style.transform = '';
     contentEl.getBoundingClientRect();
     contentEl.style.transition = '';
-    document.startViewTransition(applyLayout);
-});
+    if (document.startViewTransition) document.startViewTransition(applyLayout);
+    else morphWithoutViewTransition(applyLayout);
+}
+narrowQuery.addEventListener('change', syncLayout);
+window.addEventListener('resize', syncLayout);
 
 // Audio Setup
 if (bgMusic) bgMusic.volume = 0.4;
