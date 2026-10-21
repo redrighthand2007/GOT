@@ -22,3 +22,6 @@ yarn-error.log*
 node_modules/
 dist/
 build/
+
+# Local Claude Code / preview config
+.claude/
