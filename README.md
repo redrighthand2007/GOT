@@ -1,131 +1,98 @@
 <div align="center">
 
-# ⚔️ Game of Thrones: Battle for Westeros ⚔️
+# ⚔️ Battle for Westeros ⚔️
 
-**A sleek, fast-paced strategy web game built entirely with pure Vanilla Web Technologies.**
+**A fast strategy game for the browser, built with plain HTML, CSS and JavaScript. No frameworks, no build step.**
 
-[![Play Game](https://img.shields.io/badge/Play-Live_Demo-E34F26?style=for-the-badge&logo=google-chrome&logoColor=white)](https://redrighthand2007.github.io/Gameofthrones-Webgame/)
-[![Documentation](https://img.shields.io/badge/Docs-Project_Summary-1572B6?style=for-the-badge&logo=read-the-docs&logoColor=white)](./docs/1project_summary.pdf)
-[![License: MIT](https://img.shields.io/badge/License-MIT-323330?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![Play Game](https://img.shields.io/badge/Play-Live_Demo-E34F26?style=for-the-badge&logo=google-chrome&logoColor=white)](https://redrighthand2007.github.io/GOT/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-323330?style=for-the-badge)](./LICENSE)
 
 </div>
 
-## 📸 Preview / Demo
+## 📸 Preview
 
 <div align="center">
-  <img src="assets/images/iron-throne-bg-v2.jpg" alt="Game of Thrones: Battle for Westeros" width="100%" style="border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.6); margin-bottom: 20px;">
+  <img src="assets/images/iron-throne-bg-v2.jpg" alt="Battle for Westeros start screen" width="100%">
 </div>
 
 ## ✨ Features
 
-- **💰 Dynamic Economy & Strategy:** Draft units balancing a strict 999G budget across 9 different houses.
-- **🤖 Automated Master-Tactician AI:** Face off against a computer adversary that utilizes mathematically flawless formations.
-- **⚡ Single Page Architecture (SPA):** Absolute zero page reloads via semantic CSS class toggling.
-- **🎭 Cinematic UI/UX:** Thematic dark aesthetics, glassmorphism panels, and interactive hover modals.
-- **🎵 Custom Audio Engine:** Integrated themes and sword clash effects controlled via a minimalist UI toggle.
-
-## 🎯 Why This Project?
-
-> **The Problem:** Modern web development is often bogged down by heavy frontend frameworks (like React, Vue, or Angular) even for relatively straightforward state-driven applications.
->
-> **The Solution:** *Battle for Westeros* serves as a masterclass in raw DOM manipulation, state management, and CSS layout architecture. It proves that a complex, cinematic, state-driven interactive web application can be built elegantly using **Zero Dependencies**.
+- **💰 Draft with a budget:** pick 3 of 9 houses with 999 gold. Every house has a type (Attack, Defense or Mix), a tier and a price.
+- **🔺 Type triangle:** Attack beats Mix, Mix beats Defense, Defense beats Attack. Every winning house-vs-house matchup gives +5% strength, every losing one -5%.
+- **🤖 Two difficulties:** on *Normal* the enemy picks a random alliance; on *Hard* it picks the alliance that counters yours.
+- **🏆 Win streaks:** wins, losses, current and best streak are saved on your device.
+- **📱 Works everywhere:** one layout for phones, tablets and PCs; browser zoom scales smoothly; layout changes animate instead of jumping.
+- **🎵 Sound:** theme music starts when you join the war, dips during fights, pauses in background tabs; war horns for victory and defeat are generated in the browser. Mute is remembered.
+- **♿ Keyboard and screen-reader friendly:** every control is a real button with a label.
 
 ## 🛠️ Tech Stack
 
-- **Frontend:** HTML5, CSS3, Vanilla JavaScript (ES6+)
-- **Backend:** N/A (Client-side execution)
-- **Database:** N/A (In-memory state management)
-- **Deployment:** GitHub Pages
+- HTML5, CSS3, vanilla JavaScript (no dependencies)
+- Web Audio API for fades and the generated horn/drum sounds
+- Hosted on GitHub Pages
 
 ## 📁 Project Structure
 
 ```text
-Gameofthrones-Webgame/
+GOT/
 ├── assets/
-│   ├── audio/        # Background themes and SFX (mp3)
-│   └── images/       # Background art and UI icons (jpg, png)
+│   ├── audio/          # theme music and sword sound
+│   └── images/         # background art
 ├── css/
-│   └── got-theme.css # Advanced stylesheets
-├── docs/             # PRDs and PDF summaries
-├── js/               # Modular JS engine
-│   ├── combat.js
-│   ├── data.js
-│   └── ui.js
-├── index.html        # Singular DOM entry point
+│   └── got-theme.css   # all styles, layout and animations
+├── js/
+│   ├── data.js         # houses, rules, saved stats, layout/zoom motion
+│   ├── audio.js        # music, sound effects, mute
+│   ├── ui.js           # screens, drafting board, info panel
+│   └── combat.js       # drafting rules, enemy AI, battle maths
+├── tools/
+│   └── bump-version.mjs  # cache-busting helper (see below)
+├── index.html
+├── LICENSE
 └── README.md
 ```
 
-## ⚙️ Installation
+## ⚙️ Run it locally
 
-No complex build pipelines or NPM packages are required. It's completely plug-and-play.
-
-1. **Clone the repository:**
+1. Clone the repository:
    ```bash
-   git clone https://github.com/redrighthand2007/Gameofthrones-Webgame.git
+   git clone https://github.com/redrighthand2007/GOT.git
    ```
-2. **Navigate into the directory:**
+2. Open `index.html` in a browser, or serve the folder (recommended, so all sound features work):
    ```bash
-   cd Gameofthrones-Webgame
+   python -m http.server 5173
    ```
-3. **Open the application:**
-   Simply double-click `index.html` to open it in your default web browser, or serve it via a local live server extension (like VS Code Live Server).
+   then open `http://localhost:5173`.
 
-## 🚀 Usage
+## 🚀 How to play
 
-1. **Enter the War Room:** Review your starting budget of **999G**.
-2. **Draft Your Alliance:** Select up to 3 house cards. Hover over the info gear for a strategic pricing table.
-3. **Prepare for War:** Finalize your draft to force the AI into locking its mystery counter-alliance.
-4. **The Clash:** Hit **FIGHT!** The engine calculates raw power, applies an RNG modifier (0.85x to 1.15x), and determines the victor.
+1. Tap **JOIN THE WORLD WAR** (choose *Normal* or *Hard* first).
+2. Pick **3 houses** within **999G**. Tap a sigil in your alliance to remove it. The 📜 button shows all rules and prices.
+3. **Prepare for war** reveals the enemy alliance and both sides' type edge.
+4. **Fight!** Strength = total power × (1 + type edge) × luck (0.85x–1.15x). Higher strength wins.
 
-## 🔧 Configuration
+## 🔧 Changing things
 
-This project is completely client-side and requires **no environment variables** or **API keys**.
-*   **Audio Tuning:** Base volume and settings can be manually adjusted within `js/data.js`.
-*   **Game Balance:** Budget constraints and unit power tiers are hardcoded cleanly in the `HOUSES_DATA` array inside `js/data.js` for easy modding and tweaking.
-
-## 📊 Results / Performance
-
-*   **Load Time:** Near-instantaneous (Zero NPM bundle bloat).
-*   **Transitions:** `< 10ms` UI state changes using `.hidden` CSS class toggles instead of HTTP page routing.
-*   **Responsiveness:** Perfect 1:1 scaling from 4K desktop displays down to mobile screens using calculated Flexbox and CSS Grid logic.
-
-## 🧠 How It Works
-
-The underlying architecture delegates responsibilities cleanly across three separate JavaScript modules:
-*   `data.js`: Centralized State Management (Player/AI budgets, Audio Context, Entity Data).
-*   `ui.js`: Presentation Layer (Event listeners, DOM injection, visual hover interactions).
-*   `combat.js`: Core Business Logic (AI generation algorithms, mathematical power evaluations, and victory/defeat routing).
+- **Houses, prices, power, rules:** `HOUSES_DATA`, `ENEMY_COMBOS`, `STARTING_GOLD` and `TYPE_EDGE` in `js/data.js`.
+- **Music levels or your own victory/defeat clips:** `MUSIC_LEVEL`, `FIGHT_LEVEL` and `STING_FILES` at the top of `js/audio.js`.
+- **After changing CSS or JS, before pushing:** run `node tools/bump-version.mjs` so players' browsers load the new files instead of cached old ones.
 
 ## 🗺️ Roadmap
 
-- [x] Design core UI and Iron Throne theme
-- [x] Implement Vanilla JS SPA routing
-- [x] Build automated AI opponent algorithm
-- [x] Integrate custom audio engine
-- [ ] Add LocalStorage functionality for saving win/loss streaks
-- [ ] Implement responsive multiplayer mode (WebSockets)
-
-## 🤝 Contributing
-
-Contributions, issues, and feature requests are welcome! 
-Feel free to check out the [issues page](https://github.com/redrighthand2007/Gameofthrones-Webgame/issues) if you want to contribute.
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+- [x] Core game, Iron Throne theme and enemy AI
+- [x] Type triangle and difficulty levels
+- [x] Win/loss streaks saved on the device
+- [x] Phone, tablet and PC layouts with smooth zoom
+- [ ] Campaign across Westeros battlefields
+- [ ] Animated battle scenes
+- [ ] Installable app (PWA) with offline play
 
 ## 📄 License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+The source code is released under the [MIT License](./LICENSE).
+
+**This is an unofficial fan project and is not affiliated with HBO.** *Game of Thrones* names, artwork and music belong to their respective owners (HBO / George R. R. Martin) and are **not** covered by the MIT license.
 
 ## 👨‍💻 Author
 
-**Kush Aghera**
-* GitHub: [@redrighthand2007](https://github.com/redrighthand2007)
-
-## ⭐ Acknowledgements
-
-*   Inspired by HBO's Game of Thrones & George R.R. Martin's *A Song of Ice and Fire*.
-*   All art and audio assets are credited to their respective thematic creators.
+**Kush Aghera** · GitHub: [@redrighthand2007](https://github.com/redrighthand2007)
