@@ -615,11 +615,12 @@ img {
 /* =========================================
    PORTRAIT / SHORT SCREENS
    A letterboxed 16:9 stage would be tiny here, so the game switches to a
-   full-screen, scrollable column layout. Chosen by shape (orientation or
-   height), not by width alone, so desktop browser zoom no longer flips a
-   wide screen into the mobile layout.
+   full-screen, scrollable column layout. Chosen by orientation, plus height
+   only on touch devices (landscape phones). Browser zoom changes the CSS
+   width/height but never the orientation or pointer type, so zooming on a
+   desktop never flips into this layout.
 ========================================= */
-@media (orientation: portrait), (max-height: 500px) {
+@media (orientation: portrait), (pointer: coarse) and (max-height: 500px) {
     html {
         font-size: clamp(11px, 3.2vw, 16px);
     }
