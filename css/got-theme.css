@@ -606,33 +606,96 @@ img {
 /* =========================================
    NARROW SCREENS (phones, or a PC zoomed in a lot)
    The three columns stack into one: your side, the draft board, then
-   the enemy side. The breakpoint is in em, so it follows zoom too.
+   the enemy side. The .narrow class is set by js/data.js from the
+   (max-width: 56em) media query, so the switch can be animated.
 ========================================= */
-@media (max-width: 56em) {
-    .content {
-        padding-top: 3.5rem;
-    }
+.narrow .content {
+    padding-top: 3.5rem;
+}
 
-    #war-hall {
-        grid-template-columns: minmax(0, 1fr);
-        max-width: 28rem;
-        gap: 1.25rem;
-    }
+.narrow #war-hall {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 28rem;
+    gap: 1.25rem;
+}
 
-    .roster-side {
-        max-width: none;
-    }
+.narrow .roster-side {
+    max-width: none;
+}
 
-    #battle-location-display {
-        letter-spacing: 0.15em;
-    }
+.narrow #battle-location-display {
+    letter-spacing: 0.15em;
+}
 
-    .draft-card {
-        min-height: 7rem;
-    }
+.narrow .draft-card {
+    min-height: 7rem;
+}
 
-    #draft-options.draft-hidden {
-        display: none;
+.narrow #draft-options.draft-hidden {
+    display: none;
+}
+
+/* =========================================
+   MOTION
+   Zoom steps are animated in js/data.js. Sizes that follow the window
+   width ease into place, the PC <-> phone layout switch morphs with a
+   view transition, and screens fade in when they appear.
+========================================= */
+html {
+    transition: font-size 0.35s ease;
+}
+
+.content {
+    transition: padding 0.35s ease;
+}
+
+#main-title,
+#battle-location-display,
+#end-result-text {
+    transition: font-size 0.35s ease, letter-spacing 0.35s ease, margin 0.35s ease;
+}
+
+#war-hall {
+    transition: gap 0.35s ease;
+}
+
+#player-side { view-transition-name: player-side; }
+#enemy-side { view-transition-name: enemy-side; }
+#draft-options { view-transition-name: draft-options; }
+.action-bar { view-transition-name: action-bar; }
+#battle-location-display { view-transition-name: battle-title; }
+
+::view-transition-group(*) {
+    animation-duration: 0.45s;
+    animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(0.75rem); }
+    to { opacity: 1; transform: none; }
+}
+
+#start-screen,
+#battle-phase,
+#post-battle-screen,
+.action-row,
+#btn-battle,
+.codeword-text,
+.health-container {
+    animation: fadeIn 0.4s ease backwards;
+}
+
+#info-modal {
+    animation: fadeIn 0.2s ease backwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after,
+    ::view-transition-group(*) {
+        animation: none !important;
+        transition: none !important;
     }
 }
 
