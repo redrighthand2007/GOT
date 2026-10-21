@@ -19,6 +19,14 @@ const infoModal = document.getElementById('info-modal');
 
 settingsIcon.addEventListener('mouseenter', () => infoModal.classList.remove('hidden'));
 settingsIcon.addEventListener('mouseleave', () => infoModal.classList.add('hidden'));
+// Touch screens have no hover: tap the gear to toggle, tap anywhere else to close
+settingsIcon.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (matchMedia('(hover: none)').matches) infoModal.classList.toggle('hidden');
+});
+document.addEventListener('click', (e) => {
+    if (!infoModal.contains(e.target)) infoModal.classList.add('hidden');
+});
 
 
 // War Hall Elements
