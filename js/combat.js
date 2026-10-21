@@ -162,11 +162,11 @@ function endGameInline(playerWon) {
     
     if(playerWon) {
         if (sfxWin) sfxWin.play().catch(e=>e);
-        titleDisplay.innerHTML = "<span style='color:#32cd32; font-size: 3.5rem; letter-spacing: 5px; text-shadow: 0 0 20px rgba(50,205,50,0.8); font-weight:bold;'>VICTORY</span>";
+        titleDisplay.innerHTML = "<span class='result-banner victory'>VICTORY</span>";
         
     } else {
         flashBlood();
-        titleDisplay.innerHTML = "<span style='color:#ff0000; font-size: 3.5rem; letter-spacing: 5px; text-shadow: 0 0 20px rgba(255,0,0,0.8); font-weight:bold;'>DEFEAT</span>";
+        titleDisplay.innerHTML = "<span class='result-banner defeat'>DEFEAT</span>";
         
     }
     
