@@ -5,7 +5,6 @@ const claimBtn = document.getElementById('claim-btn');
 
 const bgMusic = document.getElementById('bg-music');
 const sfxSword = document.getElementById('sfx-sword');
-const sfxWin = document.getElementById('sfx-win');
 
 const battlePhase = document.getElementById('battle-phase');
 const battleLog = document.getElementById('battle-log');
@@ -145,8 +144,4 @@ function syncLayout() {
 }
 narrowQuery.addEventListener('change', syncLayout);
 window.addEventListener('resize', syncLayout);
-
-// Audio Setup
-if (bgMusic) bgMusic.volume = 0.4;
-if (sfxSword) sfxSword.volume = 0.7;
 

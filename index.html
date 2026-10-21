@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/got-theme.css?v=47">
+    <link rel="stylesheet" href="css/got-theme.css?v=48">
     <!-- Set the PC / phone layout before first paint (js/data.js keeps it updated),
          and keep the page hidden until the Cinzel font is ready so text doesn't jump -->
     <script>
@@ -31,8 +31,9 @@
 </head>
 <body>
     <!-- Audio Elements -->
-    <audio id="bg-music" src="assets/audio/got-theme.mp3" loop></audio>
-    <audio id="sfx-sword" src="assets/audio/sword-clash.mp3"></audio>
+    <!-- Preloaded so the theme can start the moment JOIN THE WORLD WAR is tapped -->
+    <audio id="bg-music" src="assets/audio/got-theme.mp3" loop preload="auto"></audio>
+    <audio id="sfx-sword" src="assets/audio/sword-clash.mp3" preload="auto"></audio>
     
 
     <div id="game-container">
@@ -144,9 +145,10 @@
         </div>
     </div>
 
-    <script src="js/data.js?v=47"></script>
-    <script src="js/ui.js?v=47"></script>
-    <script src="js/combat.js?v=47"></script>
+    <script src="js/data.js?v=48"></script>
+    <script src="js/audio.js?v=48"></script>
+    <script src="js/ui.js?v=48"></script>
+    <script src="js/combat.js?v=48"></script>
 </div>
 </body>
 </html>

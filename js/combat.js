@@ -87,9 +87,9 @@ btnBattle.addEventListener('click', () => {
         enemyRosterContainer.appendChild(slot);
     });
     
-    if (sfxSword) sfxSword.play().catch(e=>e);
-    
-    // Show stats explicitly 
+    Sound.playSword();
+
+    // Show stats explicitly
     const pCode = playerRoster.map(h => h.id).join(' + ');
     const eCode = enemyRoster.map(h => h.id).join(' + ');
     playerCodeword.innerText = pCode;
@@ -105,7 +105,7 @@ btnBattle.addEventListener('click', () => {
 
 btnFight.addEventListener('click', () => {
     btnFight.disabled = true;
-    if (typeof bgMusic !== 'undefined' && bgMusic && typeof isMuted !== 'undefined' && !isMuted) bgMusic.volume = 0.15;
+    Sound.fightStart(); // music dips so the clashes stand out
     
     let pPower = calculatePower(playerRoster);
     let ePower = calculatePower(enemyRoster);
@@ -123,12 +123,7 @@ btnFight.addEventListener('click', () => {
     const pBar = document.getElementById('player-health-bar');
     const eBar = document.getElementById('enemy-health-bar');
     
-    const playClash = () => {
-        if (sfxSword) {
-            sfxSword.currentTime = 0;
-            sfxSword.play().catch(e=>e);
-        }
-    };
+    const playClash = Sound.playSword;
     
     battleTimers.push(setTimeout(() => {
         playClash();
@@ -155,7 +150,8 @@ btnFight.addEventListener('click', () => {
 });
 
 function endGameInline(playerWon) {
-    if (typeof bgMusic !== 'undefined' && bgMusic && typeof isMuted !== 'undefined' && !isMuted) bgMusic.volume = 0.4;
+    // Music rises again once the victory/defeat horn has sounded
+    battleTimers.push(setTimeout(Sound.fightEnd, 2500));
     const inlineResult = document.getElementById('inline-result');
     const titleDisplay = document.getElementById('battle-location-display');
     
@@ -165,11 +161,12 @@ function endGameInline(playerWon) {
     
     
     if(playerWon) {
-        if (sfxWin) sfxWin.play().catch(e=>e);
+        Sound.victory();
         titleDisplay.innerHTML = "<span class='result-banner victory'>VICTORY</span>";
         
     } else {
         flashBlood();
+        Sound.defeat();
         titleDisplay.innerHTML = "<span class='result-banner defeat'>DEFEAT</span>";
         
     }

@@ -1,33 +1,6 @@
-let musicStarted = false;
-function startMusicWithFade() {
-    if (musicStarted || isMuted || !bgMusic) return;
-    musicStarted = true;
-    bgMusic.volume = 0;
-    let playPromise = bgMusic.play();
-    if (playPromise !== undefined) {
-        playPromise.then(() => {
-            let vol = 0;
-            let fadeInterval = setInterval(() => {
-                if(isMuted) { clearInterval(fadeInterval); return; }
-                vol += 0.05;
-                if (vol >= 0.4) {
-                    bgMusic.volume = 0.4;
-                    clearInterval(fadeInterval);
-                } else {
-                    bgMusic.volume = vol;
-                }
-            }, 200);
-        }).catch(e => {
-            musicStarted = false; 
-        });
-    }
-}
-document.addEventListener('click', startMusicWithFade);
-
 // --- Screen 1: Start Game ---
 const btnBackNav = document.getElementById('btn-back-nav');
 btnBackNav.addEventListener('click', () => {
-    if (typeof bgMusic !== 'undefined' && bgMusic && !isMuted) bgMusic.volume = 0.4;
     document.getElementById('main-title').classList.remove('hidden');
     startScreen.classList.remove('hidden');
     battlePhase.classList.add('hidden');
@@ -39,7 +12,7 @@ claimBtn.addEventListener('click', () => {
     document.getElementById('main-title').classList.add('hidden');
     startScreen.classList.add('hidden');
     battlePhase.classList.remove('hidden');
-    if (bgMusic) bgMusic.play().catch(e => console.log("Audio play failed:", e));
+    Sound.startMusic(); // the theme begins when the player joins the war
     initWarHall();
     
 });
@@ -125,6 +98,7 @@ function resetDraftingUI() {
     battleTimers.forEach(clearTimeout);
     battleTimers = [];
     document.getElementById('blood-splatter').classList.remove('splatter-active');
+    Sound.fightEnd(); // bring the music back up if a fight was cut short
 
     document.getElementById('battle-location-display').innerHTML = "MAKE YOUR ARMY";
     draftingBoard.classList.remove('transparent-board');
@@ -166,13 +140,7 @@ playAgainBtn.addEventListener('click', () => {
     initWarHall();
      // Restarts the drafting phase directly
 });
-const soundIcon = document.getElementById('sound-icon');
-let isMuted = false;
-soundIcon.addEventListener('click', () => {
-    isMuted = !isMuted;
-    soundIcon.innerHTML = isMuted ? '&#128263;' : '&#128266;';
-    document.querySelectorAll('audio').forEach(audio => audio.muted = isMuted);
-});
+document.getElementById('sound-icon').addEventListener('click', Sound.toggleMute);
 document.getElementById('btn-surrender').addEventListener('click', () => {
     document.getElementById('btn-back-nav').click();
 });
