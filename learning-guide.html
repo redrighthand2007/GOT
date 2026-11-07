@@ -1,0 +1,2215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Westeros Learning Guide</title>
+<meta name="description" content="A stage-by-stage guide to every part of Battle for Westeros: HTML, CSS, JavaScript, audio, layout, deployment, and how they all connect.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ============ TOKENS ============ */
+:root {
+  --bg: #0c0c10;
+  --panel: #15151c;
+  --panel-2: #1c1c25;
+  --border: #2b2b37;
+  --text: #e4e4ea;
+  --muted: #9b9bab;
+  --gold: #d4af37;
+  --gold-soft: rgba(212, 175, 55, 0.12);
+  --steel: #b0c4de;
+  --red: #e2605a;
+  --red-soft: rgba(226, 96, 90, 0.12);
+  --green: #55c27a;
+  --green-soft: rgba(85, 194, 122, 0.12);
+  --blue: #6aa8e6;
+  --blue-soft: rgba(106, 168, 230, 0.12);
+  --purple: #b48ae8;
+  --code-bg: #0f0f15;
+  --code-text: #d8d8e2;
+  --c-kw: #e28ad4;
+  --c-str: #9ad27a;
+  --c-com: #737388;
+  --shadow: 0 0.4rem 1.4rem rgba(0, 0, 0, 0.35);
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #f6f4ef; --panel: #ffffff; --panel-2: #f1eee6; --border: #ddd6c6;
+    --text: #23222a; --muted: #6b6878; --gold: #9a7a12; --gold-soft: rgba(154, 122, 18, 0.1);
+    --steel: #3d5a80; --red: #b8322c; --red-soft: rgba(184, 50, 44, 0.08);
+    --green: #22804a; --green-soft: rgba(34, 128, 74, 0.08); --blue: #2a6cb0; --blue-soft: rgba(42, 108, 176, 0.08);
+    --purple: #7b4bbd; --code-bg: #f3f1ec; --code-text: #2a2930; --c-kw: #a2348f; --c-str: #3f7d1f; --c-com: #8c8a96;
+    --shadow: 0 0.3rem 1rem rgba(60, 50, 20, 0.08);
+  }
+}
+:root[data-theme="light"] {
+  --bg: #f6f4ef; --panel: #ffffff; --panel-2: #f1eee6; --border: #ddd6c6;
+  --text: #23222a; --muted: #6b6878; --gold: #9a7a12; --gold-soft: rgba(154, 122, 18, 0.1);
+  --steel: #3d5a80; --red: #b8322c; --red-soft: rgba(184, 50, 44, 0.08);
+  --green: #22804a; --green-soft: rgba(34, 128, 74, 0.08); --blue: #2a6cb0; --blue-soft: rgba(42, 108, 176, 0.08);
+  --purple: #7b4bbd; --code-bg: #f3f1ec; --code-text: #2a2930; --c-kw: #a2348f; --c-str: #3f7d1f; --c-com: #8c8a96;
+  --shadow: 0 0.3rem 1rem rgba(60, 50, 20, 0.08);
+}
+
+/* ============ BASE ============ */
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 1rem; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 16px/1.65 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+h1, h2, h3, .brand { font-family: "Cinzel", Georgia, serif; letter-spacing: 0.03em; }
+h2 { font-size: 1.7rem; margin: 0.2rem 0 0.4rem; line-height: 1.25; }
+h3 { font-size: 1.15rem; margin: 2rem 0 0.6rem; color: var(--gold); }
+h4 { margin: 1.4rem 0 0.4rem; font-size: 1rem; }
+p { margin: 0.6rem 0; }
+a { color: var(--blue); }
+code { font-family: ui-monospace, "Cascadia Code", Consolas, monospace; font-size: 0.88em; background: var(--panel-2); padding: 0.08em 0.35em; border-radius: 0.25rem; border: 1px solid var(--border); }
+pre { margin: 0.8rem 0; background: var(--code-bg); color: var(--code-text); border: 1px solid var(--border); border-radius: 0.5rem; padding: 0.9rem 1rem; overflow-x: auto; font-size: 0.85rem; line-height: 1.55; }
+pre code { background: none; border: 0; padding: 0; font-size: inherit; }
+pre .k { color: var(--c-kw); }
+pre .s { color: var(--c-str); }
+pre .c { color: var(--c-com); font-style: italic; }
+.file { display: inline-block; font: 600 0.72rem ui-monospace, Consolas, monospace; color: var(--muted); margin: 0.8rem 0 -0.5rem; padding: 0.15rem 0.5rem; border: 1px solid var(--border); border-bottom: 0; border-radius: 0.35rem 0.35rem 0 0; background: var(--panel-2); }
+ul, ol { padding-left: 1.3rem; }
+li { margin: 0.25rem 0; }
+strong { color: var(--text); }
+hr { border: 0; border-top: 1px solid var(--border); margin: 2rem 0; }
+
+/* ============ LAYOUT ============ */
+.layout { display: grid; grid-template-columns: 18rem minmax(0, 1fr); min-height: 100vh; }
+.sidebar {
+  position: sticky; top: 0; height: 100vh; overflow-y: auto;
+  background: var(--panel); border-right: 1px solid var(--border); padding: 1.2rem 1rem 2rem;
+}
+.brand { font-size: 1.1rem; font-weight: 700; color: var(--gold); margin: 0 0 0.2rem; }
+.brand-sub { color: var(--muted); font-size: 0.8rem; margin: 0 0 1rem; }
+.tools { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
+.tool-btn {
+  font: 600 0.78rem system-ui, sans-serif; color: var(--text); background: var(--panel-2);
+  border: 1px solid var(--border); border-radius: 2rem; padding: 0.35rem 0.75rem; cursor: pointer;
+}
+.tool-btn[aria-pressed="true"] { background: var(--gold); color: #111; border-color: var(--gold); }
+.progress-wrap { margin-bottom: 1rem; font-size: 0.8rem; color: var(--muted); }
+.progress-bar { height: 0.4rem; background: var(--panel-2); border-radius: 1rem; overflow: hidden; margin-top: 0.3rem; border: 1px solid var(--border); }
+.progress-bar span { display: block; height: 100%; width: 0; background: var(--gold); transition: width 0.3s; }
+#toc { list-style: none; padding: 0; margin: 0; counter-reset: none; }
+#toc li { margin: 0; }
+#toc a {
+  display: flex; gap: 0.5rem; align-items: baseline; padding: 0.32rem 0.5rem; border-radius: 0.4rem;
+  color: var(--muted); text-decoration: none; font-size: 0.86rem; line-height: 1.35;
+}
+#toc a:hover { background: var(--panel-2); color: var(--text); }
+#toc a.active { background: var(--gold-soft); color: var(--text); }
+#toc .num { font: 700 0.7rem ui-monospace, monospace; color: var(--gold); min-width: 1.6rem; }
+#toc .tick { margin-left: auto; color: var(--green); }
+main { padding: 2rem clamp(1rem, 4vw, 3.5rem) 6rem; max-width: 62rem; width: 100%; }
+.menu-btn { display: none; }
+
+@media (max-width: 860px) {
+  .layout { grid-template-columns: minmax(0, 1fr); }
+  .sidebar { position: fixed; inset: 0 auto 0 0; width: min(20rem, 85vw); z-index: 50; transform: translateX(-102%); transition: transform 0.25s; box-shadow: var(--shadow); }
+  body.menu-open .sidebar { transform: none; }
+  .menu-btn { display: inline-flex; position: fixed; top: 0.7rem; right: 0.7rem; z-index: 60; }
+  main { padding-top: 3.5rem; }
+}
+
+/* ============ HERO ============ */
+.hero { border: 1px solid var(--border); background: radial-gradient(circle at 15% 0%, var(--gold-soft), transparent 60%), var(--panel); border-radius: 1rem; padding: 1.8rem; margin-bottom: 2.5rem; }
+.hero h1 { margin: 0 0 0.5rem; font-size: clamp(1.6rem, 4vw, 2.4rem); color: var(--gold); }
+.hero p { color: var(--muted); max-width: 46rem; }
+.legend { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+.legend span { font-size: 0.8rem; padding: 0.25rem 0.6rem; border-radius: 2rem; border: 1px solid var(--border); background: var(--panel-2); }
+
+/* ============ STAGES ============ */
+section.stage { padding-top: 1rem; margin-bottom: 4rem; }
+.stage-head { border-bottom: 1px solid var(--border); padding-bottom: 0.9rem; margin-bottom: 1.2rem; }
+.badge { display: inline-block; font: 700 0.72rem ui-monospace, monospace; letter-spacing: 0.08em; color: #111; background: var(--gold); padding: 0.18rem 0.55rem; border-radius: 0.3rem; text-transform: uppercase; }
+.maps { display: inline-block; font-size: 0.75rem; color: var(--muted); margin-left: 0.4rem; }
+.stage-head .lead { color: var(--muted); margin: 0.2rem 0 0.6rem; }
+.learned { display: inline-flex; align-items: center; gap: 0.45rem; font-size: 0.85rem; cursor: pointer; user-select: none; color: var(--muted); }
+.learned input { width: 1.05rem; height: 1.05rem; accent-color: var(--green); }
+
+/* ============ CALLOUTS ============ */
+.box { border: 1px solid var(--border); border-left-width: 4px; border-radius: 0.5rem; padding: 0.8rem 1rem; margin: 1rem 0; background: var(--panel); }
+.box > :first-child { margin-top: 0; }
+.box > :last-child { margin-bottom: 0; }
+.box-title { font-weight: 700; font-size: 0.85rem; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 0.3rem; display: block; }
+.remember { border-left-color: var(--gold); background: var(--gold-soft); }
+.remember .box-title { color: var(--gold); }
+.why { border-left-color: var(--blue); background: var(--blue-soft); }
+.why .box-title { color: var(--blue); }
+.warn { border-left-color: var(--red); background: var(--red-soft); }
+.warn .box-title { color: var(--red); }
+.link { border-left-color: var(--green); background: var(--green-soft); }
+.link .box-title { color: var(--green); }
+.analogy { border-left-color: var(--purple); }
+.analogy .box-title { color: var(--purple); }
+
+details.deep { border: 1px dashed var(--border); border-radius: 0.5rem; padding: 0.5rem 0.9rem; margin: 1rem 0; background: var(--panel); }
+details.deep summary { cursor: pointer; font-weight: 600; color: var(--steel); }
+details.deep[open] summary { margin-bottom: 0.4rem; }
+
+/* ============ TABLES ============ */
+.table-wrap { overflow-x: auto; margin: 0.9rem 0; border: 1px solid var(--border); border-radius: 0.5rem; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th, td { text-align: left; padding: 0.5rem 0.7rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+th { background: var(--panel-2); color: var(--steel); font-weight: 700; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+td code { white-space: nowrap; }
+
+/* ============ DIAGRAMS ============ */
+figure { margin: 1.2rem 0; padding: 1rem; background: var(--panel); border: 1px solid var(--border); border-radius: 0.7rem; overflow-x: auto; }
+figcaption { font-size: 0.8rem; color: var(--muted); margin-top: 0.7rem; text-align: center; }
+
+/* Flow: boxes joined by arrows; turns vertical on phones */
+.flow { display: flex; flex-wrap: wrap; align-items: stretch; justify-content: center; gap: 1.9rem; }
+.flow .node { position: relative; flex: 1 1 8rem; max-width: 13rem; padding: 0.6rem 0.7rem; text-align: center; border: 1px solid var(--border); border-radius: 0.5rem; background: var(--panel-2); font-size: 0.86rem; font-weight: 600; line-height: 1.35; }
+.flow .node small { display: block; font-weight: 400; color: var(--muted); font-size: 0.75rem; margin-top: 0.2rem; }
+.flow .node:not(:last-child)::after { content: "\2192"; position: absolute; right: -1.45rem; top: 50%; transform: translateY(-50%); color: var(--gold); font-size: 1.15rem; font-weight: 700; }
+.flow.col { flex-direction: column; align-items: center; gap: 1.6rem; }
+.flow.col .node { width: min(100%, 24rem); max-width: none; flex: none; }
+.flow.col .node:not(:last-child)::after { content: "\2193"; right: 50%; top: auto; bottom: -1.45rem; transform: translateX(50%); }
+@media (max-width: 640px) {
+  .flow { flex-direction: column; align-items: center; gap: 1.6rem; }
+  .flow .node { width: 100%; max-width: 24rem; flex: none; }
+  .flow .node:not(:last-child)::after { content: "\2193"; right: 50%; top: auto; bottom: -1.45rem; transform: translateX(50%); }
+}
+.node.gold { border-color: var(--gold); background: var(--gold-soft); }
+.node.blue { border-color: var(--blue); background: var(--blue-soft); }
+.node.red { border-color: var(--red); background: var(--red-soft); }
+.node.green { border-color: var(--green); background: var(--green-soft); }
+
+/* Three-layer cards (HTML / CSS / JS) */
+.trio { display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: 0.8rem; margin: 1rem 0; }
+.trio > div { border: 1px solid var(--border); border-top: 4px solid var(--c, var(--gold)); background: var(--panel); border-radius: 0.5rem; padding: 0.8rem 1rem; }
+.trio h4 { margin: 0 0 0.3rem; }
+.trio p { margin: 0.3rem 0; font-size: 0.9rem; }
+
+/* Tree (DOM / folders) */
+.tree, .tree ul { list-style: none; margin: 0; padding-left: 1.1rem; }
+.tree { padding-left: 0; font: 0.84rem/1.6 ui-monospace, Consolas, monospace; }
+.tree ul { border-left: 1px dashed var(--border); margin-left: 0.4rem; }
+.tree li { margin: 0; position: relative; }
+.tree ul > li::before { content: ""; position: absolute; left: -1.1rem; top: 0.8em; width: 0.8rem; border-top: 1px dashed var(--border); }
+.tree .t-tag { color: var(--blue); }
+.tree .t-id { color: var(--gold); }
+.tree .t-note { color: var(--muted); font-family: system-ui, sans-serif; font-size: 0.78rem; }
+
+/* Box model */
+.boxmodel { font-size: 0.8rem; text-align: center; max-width: 28rem; margin: 0 auto; }
+.boxmodel div { padding: 0.5rem 1.6rem 1rem; border-radius: 0.4rem; position: relative; }
+.boxmodel .bm-label { display: block; font-weight: 700; text-align: left; margin: 0 0 0.4rem -1rem; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.bm-margin { background: rgba(226, 150, 90, 0.18); border: 1px dashed #e2965a; }
+.bm-border { background: rgba(212, 175, 55, 0.25); border: 2px solid var(--gold); }
+.bm-padding { background: rgba(85, 194, 122, 0.2); border: 1px dashed var(--green); }
+.bm-content { background: rgba(106, 168, 230, 0.3); border: 1px solid var(--blue); padding: 0.9rem !important; font-weight: 700; }
+
+/* Layer stack (z-index) */
+.stack { position: relative; height: 15rem; max-width: 30rem; margin: 0 auto; }
+.stack div { position: absolute; left: calc(var(--i) * 1.6rem); top: calc((5 - var(--i)) * 2.1rem); width: 62%; padding: 0.55rem 0.8rem; border-radius: 0.4rem; border: 1px solid var(--border); background: var(--panel-2); font-size: 0.8rem; box-shadow: var(--shadow); }
+.stack b { color: var(--gold); font-family: ui-monospace, monospace; }
+
+/* Mini mock layouts */
+.mock { border: 1px solid var(--border); border-radius: 0.5rem; padding: 0.6rem; background: var(--bg); font-size: 0.75rem; }
+.mock-grid { display: grid; grid-template-columns: 1fr 1.5fr 1fr; gap: 0.5rem; }
+.mock-grid.narrow { grid-template-columns: 1fr; max-width: 14rem; margin: 0 auto; }
+.mock-cell { border: 1px dashed var(--muted); border-radius: 0.35rem; padding: 0.6rem 0.4rem; text-align: center; min-height: 4rem; display: flex; align-items: center; justify-content: center; flex-direction: column; }
+.mock-cell.p { border-color: var(--blue); }
+.mock-cell.b { border-color: var(--gold); }
+.mock-cell.e { border-color: var(--red); }
+.mock-row { display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: flex-start; justify-content: center; }
+.mock-row > div { flex: 1 1 15rem; }
+.mock-title { font-weight: 700; font-size: 0.8rem; text-align: center; margin-bottom: 0.4rem; color: var(--muted); }
+
+/* Timeline */
+.timeline { position: relative; margin: 2.5rem 3.5rem 3.5rem; height: 0.35rem; background: var(--border); border-radius: 1rem; }
+.timeline .tick { position: absolute; left: var(--x); top: 50%; transform: translate(-50%, -50%); width: 0.9rem; height: 0.9rem; border-radius: 50%; background: var(--gold); border: 2px solid var(--panel); }
+.timeline .tick span { position: absolute; left: 50%; transform: translateX(-50%); font-size: 0.72rem; white-space: nowrap; color: var(--text); }
+.timeline .tick .up { bottom: 1.2rem; font-weight: 700; color: var(--gold); }
+.timeline .tick .down { top: 1.2rem; color: var(--muted); text-align: center; }
+
+/* Demo crest (real CSS from the game) */
+.demo-row { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; }
+.demo-crest-wrap { width: 4.5rem; text-align: center; font-size: 0.7rem; color: var(--muted); }
+.crest { display: flex; align-items: center; justify-content: center; width: 100%; aspect-ratio: 1 / 1; border-radius: 50%; background: radial-gradient(circle at 35% 30%, var(--c1) 0%, var(--c2) 85%); border: 0.125rem solid #d4af37; box-shadow: inset 0 0 0.6rem rgba(0,0,0,0.7), 0 0 0.4rem rgba(0,0,0,0.8); container-type: inline-size; margin-bottom: 0.3rem; }
+.crest-emblem { font-size: 1.5rem; font-size: 52cqi; line-height: 1; filter: grayscale(1) brightness(1.35) contrast(1.1) drop-shadow(0 0.1rem 0.15rem rgba(0,0,0,0.8)); }
+
+/* SVG helpers (colours follow the theme) */
+svg { display: block; max-width: 100%; height: auto; margin: 0 auto; }
+svg text { fill: var(--text); font: 14px system-ui, sans-serif; }
+svg .muted { fill: var(--muted); font-size: 12px; }
+svg .title { font-weight: 700; }
+svg .box { fill: var(--panel-2); stroke: var(--border); stroke-width: 1.5; }
+svg .box-gold { fill: var(--gold-soft); stroke: var(--gold); stroke-width: 1.5; }
+svg .box-blue { fill: var(--blue-soft); stroke: var(--blue); stroke-width: 1.5; }
+svg .box-red { fill: var(--red-soft); stroke: var(--red); stroke-width: 1.5; }
+svg .box-green { fill: var(--green-soft); stroke: var(--green); stroke-width: 1.5; }
+svg .line { stroke: var(--gold); stroke-width: 2; fill: none; }
+svg .line-muted { stroke: var(--muted); stroke-width: 1.5; fill: none; stroke-dasharray: 5 4; }
+svg .line-red { stroke: var(--red); stroke-width: 2; fill: none; }
+svg .arrow-head { fill: var(--gold); }
+svg .arrow-head-muted { fill: var(--muted); }
+svg .arrow-head-red { fill: var(--red); }
+.wide-svg { min-width: 50rem; }
+
+/* Cheat sheet grid */
+.cheat { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 0.8rem; }
+.cheat > div { border: 1px solid var(--border); background: var(--panel); border-radius: 0.5rem; padding: 0.8rem 1rem; font-size: 0.88rem; }
+.cheat h4 { margin: 0 0 0.4rem; color: var(--gold); }
+.cheat ul { margin: 0; padding-left: 1.1rem; }
+
+dl.gloss { display: grid; grid-template-columns: max-content 1fr; gap: 0.35rem 1rem; font-size: 0.9rem; }
+dl.gloss dt { font-weight: 700; color: var(--gold); }
+dl.gloss dd { margin: 0; }
+@media (max-width: 640px) { dl.gloss { grid-template-columns: 1fr; } dl.gloss dd { margin-bottom: 0.5rem; } }
+
+/* Steps list (numbered sequence) */
+ol.steps { list-style: none; counter-reset: s; padding: 0; }
+ol.steps > li { counter-increment: s; position: relative; padding: 0.55rem 0 0.55rem 2.6rem; border-left: 2px solid var(--border); margin-left: 0.9rem; }
+ol.steps > li::before { content: counter(s); position: absolute; left: -0.95rem; top: 0.5rem; width: 1.8rem; height: 1.8rem; border-radius: 50%; background: var(--gold); color: #111; font: 700 0.8rem ui-monospace, monospace; display: flex; align-items: center; justify-content: center; }
+ol.steps > li:last-child { border-left-color: transparent; }
+
+/* ============ REVISION MODE ============
+   Shows only stage headings and the "Remember" boxes, for quick memorising */
+body.revision section.stage > :not(.stage-head):not(.remember) { display: none; }
+body.revision section.stage { margin-bottom: 1.5rem; }
+
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+@media print { .sidebar, .menu-btn { display: none; } .layout { display: block; } details.deep { display: block; } }
+</style>
+</head>
+<body>
+<button type="button" class="tool-btn menu-btn" id="menu-btn" aria-expanded="false" aria-controls="sidebar">&#9776; Stages</button>
+
+<div class="layout">
+<nav class="sidebar" id="sidebar" aria-label="Stages">
+  <p class="brand">&#9876; Westeros Guide</p>
+  <p class="brand-sub">Battle for Westeros, from atoms to the full system</p>
+  <div class="tools">
+    <button type="button" class="tool-btn" id="revision-btn" aria-pressed="false" title="Show only the Remember boxes">&#129504; Revision mode</button>
+    <button type="button" class="tool-btn" id="theme-btn" title="Switch light / dark">&#9680; Theme</button>
+  </div>
+  <div class="progress-wrap">
+    <span id="progress-text">0 of 0 stages learned</span>
+    <div class="progress-bar"><span id="progress-fill"></span></div>
+  </div>
+  <ol id="toc"></ol>
+</nav>
+
+<main>
+<header class="hero">
+  <h1>Battle for Westeros: the complete learning guide</h1>
+  <p>Every part of the game, explained from the smallest piece (one HTML tag, one CSS rule, one line of JavaScript) up to the full system working together. The stages follow the order you would build the game from an empty folder. They match the phases in <code>PROGRESS.md</code>.</p>
+  <div class="legend">
+    <span>&#129504; <b>Remember</b>: the facts to memorise</span>
+    <span>&#128161; <b>Why</b>: the reason behind a choice</span>
+    <span>&#9888;&#65039; <b>Gotcha</b>: common traps</span>
+    <span>&#128279; <b>Connects to</b>: links to other parts</span>
+    <span>&#127917; <b>Analogy</b>: a picture in everyday words</span>
+  </div>
+  <p style="margin-top:1rem"><b>How to study:</b> read one stage at a time with the real file open next to it. Tick <i>"I've learned this"</i> when you can explain the stage out loud without looking. Later, turn on <b>&#129504; Revision mode</b> (top of the sidebar) to see only the Remember boxes for quick revision.</p>
+</header>
+
+<!-- ===================================================== STAGE 1 -->
+<section class="stage" id="s1" data-title="The big picture">
+  <div class="stage-head">
+    <span class="badge">Stage 1</span><span class="maps">Overview of everything</span>
+    <h2>The big picture</h2>
+    <p class="lead">What the game is, which files exist, and what each one does, before going into any detail.</p>
+    <label class="learned"><input type="checkbox" data-learn="s1"> I've learned this</label>
+  </div>
+
+  <h3>The game in one paragraph</h3>
+  <p>The player taps <b>JOIN THE WORLD WAR</b>, then <b>drafts</b> 3 of 9 houses with a budget of 999 gold. Each house has a <b>type</b> (Attack, Defense or Mix), a <b>tier</b> and a <b>price</b>. <b>PREPARE FOR WAR</b> reveals an enemy alliance. On Normal the enemy picks at random; on Hard it picks the alliance that counters yours best. <b>FIGHT!</b> works out each side's strength: <code>power × (1 + type edge) × luck</code>. Three animated rounds play, then VICTORY or DEFEAT. Wins, losses and streaks are saved in the browser.</p>
+
+  <h3>Three languages, three jobs</h3>
+  <div class="trio">
+    <div style="--c: var(--blue)"><h4>HTML: the skeleton</h4><p>Says <i>what exists</i>: buttons, panels, tables, audio players. File: <code>index.html</code>.</p><p>On its own it is a plain, unstyled page that can't do anything.</p></div>
+    <div style="--c: var(--gold)"><h4>CSS: the skin and armour</h4><p>Says <i>how it looks</i>: colours, sizes, layout, animations, phone vs PC. File: <code>css/got-theme.css</code>.</p><p>It cannot react to clicks by itself, apart from states like <code>:hover</code>.</p></div>
+    <div style="--c: var(--red)"><h4>JavaScript: the brain</h4><p>Says <i>what happens</i>: rules, maths, AI, sound, saving, switching screens. Files: <code>js/*.js</code>.</p><p>It changes the HTML and CSS classes while the game runs.</p></div>
+  </div>
+  <div class="box analogy"><span class="box-title">&#127917; Analogy</span>
+    <p>Think of a castle. HTML is the stone walls and rooms. CSS is the paint, banners and torches. JavaScript is the people inside: guards who open doors (buttons), a treasurer counting gold (budget), a general planning battles (AI), and a herald blowing horns (audio).</p>
+  </div>
+
+  <h3>The file map</h3>
+  <ul class="tree">
+    <li>GOT/
+      <ul>
+        <li><span class="t-id">index.html</span> <span class="t-note">the one page; loads everything else</span></li>
+        <li>css/<ul><li><span class="t-id">got-theme.css</span> <span class="t-note">all styles, layouts, animations (≈740 lines)</span></li></ul></li>
+        <li>js/
+          <ul>
+            <li><span class="t-id">data.js</span> <span class="t-note">① element lookups, rules, houses, state, saving, layout/zoom motion</span></li>
+            <li><span class="t-id">audio.js</span> <span class="t-note">② the <code>Sound</code> module: music, sword, horns, mute</span></li>
+            <li><span class="t-id">ui.js</span> <span class="t-note">③ drawing screens, cards, rosters, rules panel, navigation</span></li>
+            <li><span class="t-id">combat.js</span> <span class="t-note">④ drafting rules, battle maths, enemy AI, the fight</span></li>
+          </ul>
+        </li>
+        <li>assets/<ul><li>audio/ <span class="t-note">got-theme.mp3 (≈6 MB), sword-clash.mp3</span></li><li>images/ <span class="t-note">iron-throne-bg-v2.jpg (≈114 KB)</span></li></ul></li>
+        <li>tools/<ul><li><span class="t-id">bump-version.mjs</span> <span class="t-note">Node script for cache busting</span></li></ul></li>
+        <li>README.md · LICENSE · PROGRESS.md · .gitignore · .gitattributes</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h3>How the pieces talk to each other</h3>
+  <figure>
+    <svg class="wide-svg" viewBox="0 0 860 300" role="img" aria-label="index.html loads CSS and four scripts. The scripts share data and change the page.">
+      <defs>
+        <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="arrow-head"/></marker>
+        <marker id="ahm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="arrow-head-muted"/></marker>
+      </defs>
+      <rect x="330" y="10" width="200" height="54" rx="8" class="box-blue"/>
+      <text x="430" y="34" text-anchor="middle" class="title">index.html</text>
+      <text x="430" y="52" text-anchor="middle" class="muted">structure + loads the rest</text>
+
+      <rect x="20" y="120" width="170" height="54" rx="8" class="box-gold"/>
+      <text x="105" y="144" text-anchor="middle" class="title">got-theme.css</text>
+      <text x="105" y="162" text-anchor="middle" class="muted">looks + layout</text>
+
+      <rect x="230" y="120" width="130" height="54" rx="8" class="box"/>
+      <text x="295" y="144" text-anchor="middle" class="title">① data.js</text>
+      <text x="295" y="162" text-anchor="middle" class="muted">rules + state</text>
+      <rect x="380" y="120" width="130" height="54" rx="8" class="box"/>
+      <text x="445" y="144" text-anchor="middle" class="title">② audio.js</text>
+      <text x="445" y="162" text-anchor="middle" class="muted">Sound module</text>
+      <rect x="530" y="120" width="130" height="54" rx="8" class="box"/>
+      <text x="595" y="144" text-anchor="middle" class="title">③ ui.js</text>
+      <text x="595" y="162" text-anchor="middle" class="muted">draw + navigate</text>
+      <rect x="680" y="120" width="150" height="54" rx="8" class="box"/>
+      <text x="755" y="144" text-anchor="middle" class="title">④ combat.js</text>
+      <text x="755" y="162" text-anchor="middle" class="muted">rules in action</text>
+
+      <rect x="230" y="230" width="600" height="54" rx="8" class="box-green"/>
+      <text x="530" y="254" text-anchor="middle" class="title">The live page (DOM) the player sees and taps</text>
+      <text x="530" y="272" text-anchor="middle" class="muted">JS changes classes, text and styles here; CSS decides how those classes look</text>
+
+      <path d="M380,64 L120,118" class="line" marker-end="url(#ah)"/>
+      <path d="M410,64 L300,118" class="line" marker-end="url(#ah)"/>
+      <path d="M435,64 L445,118" class="line" marker-end="url(#ah)"/>
+      <path d="M460,64 L585,118" class="line" marker-end="url(#ah)"/>
+      <path d="M490,64 L745,118" class="line" marker-end="url(#ah)"/>
+      <text x="610" y="92" class="muted">loaded in this order ①→④</text>
+
+      <path d="M295,174 L295,228" class="line-muted" marker-end="url(#ahm)"/>
+      <path d="M445,174 L445,228" class="line-muted" marker-end="url(#ahm)"/>
+      <path d="M595,174 L595,228" class="line-muted" marker-end="url(#ahm)"/>
+      <path d="M755,174 L755,228" class="line-muted" marker-end="url(#ahm)"/>
+      <path d="M105,174 C105,250 160,257 228,257" class="line-muted" marker-end="url(#ahm)"/>
+    </svg>
+    <figcaption>One HTML file pulls in one stylesheet and four scripts. All of them work on the same live page.</figcaption>
+  </figure>
+
+  <h3>The life of one game</h3>
+  <div class="flow">
+    <div class="node blue">Page loads<small>HTML → CSS → JS</small></div>
+    <div class="node">Start screen<small>stats + difficulty</small></div>
+    <div class="node gold">Draft<small>pick 3 within 999G</small></div>
+    <div class="node">Reveal<small>enemy AI chooses</small></div>
+    <div class="node red">Fight<small>maths + 3 rounds</small></div>
+    <div class="node green">Result<small>saved, play again</small></div>
+  </div>
+
+  <div class="box remember"><span class="box-title">&#129504; Remember</span>
+    <ul>
+      <li>HTML = what exists, CSS = how it looks, JS = what happens.</li>
+      <li>One page, two "screens" (start + war hall), shown or hidden with the <code>hidden</code> class.</li>
+      <li>Scripts load in order <b>data → audio → ui → combat</b>; each later file uses names from earlier ones.</li>
+      <li>Strength = <b>power × (1 + type edge) × luck(0.85–1.15)</b>.</li>
+      <li>No frameworks, no build step, no server code. It's a static site hosted on GitHub Pages.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================================================== STAGE 2 -->
+<section class="stage" id="s2" data-title="Tools, Git and the local server">
+  <div class="stage-head">
+    <span class="badge">Stage 2</span><span class="maps">PROGRESS Phase 0</span>
+    <h2>Tools, Git and the local server</h2>
+    <p class="lead">What you need before writing a single line, and how your code travels from your PC to the internet.</p>
+    <label class="learned"><input type="checkbox" data-learn="s2"> I've learned this</label>
+  </div>
+
+  <h3>Your toolbox</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Tool</th><th>What it does for this project</th></tr>
+    <tr><td>VS Code</td><td>Editor. <code>GOT.code-workspace</code> remembers that this folder is the project.</td></tr>
+    <tr><td>Browser + DevTools (F12)</td><td><b>Elements</b> tab: see and edit HTML/CSS live. <b>Console</b>: JS errors and quick tests. <b>Network</b>: what files load and how big they are. <b>Device toolbar</b> (Ctrl+Shift+M): fake phone sizes. <b>Application → Local Storage</b>: see saved stats.</td></tr>
+    <tr><td>Git</td><td>Saves snapshots (commits) of the whole project so you can go back and see what changed.</td></tr>
+    <tr><td>GitHub</td><td>Online copy of the repo plus free hosting (GitHub Pages).</td></tr>
+    <tr><td>Python</td><td>Only used to run a tiny local web server: <code>python -m http.server 5173</code>.</td></tr>
+    <tr><td>Node.js</td><td>Only used to run <code>tools/bump-version.mjs</code>.</td></tr>
+  </table></div>
+
+  <h3>How code travels: the Git flow</h3>
+  <div class="flow">
+    <div class="node">Working folder<small>you edit files</small></div>
+    <div class="node">Staging area<small><code>git add</code></small></div>
+    <div class="node gold">Local history<small><code>git commit -m "..."</code></small></div>
+    <div class="node blue">GitHub repo<small><code>git push</code></small></div>
+    <div class="node green">GitHub Pages<small>live website</small></div>
+  </div>
+  <div class="table-wrap"><table>
+    <tr><th>Command</th><th>Meaning</th></tr>
+    <tr><td><code>git status</code></td><td>What changed and what's staged.</td></tr>
+    <tr><td><code>git add file</code> / <code>git add .</code></td><td>Put changes into the next snapshot.</td></tr>
+    <tr><td><code>git commit -m "Fixed zoom jump"</code></td><td>Save the snapshot with a message.</td></tr>
+    <tr><td><code>git push</code></td><td>Upload commits to GitHub; Pages redeploys a minute later.</td></tr>
+    <tr><td><code>git log --oneline</code></td><td>The diary of the project (89 commits here).</td></tr>
+    <tr><td><code>git show &lt;id&gt;</code></td><td>Exactly what one commit changed.</td></tr>
+    <tr><td><code>git diff</code></td><td>Unsaved changes compared to the last commit.</td></tr>
+  </table></div>
+
+  <h3>Two small config files</h3>
+  <h4><code>.gitignore</code>: what Git must not track</h4>
+  <p>Editor folders (<code>.vscode</code>, <code>.idea</code>), OS junk (<code>.DS_Store</code>, <code>Thumbs.db</code>), logs, <code>node_modules/</code>, <code>dist/</code>, and <code>.claude/</code> (your personal preview config). These are personal or generated, not part of the game.</p>
+  <h4><code>.gitattributes</code>: how Git treats files</h4>
+<pre><code>* text=auto eol=lf     <span class="c"># every text file is stored with LF line endings</span>
+*.jpg binary           <span class="c"># never touch these bytes</span>
+*.mp3 binary</code></pre>
+  <div class="box why"><span class="box-title">&#128161; Why</span><p>Windows ends lines with CRLF, Mac/Linux with LF. Without this rule, every line can show as "changed" when someone on another OS edits a file. Marking images and MP3s as <b>binary</b> stops Git from trying to "fix" their line endings and corrupting them.</p></div>
+
+  <h3>Why a local server? <code>file://</code> vs <code>http://</code></h3>
+  <div class="mock-row">
+    <div class="box warn"><span class="box-title">Double-click index.html</span><p>URL: <code>file:///E:/GOT/index.html</code></p><p>The browser treats it as a local file with strict security. Web Audio can't route the <code>&lt;audio&gt;</code> elements, so the game falls back to simpler fades. <code>audio.js</code> checks <code>location.protocol !== 'file:'</code>.</p></div>
+    <div class="box link"><span class="box-title">Local server</span><p>URL: <code>http://localhost:5173</code></p><p>Behaves exactly like the real website. All features work. Start it with <code>python -m http.server 5173</code> in the project folder.</p></div>
+  </div>
+
+  <div class="box remember"><span class="box-title">&#129504; Remember</span>
+    <ul>
+      <li>Git flow: <b>edit → add → commit → push → Pages</b>.</li>
+      <li><code>.gitignore</code> = don't track. <code>.gitattributes</code> = how to treat (LF endings, binary files).</li>
+      <li>Test on <code>http://localhost:5173</code>, not by double-clicking: <code>file://</code> disables Web Audio routing.</li>
+      <li>DevTools: Elements (HTML/CSS), Console (errors), Network (sizes), Application (localStorage).</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================================================== STAGE 3 -->
+<section class="stage" id="s3" data-title="How the browser loads the page">
+  <div class="stage-head">
+    <span class="badge">Stage 3</span><span class="maps">Background for Phases 1–4</span>
+    <h2>How the browser loads the page</h2>
+    <p class="lead">What happens between typing the URL and seeing the Iron Throne. This explains why the files are ordered the way they are.</p>
+    <label class="learned"><input type="checkbox" data-learn="s3"> I've learned this</label>
+  </div>
+
+  <h3>From URL to pixels</h3>
+  <div class="flow">
+    <div class="node">Request<small>GET /GOT/index.html</small></div>
+    <div class="node blue">Parse HTML<small>builds the DOM tree</small></div>
+    <div class="node gold">Parse CSS<small>builds the CSSOM</small></div>
+    <div class="node">Render tree<small>DOM + styles, skips <code>display:none</code></small></div>
+    <div class="node">Layout<small>sizes + positions</small></div>
+    <div class="node green">Paint + composite<small>pixels on screen</small></div>
+  </div>
+  <p>The <b>DOM</b> (Document Object Model) is the browser's live tree of objects built from your HTML. JavaScript never edits the <i>file</i>; it edits this live tree. The <b>CSSOM</b> is the same idea for CSS rules. Each time JS changes a class, the browser repeats <i>style → layout → paint</i> for the affected part.</p>
+
+  <h3>The exact loading order of <code>index.html</code></h3>
+  <ol class="steps">
+    <li><b>Meta tags</b> (charset, viewport, title, share preview). These have to come first because they affect how the rest is read and shown.</li>
+    <li><b>Font preconnect + Cinzel stylesheet.</b> Starts the connection to Google Fonts early.</li>
+    <li><b><code>got-theme.css?v=50</code></b>. CSS <i>blocks rendering</i>: the browser won't paint until it has the styles, so you never see an unstyled page.</li>
+    <li><b>Inline script in <code>&lt;head&gt;</code></b>. Runs immediately, before anything is painted. It adds <code>narrow</code> (phone layout) and <code>fonts-loading</code> (page hidden) to <code>&lt;html&gt;</code>.</li>
+    <li><b><code>&lt;body&gt;</code> is parsed</b>: audio elements start downloading (<code>preload="auto"</code>), then all the screens, buttons and panels.</li>
+    <li><b>Scripts at the very end</b>: <code>data.js → audio.js → ui.js → combat.js</code>, each downloaded and run in order. Because they come last, every element they look up already exists.</li>
+    <li><b>Font ready</b> (or after 2.5 s): <code>fonts-loading</code> is removed and the page fades in.</li>
+  </ol>
+
+  <div class="box why"><span class="box-title">&#128161; Why scripts go at the bottom</span>
+    <p>A normal <code>&lt;script&gt;</code> <b>stops the HTML parser</b> until it has downloaded and run. If <code>data.js</code> were in the head, <code>document.getElementById('start-screen')</code> would return <code>null</code> because that element hasn't been parsed yet. The game would crash. At the end of the body, everything exists. (Modern alternative: <code>&lt;script defer&gt;</code> in the head does the same.)</p>
+  </div>
+  <div class="box warn"><span class="box-title">&#9888;&#65039; Gotcha: FOUC and layout flash</span>
+    <p>FOUC = "flash of unstyled content". This project prevents two kinds of it: (1) the phone briefly showing the 3-column PC layout, fixed by setting <code>.narrow</code> in the head script before the first paint; (2) text jumping when Cinzel replaces the fallback font, fixed by keeping the page invisible until the font has loaded.</p>
+  </div>
+
+  <div class="box remember"><span class="box-title">&#129504; Remember</span>
+    <ul>
+      <li>Pipeline: <b>HTML → DOM, CSS → CSSOM, render tree → layout → paint</b>.</li>
+      <li>JS changes the <b>DOM</b> (live tree), never the HTML file.</li>
+      <li>CSS in the head blocks painting. A normal script blocks parsing. That's why scripts sit at the end of <code>&lt;body&gt;</code>.</li>
+      <li>The tiny head script runs <i>before the first paint</i> so the right layout and the font are ready.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================================================== STAGE 4 -->
+<section class="stage" id="s4" data-title="HTML in detail">
+  <div class="stage-head">
+    <span class="badge">Stage 4</span><span class="maps">PROGRESS Phase 1</span>
+    <h2>HTML in detail</h2>
+    <p class="lead">Every tag in <code>index.html</code>, why it is there, and how HTML connects to CSS and JS through ids, classes and attributes.</p>
+    <label class="learned"><input type="checkbox" data-learn="s4"> I've learned this</label>
+  </div>
+
+  <h3>The atom: anatomy of one element</h3>
+<pre><code>&lt;<span class="k">button</span> <span class="k">type</span>=<span class="s">"button"</span> <span class="k">id</span>=<span class="s">"difficulty-btn"</span> <span class="k">class</span>=<span class="s">"text-btn"</span> <span class="k">aria-pressed</span>=<span class="s">"false"</span>&gt;Difficulty: Normal&lt;/<span class="k">button</span>&gt;
+ └─ tag ─┘ └──────────────────── attributes (name="value") ─────────────────────┘ └── content ──┘</code></pre>
+  <div class="table-wrap"><table>
+    <tr><th>Part</th><th>Used by</th><th>In this element</th></tr>
+    <tr><td><b>tag</b></td><td>browser</td><td><code>button</code>: clickable, focusable with Tab, works with Enter/Space.</td></tr>
+    <tr><td><b>id</b></td><td>JS (+ CSS)</td><td>Unique name. JS finds it with <code>getElementById('difficulty-btn')</code>.</td></tr>
+    <tr><td><b>class</b></td><td>CSS (+ JS)</td><td>Reusable style group. <code>.text-btn</code> styles it as an underlined text button.</td></tr>
+    <tr><td><b>aria-*</b></td><td>screen readers (+ CSS)</td><td><code>aria-pressed="true"</code> means "Hard is on". CSS also turns it red using this attribute.</td></tr>
+    <tr><td><b>content</b></td><td>the player</td><td>The visible text. JS rewrites it with <code>textContent</code>.</td></tr>
+  </table></div>
+
+  <h3>The <code>&lt;head&gt;</code>: invisible but important</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Tag</th><th>What it does</th></tr>
+    <tr><td><code>&lt;!DOCTYPE html&gt;</code></td><td>Standards mode. Without it browsers use old "quirks" rules.</td></tr>
+    <tr><td><code>&lt;html lang="en"&gt;</code></td><td>Language for screen readers, translation and hyphenation.</td></tr>
+    <tr><td><code>&lt;meta charset="UTF-8"&gt;</code></td><td>Lets every character display: ⚔️, 🐉, ·, ✓.</td></tr>
+    <tr><td><code>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"&gt;</code></td><td>Phones use their real width instead of pretending to be a 980px desktop. <code>viewport-fit=cover</code> lets the page fill behind the notch; CSS then pads with <code>env(safe-area-inset-*)</code>.</td></tr>
+    <tr><td><code>&lt;meta name="theme-color" content="#050505"&gt;</code></td><td>Colours the mobile browser bar to match the game.</td></tr>
+    <tr><td><code>&lt;title&gt;</code> + <code>meta description</code></td><td>Tab title and the Google search snippet.</td></tr>
+    <tr><td><code>og:*</code> + <code>twitter:card</code></td><td>The preview card (title, text, big image) when the link is shared. <code>og:image</code> must be a full URL.</td></tr>
+    <tr><td><code>&lt;link rel="icon" href="data:image/svg+xml,..."&gt;</code></td><td>The favicon is an SVG containing the ⚔️ emoji, written straight into the URL (a <b>data URI</b>). No icon file needed. Special characters are URL-encoded (<code>%3C</code> = <code>&lt;</code>).</td></tr>
+    <tr><td><code>&lt;link rel="preconnect"&gt;</code></td><td>Opens the connection to Google Fonts early (saves a round trip).</td></tr>
+    <tr><td>Cinzel stylesheet with <code>display=swap</code></td><td>Shows a fallback font until Cinzel arrives.</td></tr>
+    <tr><td><code>css/got-theme.css?v=50</code></td><td>Our styles. <code>?v=50</code> is for cache busting (Stage 16).</td></tr>
+    <tr><td>Inline <code>&lt;script&gt;</code></td><td>Pre-paint setup: phone layout class and hiding the page until the font loads (Stage 14).</td></tr>
+  </table></div>
+
+  <h3>The <code>&lt;body&gt;</code>: the DOM tree</h3>
+  <ul class="tree">
+    <li><span class="t-tag">body</span>
+      <ul>
+        <li><span class="t-tag">audio</span><span class="t-id">#bg-music</span> <span class="t-note">loop, preload; the theme</span></li>
+        <li><span class="t-tag">audio</span><span class="t-id">#sfx-sword</span> <span class="t-note">sword clash</span></li>
+        <li><span class="t-tag">div</span><span class="t-id">#game-container</span> <span class="t-note">wraps the whole game, clips overflow</span>
+          <ul>
+            <li><span class="t-tag">div</span><span class="t-id">#live-bg</span> <span class="t-note">Iron Throne picture, slowly zooming</span></li>
+            <li><span class="t-tag">button</span><span class="t-id">#btn-back-nav</span> ⌂ · <span class="t-id">#sound-icon</span> 🔊 · <span class="t-id">#settings-icon</span> 📜 <span class="t-note">corner icons</span></li>
+            <li><span class="t-tag">div</span><span class="t-id">#info-modal</span>.hidden <span class="t-note">role="dialog"; rules list + 2 tables</span></li>
+            <li><span class="t-tag">div</span>.content
+              <ul>
+                <li><span class="t-tag">h1</span><span class="t-id">#main-title</span> <span class="t-note">GAME OF THRONES</span></li>
+                <li><span class="t-tag">div</span><span class="t-id">#start-screen</span> <span class="t-note">SCREEN 1</span>
+                  <ul><li><span class="t-id">#claim-btn</span> · <span class="t-id">#difficulty-btn</span> · <span class="t-tag">p</span><span class="t-id">#stats-line</span></li></ul>
+                </li>
+                <li><span class="t-tag">div</span><span class="t-id">#battle-phase</span>.hidden <span class="t-note">SCREEN 2</span>
+                  <ul>
+                    <li><span class="t-id">#battle-location-display</span> <span class="t-note">"MAKE YOUR ARMY" / VICTORY / DEFEAT</span></li>
+                    <li><span class="t-id">#war-hall</span> <span class="t-note">3-column grid</span>
+                      <ul>
+                        <li><span class="t-id">#player-side</span> <span class="t-note">h3, gold, #player-roster, codeword, health bar</span></li>
+                        <li><span class="t-id">#drafting-board</span>
+                          <ul>
+                            <li><span class="t-id">#draft-options</span> <span class="t-note">empty; JS adds 9 cards</span></li>
+                            <li><span class="t-id">#battle-log</span> <span class="t-note">aria-live messages</span></li>
+                            <li>.action-bar <span class="t-note">#btn-battle · #action-buttons-container (Surrender, Fight) · #inline-result (Home, Battle again)</span></li>
+                          </ul>
+                        </li>
+                        <li><span class="t-id">#enemy-side</span> <span class="t-note">same shape as player side</span></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+                <li><span class="t-tag">div</span><span class="t-id">#blood-splatter</span> <span class="t-note">red flash on defeat</span></li>
+              </ul>
+            </li>
+            <li><span class="t-tag">script</span> ×4 <span class="t-note">data, audio, ui, combat</span></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  <h3>Key idea: "screens" are just shown and hidden</h3>
+  <p>There is no second HTML page. Both screens are always in the DOM; the class <code>hidden</code> (<code>display: none !important</code>) decides which one you see. This is the basic idea of a <b>single-page app</b>: instant switching, no reload, and the music keeps playing.</p>
+  <div class="flow">
+    <div class="node">#start-screen visible<small>#battle-phase.hidden</small></div>
+    <div class="node gold">tap JOIN<small>JS swaps the classes</small></div>
+    <div class="node">#start-screen.hidden<small>#battle-phase visible</small></div>
+  </div>
+  <p>The same trick is used inside the war hall: the PREPARE button, the Surrender/Fight row, the Home/Battle again row, codewords and health bars all exist from the start, and JS shows the ones the current moment needs.</p>
+
+  <h3>Small HTML details worth knowing</h3>
+  <ul>
+    <li><b>HTML entities</b>: <code>&amp;#8962;</code> = ⌂, <code>&amp;#128266;</code> = 🔊, <code>&amp;#128220;</code> = 📜. A number code for any character.</li>
+    <li><b><code>type="button"</code></b> on every button: the default type is <code>submit</code>, which would try to submit a form.</li>
+    <li><b>Empty containers</b> (<code>#draft-options</code>, <code>#player-roster</code>, <code>#stats-line</code>) are placeholders that JavaScript fills.</li>
+    <li><b>The info tables are written in HTML by hand</b>, so if you change a price in <code>data.js</code>, you must change the table too. (A possible improvement: build the table from <code>HOUSES_DATA</code> in JS.)</li>
+    <li><b>Corner buttons sit outside <code>.content</code></b> so the zoom animation (which scales <code>.content</code>) doesn't move them.</li>
+  </ul>
+
+  <h3>The connection triangle: how one element links all three languages</h3>
+  <figure>
+    <svg viewBox="0 0 640 250" role="img" aria-label="HTML element connected to CSS through class and to JS through id">
+      <rect x="220" y="10" width="200" height="60" rx="8" class="box-blue"/>
+      <text x="320" y="35" text-anchor="middle" class="title">HTML element</text>
+      <text x="320" y="55" text-anchor="middle" class="muted">&lt;span id="player-gold"&gt;</text>
+      <rect x="20" y="170" width="220" height="60" rx="8" class="box-gold"/>
+      <text x="130" y="195" text-anchor="middle" class="title">CSS</text>
+      <text x="130" y="215" text-anchor="middle" class="muted">.over-budget { color: red }</text>
+      <rect x="400" y="170" width="220" height="60" rx="8" class="box-red"/>
+      <text x="510" y="195" text-anchor="middle" class="title">JavaScript</text>
+      <text x="510" y="215" text-anchor="middle" class="muted">getElementById('player-gold')</text>
+      <path d="M270,70 L150,168" class="line" marker-end="url(#ah)"/>
+      <text x="110" y="115" class="muted">matched by selector</text>
+      <path d="M370,70 L490,168" class="line" marker-end="url(#ah)"/>
+      <text x="445" y="115" class="muted">found by id</text>
+      <path d="M398,200 L242,200" class="line" marker-end="url(#ah)"/>
+      <text x="320" y="190" text-anchor="middle" class="muted">JS adds the class</text>
+    </svg>
+    <figcaption>JS finds an element by <b>id</b>, then adds or removes a <b>class</b>; CSS decides what that class looks like. This is the main pattern of the whole game.</figcaption>
+  </figure>
+
+  <div class="box remember"><span class="box-title">&#129504; Remember</span>
+    <ul>
+      <li>Element = tag + attributes + content. <b>id</b> is for JS (unique), <b>class</b> is for CSS (reusable).</li>
+      <li>Viewport meta makes phones behave; <code>viewport-fit=cover</code> + safe-area handles notches.</li>
+      <li>Two screens in one page, swapped with <code>.hidden</code>: a single-page app.</li>
+      <li>Empty containers get filled by JS (<code>#draft-options</code> gets 9 cards).</li>
+      <li>Main pattern: <b>JS toggles a class → CSS styles that class</b>.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================================================== STAGE 5 -->
+<section class="stage" id="s5" data-title="CSS fundamentals">
+  <div class="stage-head">
+    <span class="badge">Stage 5</span><span class="maps">PROGRESS Phase 2</span>
+    <h2>CSS fundamentals</h2>
+    <p class="lead">The rules of the CSS language itself: rules, selectors, the cascade, specificity, the box model and units, each with examples from <code>got-theme.css</code>.</p>
+    <label class="learned"><input type="checkbox" data-learn="s5"> I've learned this</label>
+  </div>
+
+  <h3>The atom: one CSS rule</h3>
+<pre><code><span class="k">.gold-display span</span> {        <span class="c">/* selector: WHICH elements */</span>
+    color: #d4af37;           <span class="c">/* declaration = property: value; */</span>
+    font-weight: bold;
+}</code></pre>
+
+  <h3>Selectors used in this project</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Selector</th><th>Matches</th><th>Example in the game</th></tr>
+    <tr><td><code>*</code></td><td>every element</td><td>the reset at the top</td></tr>
+    <tr><td><code>button</code></td><td>all elements of a tag</td><td>button reset</td></tr>
+    <tr><td><code>.hidden</code></td><td>class</td><td>show/hide anything</td></tr>
+    <tr><td><code>#live-bg</code></td><td>id</td><td>background picture</td></tr>
+    <tr><td><code>.gold-display span</code></td><td>descendant (span inside .gold-display)</td><td>gold number</td></tr>
+    <tr><td><code>.action-bar &gt; *</code></td><td>direct children</td><td>stacked button rows</td></tr>
+    <tr><td><code>h2 + .info-table + h2</code></td><td>next sibling</td><td>spacing in rules panel</td></tr>
+    <tr><td><code>.text-btn[aria-pressed="true"]</code></td><td>attribute value</td><td>red "Hard" button</td></tr>
+    <tr><td><code>:hover :active :disabled :focus-visible</code></td><td>pseudo-classes (states)</td><td>button feedback</td></tr>
+    <tr><td><code>:not(:disabled)</code></td><td>negation</td><td>hover only on usable buttons</td></tr>
+    <tr><td><code>.roster:not(:empty)</code></td><td>has children</td><td>margin only when sigils exist</td></tr>
+    <tr><td><code>::after</code></td><td>pseudo-element (fake child)</td><td>✓ on picked cards</td></tr>
+    <tr><td><code>.narrow #war-hall</code></td><td>context class on an ancestor</td><td>phone layout</td></tr>
+    <tr><td><code>.fonts-loading .content</code></td><td>same idea</td><td>hide until font loads</td></tr>
+  </table></div>
+
+  <h3>The cascade and specificity: who wins?</h3>
+  <p>When two rules set the same property on the same element, the browser decides in this order:</p>
+  <div class="flow">
+    <div class="node red">1. <code>!important</code><small>beats everything normal</small></div>
+    <div class="node gold">2. Specificity<small>id &gt; class &gt; tag</small></div>
+    <div class="node">3. Source order<small>later rule wins</small></div>
+  </div>
+  <p>Specificity is counted as <b>(ids, classes/attributes/pseudo-classes, tags)</b> and compared left to right:</p>
+  <div class="table-wrap"><table>
+    <tr><th>Selector</th><th>Score</th></tr>
+    <tr><td><code>button</code></td><td>(0,0,1)</td></tr>
+    <tr><td><code>.hidden</code></td><td>(0,1,0)</td></tr>
+    <tr><td><code>.gold-display span</code></td><td>(0,1,1)</td></tr>
+    <tr><td><code>#start-screen</code></td><td>(1,0,0)</td></tr>
+    <tr><td><code>.narrow #war-hall</code></td><td>(1,1,0)</td></tr>
+  </table></div>
+  <div class="box why"><span class="box-title">&#128161; Why <code>.hidden</code> needs <code>!important</code>, a real example from this game</span>
+    <p><code>#start-screen { display: flex }</code> scores (1,0,0). <code>.hidden { display: none }</code> scores (0,1,0). The id wins, so <b>without <code>!important</code> the start screen could never be hidden</b>. The same reason explains <code>.over-budget { color: #ff4444 !important }</code> (it must beat <code>.gold-display span</code>) and <code>.splatter-active { opacity: 1 !important }</code> (it must beat <code>#blood-splatter { opacity: 0 }</code>).</p>
+  </div>
+  <p><b>Inheritance:</b> some properties (colour, font) pass from parent to child automatically. Here the reset sets <code>color</code> and <code>font-family</code> on <code>*</code> (every element) directly, and buttons use <code>font: inherit; color: inherit</code> to copy their parent.</p>
+
+  <h3>The box model</h3>
+  <figure>
+    <div class="boxmodel">
+      <div class="bm-margin"><span class="bm-label">margin (outside space)</span>
+        <div class="bm-border"><span class="bm-label">border</span>
+          <div class="bm-padding"><span class="bm-label">padding (inside space)</span>
+            <div class="bm-content">content</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption>With <code>box-sizing: border-box</code> (set on <code>*</code> in this project), <code>width</code> includes padding and border, so a 100%-wide box with padding never overflows.</figcaption>
+  </figure>
+<pre><code><span class="c">/* The reset: the first rule every project needs */</span>
+<span class="k">*</span> {
+    margin: 0; padding: 0;          <span class="c">/* remove browser default spacing */</span>
+    box-sizing: border-box;         <span class="c">/* width includes padding + border */</span>
+    text-align: center;
+    color: #e0e0e0;
+    font-family: 'Cinzel', serif;   <span class="c">/* serif = fallback if Cinzel fails */</span>
+}</code></pre>
+
+  <h3>Units: the most important choice for scaling</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Unit</th><th>Relative to</th><th>Used for</th></tr>
+    <tr><td><code>px</code></td><td>fixed</td><td>hardly used (only some JS animations). Doesn't scale nicely.</td></tr>
+    <tr><td><code>rem</code></td><td>the root (<code>html</code>) font size</td><td><b>almost everything</b>. Change the root size and the whole game scales.</td></tr>
+    <tr><td><code>em</code></td><td>the element's own font size</td><td>button padding (<code>0.8em 2em</code>), the breakpoint <code>56em</code></td></tr>
+    <tr><td><code>%</code></td><td>the parent</td><td>widths, the root font size, health bar width</td></tr>
+    <tr><td><code>vw</code> / <code>vh</code></td><td>1% of window width / height</td><td>fluid title sizes, margins</td></tr>
+    <tr><td><code>dvh</code></td><td>1% of the <i>actual</i> visible height</td><td>full-height screens on phones, where the address bar changes height</td></tr>
+    <tr><td><code>cqi</code></td><td>1% of the <i>container's</i> width</td><td>emoji size inside a crest</td></tr>
+    <tr><td><code>fr</code></td><td>a share of free space in a grid</td><td>war hall columns</td></tr>
+  </table></div>
+
+  <h3><code>clamp(min, preferred, max)</code>, worked out with numbers</h3>
+<pre><code><span class="k">html</span> { font-size: clamp(100%, 0.55vw + 0.5rem, 150%); }</code></pre>
+  <div class="table-wrap"><table>
+    <tr><th>Screen width</th><th>Preferred = 0.55vw + 8px</th><th>Result</th></tr>
+    <tr><td>375 px (phone)</td><td>2.06 + 8 = 10.1 px</td><td>below the minimum → <b>16 px</b></td></tr>
+    <tr><td>1920 px (PC)</td><td>10.56 + 8 = 18.6 px</td><td><b>18.6 px</b></td></tr>
+    <tr><td>3000 px (huge)</td><td>16.5 + 8 = 24.5 px</td><td>above the maximum → <b>24 px</b></td></tr>
+  </table></div>
+  <p>Because nearly everything uses <code>rem</code>, this one line makes the whole game a bit bigger on big monitors, while text never goes below 16px. Browser zoom changes the root size too, so zooming scales the entire game smoothly.</p>
+
+  <div class="box remember"><span class="box-title">&#129504; Remember</span>
+    <ul>
+      <li>Rule = selector + { property: value; }.</li>
+      <li>Who wins: <b>!important → specificity (id, class, tag) → later in the file</b>.</li>
+      <li><code>.hidden</code> needs <code>!important</code> because ids beat classes.</li>
+      <li>Box model: content → padding → border → margin; <code>border-box</code> makes width include padding and border.</li>
+      <li><b>rem everywhere</b> + <code>clamp()</code> on the root = one knob that scales the whole game.</li>
+      <li><code>dvh</code> = real phone height. <code>cqi</code> = container width. <code>fr</code> = grid share.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================================================== STAGE 6 -->
+<section class="stage" id="s6" data-title="CSS layout: flex, grid, layers">
+  <div class="stage-head">
+    <span class="badge">Stage 6</span><span class="maps">PROGRESS Phases 2–3</span>
+    <h2>CSS layout: flex, grid and layers</h2>
+    <p class="lead">How the screens are arranged: flexbox for stacks, grid for the war hall, positioning and z-index for layers on top of each other.</p>
+    <label class="learned"><input type="checkbox" data-learn="s6"> I've learned this</label>
+  </div>
+
+  <h3>Flexbox: one direction at a time</h3>
+<pre><code><span class="k">.content</span> {
+    display: flex;
+    flex-direction: column;   <span class="c">/* stack children top to bottom */</span>
+    align-items: center;      <span class="c">/* centre them horizontally */</span>
+    min-height: 100dvh;
+}
+<span class="k">#start-screen</span> {
+    flex: 1;                  <span class="c">/* take all leftover height */</span>
+    display: flex; flex-direction: column;
+    justify-content: flex-end;<span class="c">/* push the buttons to the bottom */</span>
+    gap: 0.9rem;              <span class="c">/* space between children */</span>
+}</code></pre>
+  <p>In a column flexbox, <code>justify-content</code> works vertically (main axis) and <code>align-items</code> horizontally (cross axis). In a row it's the other way round. That's the most common flexbox confusion.</p>
+  <p>Flexbox is also used for: the roster sigils (<code>.roster</code>), the button rows (<code>.action-row</code>), card contents (<code>.draft-card</code>) and centring the emoji in a crest.</p>
+
+  <h3>Grid: rows and columns at once, used for the war hall</h3>
+<pre><code><span class="k">#war-hall</span> {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr) minmax(0, 1fr);
+    gap: clamp(1rem, 3vw, 3rem);
+}
+<span class="k">.narrow #war-hall</span> { grid-template-columns: minmax(0, 1fr); max-width: 28rem; }
+
+<span class="k">#draft-options</span> { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }</code></pre>
+  <figure>
+    <div class="mock-row">
+      <div>
+        <p class="mock-title">PC: 3 columns (1 : 1.5 : 1)</p>
+        <div class="mock mock-grid">
+          <div class="mock-cell p">YOUR ALLIANCE<small>gold · sigils</small></div>
+          <div class="mock-cell b">DRAFT BOARD<small>3×3 cards · log · buttons</small></div>
+          <div class="mock-cell e">ENEMY ALLIANCE<small>??? · sigils</small></div>
+        </div>
+      </div>
+      <div>
+        <p class="mock-title">Phone (<code>.narrow</code>): 1 column</p>
+        <div class="mock mock-grid narrow">
+          <div class="mock-cell p">YOUR ALLIANCE</div>
+          <div class="mock-cell b">DRAFT BOARD</div>
+          <div class="mock-cell e">ENEMY ALLIANCE</div>
+        </div>
+      </div>
+    </div>
+    <figcaption>The same three HTML panels, rearranged by changing only <code>grid-template-columns</code>.</figcaption>
+  </figure>
+  <div class="box why"><span class="box-title">&#128161; Why <code>minmax(0, 1fr)</code> instead of <code>1fr</code></span>
+    <p>A plain <code>1fr</code> column refuses to shrink below its widest content (a long house name), which can push the page wider than the screen. <code>minmax(0, 1fr)</code> lets it shrink to 0, so long words wrap instead (with <code>overflow-wrap: anywhere</code>). Many of the "fix overflow layout" commits were about exactly this.</p>
+  </div>
+
+  <h3>Positioning</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Value</th><th>Meaning</th><th>In the game</th></tr>
+    <tr><td><code>static</code></td><td>normal flow (default)</td><td>most elements</td></tr>
+    <tr><td><code>relative</code></td><td>normal flow, but becomes the anchor for absolute children</td><td><code>.content</code>, <code>.draft-card</code>, <code>.action-bar</code></td></tr>
+    <tr><td><code>absolute</code></td><td>placed relative to the nearest positioned ancestor; out of the flow</td><td>✓ tick in the card corner; button rows stacked in the action bar</td></tr>
+    <tr><td><code>fixed</code></td><td>placed relative to the window; stays when scrolling</td><td>background, blood overlay, corner icons, rules panel</td></tr>
+  </table></div>
+
+  <h3>The action-bar trick: no jumping buttons</h3>
+<pre><code><span class="k">.action-bar</span>       { position: relative; height: 3.25rem; }
+<span class="k">.action-bar &gt; *</span>   { position: absolute; inset: 0; }   <span class="c">/* every row fills the same box */</span></code></pre>
+  <p>PREPARE, the Surrender/Fight row and the Home/Battle again row all sit in <b>the exact same spot</b>. Only one is visible at a time. Because the bar has a fixed height, swapping them never shifts anything else on the page.</p>
+
+  <h3>Layers and <code>z-index</code></h3>
+  <figure>
+    <div class="stack">
+      <div style="--i:0">#live-bg <b>z 1</b> background picture</div>
+      <div style="--i:1">.content <b>z 2</b> screens, cards, buttons</div>
+      <div style="--i:2">#blood-splatter <b>z 50</b> red flash</div>
+      <div style="--i:3">.icon-btn <b>z 100</b> ⌂ 🔊 📜</div>
+      <div style="--i:4">#info-modal <b>z 200</b> rules panel</div>
+    </div>
+    <figcaption>Higher z-index sits on top. The blood overlay uses <code>pointer-events: none</code> so clicks pass through it.</figcaption>
+  </figure>
+<pre><code><span class="k">#live-bg, #blood-splatter</span> { position: fixed; inset: 0; }  <span class="c">/* inset: 0 = top/right/bottom/left 0 = full screen */</span></code></pre>
+
+  <h3>Safe areas (notches)</h3>
+<pre><code><span class="k">.content</span> {
+    padding: calc(3.25rem + env(safe-area-inset-top, 0px))
+             calc(1rem + env(safe-area-inset-right, 0px)) ...;
+}</code></pre>
+  <p><code>env(safe-area-inset-top)</code> is the height of the notch or status bar on phones (0 on PCs). Adding it to the padding keeps buttons tappable and visible. <code>calc()</code> lets you mix units: rem + px.</p>
+
+  <h3>Overflow</h3>
+  <ul>
+    <li><code>body { overflow-x: hidden }</code>: no sideways scrolling.</li>
+    <li><code>#game-container { overflow: hidden; overflow: clip; }</code>: animations that briefly scale things up never create scrollbars. <code>clip</code> is the stricter modern version; the line before it is the fallback for older browsers. Writing a property twice like this is a common <b>progressive enhancement</b> pattern: the last value the browser understands wins.</li>
+    <li><code>#info-modal { overflow: auto; overscroll-behavior: contain }</code>: the panel scrolls inside itself, and reaching its end doesn't scroll the page behind it.</li>
+  </ul>
+
+  <div class="box remember"><span class="box-title">&#129504; Remember</span>
+    <ul>
+      <li><b>Flex = one direction</b> (stacks, rows). <b>Grid = two directions</b> (war hall, 3×3 cards).</li>
+      <li>War hall: <code>1fr 1.5fr 1fr</code> on PC → <code>1fr</code> on phones (via <code>.narrow</code>).</li>
+      <li><code>minmax(0, 1fr)</code> stops long content from overflowing.</li>
+      <li>absolute is placed inside the nearest <code>relative</code> parent; fixed is placed on the window.</li>
+      <li>Layers: bg 1 · content 2 · blood 50 · icons 100 · rules 200.</li>
+      <li>Action bar: all button rows stacked in one fixed-height box, so nothing jumps.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================================================== STAGE 7 -->
+<section class="stage" id="s7" data-title="CSS visuals and effects">
+  <div class="stage-head">
+    <span class="badge">Stage 7</span><span class="maps">PROGRESS Phases 2–3</span>
+    <h2>CSS visuals and effects</h2>
+    <p class="lead">How the game gets its look: gradients, metal text, glass buttons, house crests drawn in pure CSS, and animations.</p>
+    <label class="learned"><input type="checkbox" data-learn="s7"> I've learned this</label>
+  </div>
+
+  <h3>Gradients</h3>
+  <ul>
+    <li><code>linear-gradient(135deg, a, b)</code>: colour fades along a line (buttons, health bar).</li>
+    <li><code>radial-gradient(circle at 35% 30%, a, b)</code>: fades outward from a point. Used for the crest (light from top-left) and the blood overlay (<code>transparent 20%</code> in the middle, dark red at the edges).</li>
+  </ul>
+
+  <h3>Metal title: gradient text</h3>
+<pre><code><span class="k">#main-title</span> {
+    background: linear-gradient(to bottom, #fff 0%, #b0c4de 100%);
+    -webkit-background-clip: text; background-clip: text;  <span class="c">/* paint background only inside letters */</span>
+    -webkit-text-fill-color: transparent;                  <span class="c">/* make letters see-through */</span>
+    text-shadow: 0 0 1.25rem rgba(176,196,222,0.5), 0.125rem 0.125rem 0.6rem #000;
+}</code></pre>
+  <p>The gradient is painted as the background, clipped to the letter shapes, and the letters themselves are transparent, so you see the gradient through them. The red "MAKE YOUR ARMY" title uses the same trick. The VICTORY/DEFEAT banner sets <code>-webkit-text-fill-color</code> back to a solid colour to override it.</p>
+
+  <h3>Glass buttons</h3>
+<pre><code><span class="k">.theme-btn</span> {
+    background: linear-gradient(135deg, rgba(30,35,40,0.7), rgba(10,15,20,0.7)); <span class="c">/* 70% opaque */</span>
+    backdrop-filter: blur(0.25rem);           <span class="c">/* blur whatever is BEHIND the button */</span>
+    border: 0.125rem solid #a0b0c0;
+    box-shadow: 0 0 0.9rem rgba(176,196,222,0.4);  <span class="c">/* soft steel glow */</span>
+    transition: all 0.3s;
+}
+<span class="k">.theme-btn:hover:not(:disabled)</span> { transform: scale(1.05); box-shadow: 0 0 1.5rem ...; }
+<span class="k">.theme-btn:active:not(:disabled)</span> { transform: scale(0.95); }  <span class="c">/* feels pressed */</span></code></pre>
+
+  <h3>House crests: no image files at all</h3>
+  <p>Each crest is a <code>&lt;span class="crest"&gt;</code> with an emoji inside. Here are four real ones, drawn with the exact CSS from the game:</p>
+  <figure>
+    <div class="demo-row">
+      <div class="demo-crest-wrap"><span class="crest" style="--c1:#b3121b;--c2:#1a0204"><span class="crest-emblem">🐉</span></span>Targaryen</div>
+      <div class="demo-crest-wrap"><span class="crest" style="--c1:#3a3f52;--c2:#05060a"><span class="crest-emblem">❄️</span></span>Night's Watch</div>
+      <div class="demo-crest-wrap"><span class="crest" style="--c1:#7fa7c9;--c2:#1a2a3a"><span class="crest-emblem">🦅</span></span>Vale</div>
+      <div class="demo-crest-wrap"><span class="crest" style="--c1:#c9a227;--c2:#1a1406"><span class="crest-emblem">🦌</span></span>Stormlanders</div>
+    </div>
+    <figcaption>Same CSS class, different colours, set through custom properties.</figcaption>
+  </figure>
+  <ol class="steps">
+    <li><b>Custom properties (CSS variables).</b> JS writes <code>style="--c1:#b3121b;--c2:#1a0204"</code> on each crest (from <code>colors</code> in <code>HOUSES_DATA</code>). CSS reads them: <code>radial-gradient(circle at 35% 30%, var(--c1) 0%, var(--c2) 85%)</code>. One rule, nine different crests.</li>
+    <li><b>Perfect circle:</b> <code>border-radius: 50%</code> + <code>aspect-ratio: 1 / 1</code> + <code>width: 100%</code> (it fills whatever holds it).</li>
+    <li><b>Depth:</b> <code>box-shadow: inset ...</code> darkens the inner edge; a gold border frames it.</li>
+    <li><b>Container query unit:</b> the crest has <code>container-type: inline-size</code>, so the emoji can use <code>font-size: 52cqi</code> = 52% of the crest's width. Big crest, big emoji, automatically. The line before it (<code>1.5rem</code>) is the fallback for old browsers.</li>
+    <li><b>Uniform silver emblems:</b> <code>filter: grayscale(1) brightness(1.35) contrast(1.1) drop-shadow(...)</code>. Emoji look different on Apple, Windows and Android; turning them all grey-silver makes the set look consistent.</li>
+  </ol>
+
+  <h3>Pseudo-element: the ✓ on picked cards</h3>
+<pre><code><span class="k">.draft-card</span>              { position: relative; }
+<span class="k">.draft-card.picked::after</span> { content: "\2713"; position: absolute; top: 0.2rem; right: 0.35rem; color: #d4af37; }</code></pre>
+  <p><code>::after</code> creates a fake last child made of pure CSS. <code>\2713</code> is the Unicode code of ✓. No extra HTML needed.</p>
+
+  <h3>Transitions vs animations</h3>
+  <div class="trio">
+    <div style="--c: var(--blue)"><h4>transition</h4><p>"When this property <b>changes</b>, glide to the new value."</p><p>Needs a trigger (hover, a class change, JS setting a width).</p><p>Example: <code>.health-bar { transition: width 0.5s }</code>. JS sets <code>width = '45%'</code> and the bar slides down.</p></div>
+    <div style="--c: var(--gold)"><h4>animation + @keyframes</h4><p>"Play this sequence <b>on its own</b>."</p><p>Runs as soon as the element appears; can loop.</p><p>Example: <code>slowZoom</code> 30s, <code>infinite alternate</code>, on the background.</p></div>
+  </div>
+<pre><code><span class="k">@keyframes</span> slowZoom { 0% { transform: scale(1); } 100% { transform: scale(1.15); } }
+<span class="k">#live-bg</span> { animation: slowZoom 30s infinite alternate ease-in-out; }
+
+<span class="k">@keyframes</span> fadeIn { from { opacity: 0; transform: translateY(0.75rem); } to { opacity: 1; transform: none; } }
+<span class="k">#start-screen, #battle-phase, .action-row, ...</span> { animation: fadeIn 0.4s ease backwards; }</code></pre>
+  <div class="box why"><span class="box-title">&#128161; Why fadeIn plays again every time a screen appears</span>
+    <p>An element with <code>display: none</code> isn't rendered at all. When <code>.hidden</code> is removed, the element is rendered again, which restarts its CSS animation. So every time JS shows a screen or button row, it fades in for free, with no JS animation code.</p>
+  </div>
+  <div class="box why"><span class="box-title">&#128161; Why animate <code>transform</code> and <code>opacity</code></span>
+    <p>The browser can animate these on the GPU without redoing layout, so they stay smooth even on cheap phones. Animating <code>width</code> or <code>top</code> forces layout on every frame. (The health bar animates <code>width</code>, which is fine for one small element.)</p>
+  </div>
+
+  <h3>The blood flash, in three properties</h3>
+<pre><code><span class="k">#blood-splatter</span> { background: radial-gradient(circle, transparent 20%, rgba(60,0,0,0.8) 100%);
+                  opacity: 0; pointer-events: none; transition: opacity 0.5s; }
+<span class="k">.splatter-active</span> { opacity: 1 !important; }</code></pre>
+  <p>JS adds <code>.splatter-active</code> → the overlay fades in over 0.5 s; 0.5 s later JS removes it → it fades out. <code>pointer-events: none</code> means clicks go straight through to the buttons below.</p>
+
+  <div class="box remember"><span class="box-title">&#129504; Remember</span>
+    <ul>
+      <li>Gradient text = gradient background + <code>background-clip: text</code> + transparent fill.</li>
+      <li>Glass = semi-transparent background + <code>backdrop-filter: blur()</code>.</li>
+      <li>Crest = CSS variables <code>--c1/--c2</code> set by JS + radial gradient + circle + <code>cqi</code> emoji size + grayscale filter.</li>
+      <li><code>::after</code> + <code>content</code> = decoration without HTML.</li>
+      <li><b>Transition</b> reacts to a change; <b>animation</b> runs by itself. Showing an element again restarts its animation.</li>
+      <li>Prefer animating <code>transform</code> and <code>opacity</code> (smooth, GPU).</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================================================== STAGE 8 -->
+<section class="stage" id="s8" data-title="JavaScript fundamentals">
+  <div class="stage-head">
+    <span class="badge">Stage 8</span><span class="maps">PROGRESS Phase 4</span>
+    <h2>JavaScript fundamentals</h2>
+    <p class="lead">Every JavaScript building block the game uses, explained with a line from the real code.</p>
+    <label class="learned"><input type="checkbox" data-learn="s8"> I've learned this</label>
+  </div>
+
+  <h3>How four files share one world (global scope)</h3>
+  <figure>
+    <svg class="wide-svg" viewBox="0 0 860 230" role="img" aria-label="Four script files placing names into one shared global scope">
+      <rect x="10" y="10" width="840" height="210" rx="10" class="box-green"/>
+      <text x="30" y="34" class="title">window: the global scope every classic &lt;script&gt; shares</text>
+      <rect x="30" y="55" width="190" height="150" rx="8" class="box"/>
+      <text x="125" y="78" text-anchor="middle" class="title">① data.js puts:</text>
+      <text x="45" y="102" class="muted">startScreen, battleLog, ...</text>
+      <text x="45" y="122" class="muted">STARTING_GOLD, BEATS</text>
+      <text x="45" y="142" class="muted">HOUSES_DATA + combos</text>
+      <text x="45" y="162" class="muted">playerGold, playerRoster</text>
+      <text x="45" y="182" class="muted">stats, difficulty, writeStore</text>
+      <rect x="235" y="55" width="190" height="150" rx="8" class="box"/>
+      <text x="330" y="78" text-anchor="middle" class="title">② audio.js puts:</text>
+      <text x="250" y="102" class="muted">Sound  (only this one!)</text>
+      <text x="250" y="122" class="muted">uses: bgMusic, sfxSword</text>
+      <text x="250" y="142" class="muted">everything else is private</text>
+      <text x="250" y="162" class="muted">inside its closure</text>
+      <rect x="440" y="55" width="190" height="150" rx="8" class="box"/>
+      <text x="535" y="78" text-anchor="middle" class="title">③ ui.js puts:</text>
+      <text x="455" y="102" class="muted">crestHTML, armyNames</text>
+      <text x="455" y="122" class="muted">showStartScreen, initWarHall</text>
+      <text x="455" y="142" class="muted">renderDraftingBoard, ...</text>
+      <text x="455" y="162" class="muted">resetDraftingUI</text>
+      <text x="455" y="182" class="muted">uses: data.js, Sound</text>
+      <rect x="645" y="55" width="190" height="150" rx="8" class="box"/>
+      <text x="740" y="78" text-anchor="middle" class="title">④ combat.js puts:</text>
+      <text x="660" y="102" class="muted">draftHouse, removeHouse</text>
+      <text x="660" y="122" class="muted">typeEdge, strength</text>
+      <text x="660" y="142" class="muted">generateEnemyRoster</text>
+      <text x="660" y="162" class="muted">recordResult, flashBlood</text>
+      <text x="660" y="182" class="muted">uses: all three before it</text>
+    </svg>
+    <figcaption>Top-level <code>const</code>, <code>let</code> and <code>function</code> in a classic script are visible to every later script.</figcaption>
+  </figure>
+  <div class="box warn"><span class="box-title">&#9888;&#65039; Gotcha: "use before it exists" is fine only inside functions that run later</span>
+    <p><code>ui.js</code> calls <code>draftHouse()</code>, which is defined later in <code>combat.js</code>. That works because the call is inside a click handler, which only runs <b>after all four files have loaded</b>. If <code>ui.js</code> called <code>draftHouse()</code> directly at load time, it would crash with "draftHouse is not defined". Code that runs immediately (like <code>renderStats()</code> at the bottom of <code>ui.js</code>) may only use things from earlier files.</p>
+  </div>
+
+  <h3>Variables: <code>const</code> and <code>let</code></h3>
+<pre><code><span class="k">const</span> STARTING_GOLD = 999;      <span class="c">// never reassigned → const (UPPER_CASE = a rule/setting)</span>
+<span class="k">let</span> playerGold = STARTING_GOLD;  <span class="c">// changes during play → let</span>
+<span class="k">const</span> playerRoster = [];         <span class="c">// note: in the game this is `let` because it gets REPLACED with a new []</span></code></pre>
+  <p><code>const</code> means the <i>name</i> can't point to something else. A <code>const</code> array can still be changed inside (<code>push</code>), it just can't be swapped for another array. The game uses <code>let playerRoster</code> because <code>initWarHall()</code> replaces it with a fresh <code>[]</code>.</p>
+
+  <h3>Data types used</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Type</th><th>Example in the game</th></tr>
+    <tr><td>number</td><td><code>999</code>, <code>0.05</code>, <code>pFinal</code></td></tr>
+    <tr><td>string</td><td><code>'normal'</code>, <code>"Targaryen Dragons"</code>, <code>'#b3121b'</code></td></tr>
+    <tr><td>boolean</td><td><code>battleLocked</code>, <code>playerWon</code>, <code>muted</code></td></tr>
+    <tr><td>null</td><td><code>let ctx = null</code>: "nothing yet" (audio engine not created)</td></tr>
+    <tr><td>array</td><td><code>HOUSES_DATA</code>, <code>playerRoster</code>, <code>battleTimers</code></td></tr>
+    <tr><td>object</td><td>each house <code>{ id, name, role, ... }</code>, <code>stats</code>, <code>BEATS</code></td></tr>
+    <tr><td>function</td><td><code>draftHouse</code>, arrow functions <code>h =&gt; h.power</code></td></tr>
+  </table></div>
+
+  <h3>Objects and arrays</h3>
+<pre><code><span class="k">const</span> house = { id: <span class="s">"targ"</span>, name: <span class="s">"Targaryen Dragons"</span>, role: <span class="s">"A"</span>, cost: 500, power: 3 };
+house.cost            <span class="c">// 500  (dot access)</span>
+BEATS[a.role]         <span class="c">// bracket access with a variable key: BEATS["A"] → "M"</span>
+playerRoster.length   <span class="c">// how many items</span>
+playerRoster[0]       <span class="c">// first item</span></code></pre>
+
+  <h3>Functions: three ways to write them</h3>
+<pre><code><span class="k">function</span> calculatePower(roster) { <span class="k">return</span> roster.reduce((sum, h) =&gt; sum + h.power, 0); }  <span class="c">// declaration</span>
+<span class="k">const</span> show = <span class="k">function</span> () { root.classList.remove(<span class="s">'fonts-loading'</span>); };         <span class="c">// expression (head script)</span>
+h =&gt; h.name                                                                     <span class="c">// arrow: short, for callbacks</span></code></pre>
+  <p><b>Guard clauses</b> keep functions simple: exit early when the action isn't allowed.</p>
+<pre><code><span class="k">function</span> draftHouse(house) {
+    <span class="k">if</span> (battleLocked || playerRoster.length &gt;= ARMY_SIZE) <span class="k">return</span>;   <span class="c">// guard</span>
+    playerRoster.push(house);
+    ...
+}</code></pre>
+
+  <h3>Template literals</h3>
+<pre><code>`Wins ${stats.wins} · Losses ${stats.losses}`      <span class="c">// backticks + ${} put values into text</span>
+`Pick ${ARMY_SIZE} houses (${playerRoster.length}/${ARMY_SIZE})`</code></pre>
+
+  <h3>Array methods: the workhorses</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Method</th><th>Does</th><th>Real line</th></tr>
+    <tr><td><code>forEach</code></td><td>run something for each item</td><td><code>HOUSES_DATA.forEach(h =&gt; { ...make a card... })</code></td></tr>
+    <tr><td><code>map</code></td><td>new array, each item transformed</td><td><code>roster.map(h =&gt; h.name)</code> → list of names</td></tr>
+    <tr><td><code>find</code></td><td>first item that matches</td><td><code>HOUSES_DATA.find(h =&gt; h.id === id)</code></td></tr>
+    <tr><td><code>some</code></td><td>true if any item matches</td><td><code>playerRoster.some(r =&gt; r.id === h.id)</code> → is it picked?</td></tr>
+    <tr><td><code>filter</code></td><td>keep only matching items</td><td><code>.filter(el =&gt; el &amp;&amp; el.getClientRects().length &gt; 0)</code> (layout morph)</td></tr>
+    <tr><td><code>reduce</code></td><td>fold a list into one value</td><td><code>roster.reduce((sum, h) =&gt; sum + h.power, 0)</code></td></tr>
+    <tr><td><code>push</code></td><td>add to the end</td><td><code>playerRoster.push(house)</code></td></tr>
+    <tr><td><code>splice</code></td><td>remove (and return) items at a position</td><td><code>const [house] = playerRoster.splice(index, 1)</code></td></tr>
+    <tr><td><code>join</code></td><td>array → one string</td><td><code>names.join(' + ')</code></td></tr>
+    <tr><td><code>[...x]</code></td><td>spread into a new array</td><td><code>[...html.matchAll(/\?v=(\d+)/g)]</code> (bump script)</td></tr>
+  </table></div>
+  <details class="deep"><summary>Deep dive: how <code>reduce</code> adds up power, step by step</summary>
+<pre><code>[targ(3), doth(2), dorn(1)].reduce((sum, h) =&gt; sum + h.power, 0)
+start   sum = 0
+targ →  sum = 0 + 3 = 3
+doth →  sum = 3 + 2 = 5
+dorn →  sum = 5 + 1 = 6     ← final answer</code></pre>
+    <p><code>const [house] = arr.splice(i, 1)</code> uses <b>destructuring</b>: <code>splice</code> returns an array of removed items, and <code>[house]</code> takes its first element.</p>
+  </details>
+
+  <h3>The DOM API: how JS touches the page</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Call</th><th>Use</th></tr>
+    <tr><td><code>document.getElementById('x')</code></td><td>find one element by id</td></tr>
+    <tr><td><code>document.querySelector('.content')</code></td><td>find the first element matching any CSS selector</td></tr>
+    <tr><td><code>document.createElement('button')</code></td><td>make a new element (draft cards, roster slots)</td></tr>
+    <tr><td><code>parent.appendChild(el)</code></td><td>put it on the page</td></tr>
+    <tr><td><code>el.innerHTML = ''</code></td><td>empty a container before redrawing</td></tr>
+    <tr><td><code>el.textContent</code> / <code>el.innerText</code></td><td>set plain text (safe)</td></tr>
+    <tr><td><code>el.classList.add / remove / toggle(name, force)</code></td><td>switch CSS classes</td></tr>
+    <tr><td><code>el.setAttribute('aria-pressed', 'true')</code></td><td>set any attribute</td></tr>
+    <tr><td><code>el.disabled = true</code></td><td>block a button</td></tr>
+    <tr><td><code>el.style.width = '45%'</code></td><td>inline style (health bars, zoom)</td></tr>
+    <tr><td><code>el.getBoundingClientRect()</code></td><td>where an element is on screen and how big</td></tr>
+    <tr><td><code>el.contains(other)</code></td><td>is <code>other</code> inside <code>el</code>? (click-outside check)</td></tr>
+  </table></div>
+  <p><code>classList.toggle('over-budget', playerGold &lt; 0)</code> is worth remembering: with a second argument it <b>adds</b> the class when the condition is true and <b>removes</b> it when false. One line instead of an if/else.</p>
+
+  <h3>Events</h3>
+<pre><code>btnFight.addEventListener(<span class="s">'click'</span>, () =&gt; { ... });            <span class="c">// run on click</span>
+document.addEventListener(<span class="s">'keydown'</span>, (e) =&gt; { <span class="k">if</span> (e.key === <span class="s">'Escape'</span>) ... });
+infoBtn.addEventListener(<span class="s">'click'</span>, (e) =&gt; { e.stopPropagation(); ... });   <span class="c">// don't bubble up</span></code></pre>
+  <p>Events used: <code>click</code>, <code>keydown</code>, <code>mouseenter</code>, <code>mouseleave</code>, <code>resize</code>, <code>transitionend</code>, <code>visibilitychange</code>, and the media query <code>change</code>.</p>
+  <div class="box why"><span class="box-title">&#128161; Event bubbling</span>
+    <p>A click on a button also "bubbles up" to every ancestor, all the way to <code>document</code>. The rules panel listens on <code>document</code> to close when you click anywhere else. But a click on the 📜 icon would reach <code>document</code> too and close the panel straight away, so the icon calls <code>e.stopPropagation()</code> to stop the bubble.</p>
+  </div>
+
+  <h3>Timers</h3>
+<pre><code><span class="k">const</span> id = setTimeout(fn, 400);   <span class="c">// run fn once, 400 ms from now; returns an id</span>
+clearTimeout(id);                 <span class="c">// cancel it before it runs</span>
+requestAnimationFrame(step);      <span class="c">// run step before the next screen repaint (~60 times/second)</span></code></pre>
+
+  <h3>Promises (things that finish later)</h3>
+<pre><code>bgMusic.play()                        <span class="c">// returns a Promise</span>
+    .then(() =&gt; fadeMusic(level, 2))   <span class="c">// success: playing started</span>
+    .catch(() =&gt; { started = false; }); <span class="c">// failure: the browser blocked it</span>
+
+Promise.all([fontA, fontB]).then(show, show);   <span class="c">// wait for both; show either way</span></code></pre>
+
+  <h3>Errors: <code>try / catch</code></h3>
+<pre><code><span class="k">try</span> { localStorage.setItem(key, JSON.stringify(value)); }
+<span class="k">catch</span> (e) { <span class="c">/* private mode: storage blocked, just carry on */</span> }</code></pre>
+
+  <h3>Closures and the module pattern (IIFE)</h3>
+<pre><code><span class="k">const</span> Sound = (() =&gt; {
+    <span class="k">let</span> muted = false;                 <span class="c">// private: nobody outside can touch it</span>
+    <span class="k">function</span> toggleMute() { muted = !muted; }
+    <span class="k">return</span> { toggleMute };            <span class="c">// public: only what's returned</span>
+})();                                  <span class="c">// ← the () runs the function immediately</span>
+
+Sound.toggleMute();   <span class="c">// ok</span>
+Sound.muted;          <span class="c">// undefined: it's private</span></code></pre>
+  <p>IIFE = "Immediately Invoked Function Expression". The returned functions still "remember" the variables around them after the outer function has finished. That memory is called a <b>closure</b>. It gives <code>audio.js</code> private state and one clean public name, <code>Sound</code>, instead of 20 globals.</p>
+
+  <div class="box remember"><span class="box-title">&#129504; Remember</span>
+    <ul>
+      <li>Classic scripts share one global scope; later files use earlier names. Calls inside click handlers can use names from any file.</li>
+      <li><code>const</code> = name never reassigned; <code>let</code> = can change.</li>
+      <li>Arrays: <b>forEach, map, find, some, filter, reduce, push, splice, join</b>.</li>
+      <li>DOM: <b>getElementById → createElement → appendChild → classList → textContent</b>.</li>
+      <li><code>classList.toggle(name, condition)</code> adds or removes in one line.</li>
+      <li>Events bubble up; <code>stopPropagation()</code> stops them.</li>
+      <li><code>setTimeout</code> returns an id; keep it so you can <code>clearTimeout</code>.</li>
+      <li>IIFE + closure = private variables + a small public API (<code>Sound</code>).</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================================================== STAGE 9 -->
+<section class="stage" id="s9" data-title="The data layer (data.js)">
+  <div class="stage-head">
+    <span class="badge">Stage 9</span><span class="maps">PROGRESS Phases 4–5</span>
+    <h2>The data layer: <code>data.js</code></h2>
+    <p class="lead">The game's memory: rules, houses, the current state of a game, and the stats saved on the device.</p>
+    <label class="learned"><input type="checkbox" data-learn="s9"> I've learned this</label>
+  </div>
+
+  <h3>What's in <code>data.js</code>, top to bottom</h3>
+  <ol class="steps">
+    <li><b>DOM lookups</b>: <code>startScreen</code>, <code>claimBtn</code>, <code>bgMusic</code>, <code>sfxSword</code>, <code>battleLog</code>, gold displays, containers, buttons. Found once, used by every file.</li>
+    <li><b>Rules</b>: <code>STARTING_GOLD = 999</code>, <code>ARMY_SIZE = 3</code>, <code>TYPE_EDGE = 0.05</code>.</li>
+    <li><b>Type triangle</b>: <code>ROLE_NAMES</code> and <code>BEATS</code>.</li>
+    <li><b>Content</b>: <code>HOUSES_DATA</code> (9 houses) and <code>ENEMY_COMBOS</code> (3 alliances).</li>
+    <li><b>State</b>: gold, rosters, <code>battleLocked</code>, <code>battleTimers</code>.</li>
+    <li><b>Saving</b>: <code>readStore</code>, <code>writeStore</code>, <code>stats</code>, <code>difficulty</code>.</li>
+    <li><b>Layout motion</b>: smooth zoom and the PC ↔ phone morph (explained in Stage 14).</li>
+  </ol>
+
+  <h3>The type triangle as data</h3>
+  <div class="mock-row">
+    <figure style="flex:0 1 20rem">
+      <svg viewBox="0 0 320 270" role="img" aria-label="Attack beats Mix, Mix beats Defense, Defense beats Attack">
+        <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="arrow-head"/></marker></defs>
+        <circle cx="160" cy="45" r="36" class="box-red"/><text x="160" y="50" text-anchor="middle" class="title">Attack</text>
+        <circle cx="270" cy="220" r="36" class="box-gold"/><text x="270" y="225" text-anchor="middle" class="title">Mix</text>
+        <circle cx="50" cy="220" r="36" class="box-blue"/><text x="50" y="225" text-anchor="middle" class="title">Defense</text>
+        <path d="M185,75 L245,185" class="line" marker-end="url(#ah2)"/>
+        <path d="M232,222 L90,222" class="line" marker-end="url(#ah2)"/>
+        <path d="M68,188 L133,76" class="line" marker-end="url(#ah2)"/>
+        <text x="240" y="125" class="muted">beats</text>
+        <text x="160" y="245" text-anchor="middle" class="muted">beats</text>
+        <text x="55" y="125" class="muted">beats</text>
+      </svg>
+      <figcaption>Arrow = "beats". Same type = no effect.</figcaption>
+    </figure>
+    <div>
+<pre><code><span class="k">const</span> ROLE_NAMES = { A: <span class="s">'Attack'</span>, D: <span class="s">'Defense'</span>, M: <span class="s">'Mix'</span> };
+<span class="k">const</span> BEATS = { A: <span class="s">'M'</span>, M: <span class="s">'D'</span>, D: <span class="s">'A'</span> };
+
+BEATS[<span class="s">'A'</span>] === <span class="s">'M'</span>   <span class="c">// "Attack beats Mix" → true</span></code></pre>
+      <div class="box why"><span class="box-title">&#128161; Why store rules as data</span><p>The battle code never says "if attack and mix then...". It just asks <code>BEATS[mine] === theirs</code>. To add a 4th type, or flip the triangle, you edit one object and the maths still works.</p></div>
+    </div>
+  </div>
+
+  <h3>The nine houses</h3>
+  <div class="table-wrap"><table>
+    <tr><th>id</th><th>Name</th><th>Role</th><th>Tier</th><th>Power</th><th>Cost</th><th>Gold per power</th></tr>
+    <tr><td>targ</td><td>Targaryen Dragons</td><td>A</td><td>1</td><td>3</td><td>500</td><td>167</td></tr>
+    <tr><td>doth</td><td>Dothraki Riders</td><td>A</td><td>2</td><td>2</td><td>300</td><td>150</td></tr>
+    <tr><td>dorn</td><td>Dornish Spears</td><td>A</td><td>3</td><td>1</td><td>150</td><td>150</td></tr>
+    <tr><td>unsu</td><td>Unsullied</td><td>D</td><td>1</td><td>3</td><td>450</td><td>150</td></tr>
+    <tr><td>night</td><td>Night's Watch</td><td>D</td><td>2</td><td>2</td><td>280</td><td>140</td></tr>
+    <tr><td>rive</td><td>Riverlands Levies</td><td>D</td><td>3</td><td>1</td><td>130</td><td>130</td></tr>
+    <tr><td>storm</td><td>Stormlanders</td><td>M</td><td>1</td><td>3</td><td>400</td><td>133</td></tr>
+    <tr><td>iron</td><td>Iron Fleet</td><td>M</td><td>2</td><td>2</td><td>280</td><td>140</td></tr>
+    <tr><td>vale</td><td>Knights of the Vale</td><td>M</td><td>3</td><td>1</td><td>150</td><td>150</td></tr>
+  </table></div>
+  <p>Each object also has <code>emblem</code> (emoji), <code>colors</code> (two hex colours for the crest gradient) and <code>desc</code> (tooltip text). The last column isn't in the code; it's worked out here to show the balance: Attack is the most expensive per point of power, Mix the cheapest at Tier 1.</p>
+
+  <h3>Enemy alliances</h3>
+<pre><code><span class="k">const</span> ENEMY_COMBOS = [
+    { name: <span class="s">"Pure Attack"</span>,  ids: [<span class="s">"targ"</span>, <span class="s">"doth"</span>, <span class="s">"dorn"</span>] },   <span class="c">// 950G, power 6</span>
+    { name: <span class="s">"Pure Defense"</span>, ids: [<span class="s">"unsu"</span>, <span class="s">"night"</span>, <span class="s">"rive"</span>] }, <span class="c">// 860G, power 6</span>
+    { name: <span class="s">"Pure Mix"</span>,     ids: [<span class="s">"storm"</span>, <span class="s">"iron"</span>, <span class="s">"vale"</span>] }  <span class="c">// 830G, power 6</span>
+];</code></pre>
+  <p>Combos store <b>ids</b>, not copies of houses. There's one source of truth (<code>HOUSES_DATA</code>), and ids are looked up when needed.</p>
+
+  <h3>Game state: who reads and who writes</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Variable</th><th>Meaning</th><th>Written by</th><th>Read by</th></tr>
+    <tr><td><code>playerGold</code></td><td>gold left</td><td>initWarHall, draftHouse, removeHouse</td><td>updateGoldDisplay, updateBattleButton, PREPARE</td></tr>
+    <tr><td><code>enemyGold</code></td><td>enemy gold left</td><td>initWarHall, generateEnemyRoster</td><td>PREPARE (display)</td></tr>
+    <tr><td><code>playerRoster</code></td><td>your picked houses</td><td>initWarHall, draftHouse, removeHouse</td><td>almost everything</td></tr>
+    <tr><td><code>enemyRoster</code></td><td>enemy houses</td><td>initWarHall, generateEnemyRoster</td><td>renderEnemyRoster, FIGHT</td></tr>
+    <tr><td><code>battleLocked</code></td><td>army can't change</td><td>PREPARE (true), resetDraftingUI (false)</td><td>draftHouse, removeHouse, renderPlayerRoster, surrender, updateBattleButton</td></tr>
+    <tr><td><code>battleTimers</code></td><td>pending fight timeouts</td><td>FIGHT, endGameInline, flashBlood</td><td>resetDraftingUI (cancels them)</td></tr>
+    <tr><td><code>stats</code></td><td>wins, losses, streak, best</td><td>recordResult</td><td>renderStats, endGameInline</td></tr>
+    <tr><td><code>difficulty</code></td><td>'normal' or 'hard'</td><td>difficulty button</td><td>generateEnemyRoster, renderDifficulty</td></tr>
+  </table></div>
+
+  <h3>Saving on the device</h3>
+  <div class="flow">
+    <div class="node">JS object<small><code>{wins:3, ...}</code></small></div>
+    <div class="node gold">JSON.stringify<small>→ text</small></div>
+    <div class="node blue">localStorage<small>key "got-stats"</small></div>
+    <div class="node gold">JSON.parse<small>← text, next visit</small></div>
+    <div class="node">JS object again</div>
+  </div>
+<pre><code><span class="k">function</span> readStore(key, fallback) {
+    <span class="k">try</span> {
+        <span class="k">const</span> raw = localStorage.getItem(key);
+        <span class="k">return</span> raw === <span class="k">null</span> ? fallback : JSON.parse(raw);   <span class="c">// nothing saved yet → fallback</span>
+    } <span class="k">catch</span> (e) { <span class="k">return</span> fallback; }                         <span class="c">// blocked or broken → fallback</span>
+}
+
+<span class="k">let</span> stats = Object.assign({ wins: 0, losses: 0, streak: 0, best: 0 }, readStore(STORE_KEYS.stats, {}));
+<span class="k">let</span> difficulty = readStore(STORE_KEYS.difficulty, <span class="s">'normal'</span>) === <span class="s">'hard'</span> ? <span class="s">'hard'</span> : <span class="s">'normal'</span>;</code></pre>
+  <ul>
+    <li><code>Object.assign(defaults, saved)</code> copies saved values over the defaults. If an old save is missing <code>best</code>, it still gets <code>0</code> instead of <code>undefined</code>.</li>
+    <li>The difficulty line <b>validates</b>: anything except the exact string <code>'hard'</code> becomes <code>'normal'</code>. Never trust stored data blindly; a user can edit it in DevTools.</li>
+    <li>Three keys exist: <code>got-stats</code>, <code>got-difficulty</code> (data.js) and <code>got-muted</code> (audio.js, stored as <code>'1'</code>/<code>'0'</code>).</li>
+    <li>Storage is per browser and per website. Stats on your phone and PC are separate.</li>
+  </ul>
+
+  <div class="box remember"><span class="box-title">&#129504; Remember</span>
+    <ul>
+      <li><code>data.js</code> = lookups + rules + houses + state + saving + layout motion.</li>
+      <li><code>BEATS = {A:'M', M:'D', D:'A'}</code>: Attack &gt; Mix &gt; Defense &gt; Attack.</li>
+      <li>Tier 1/2/3 = power 3/2/1. All three enemy combos have power 6.</li>
+      <li>Combos store ids; <code>HOUSES_DATA</code> is the single source of truth.</li>
+      <li>Saving = <code>JSON.stringify</code> → localStorage → <code>JSON.parse</code>, wrapped in try/catch with fallbacks.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================================================== STAGE 10 -->
+<section class="stage" id="s10" data-title="The UI layer (ui.js)">
+  <div class="stage-head">
+    <span class="badge">Stage 10</span><span class="maps">PROGRESS Phases 6, 7, 11</span>
+    <h2>The UI layer: <code>ui.js</code></h2>
+    <p class="lead">Turning state into things on screen: the start screen, draft cards, rosters, the smart PREPARE button and the rules panel.</p>
+    <label class="learned"><input type="checkbox" data-learn="s10"> I've learned this</label>
+  </div>
+
+  <h3>The core pattern: render from state</h3>
+  <figure>
+    <svg viewBox="0 0 640 220" role="img" aria-label="Player action changes state, state is rendered to the screen, the player sees it and acts again">
+      <defs><marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="arrow-head"/></marker></defs>
+      <rect x="230" y="10" width="180" height="56" rx="8" class="box-red"/>
+      <text x="320" y="34" text-anchor="middle" class="title">Player taps a card</text>
+      <text x="320" y="52" text-anchor="middle" class="muted">click event</text>
+      <rect x="440" y="140" width="190" height="56" rx="8" class="box-gold"/>
+      <text x="535" y="164" text-anchor="middle" class="title">Change the STATE</text>
+      <text x="535" y="182" text-anchor="middle" class="muted">draftHouse: push, gold −=</text>
+      <rect x="10" y="140" width="200" height="56" rx="8" class="box-blue"/>
+      <text x="110" y="164" text-anchor="middle" class="title">RENDER from state</text>
+      <text x="110" y="182" text-anchor="middle" class="muted">renderDraftingBoard()</text>
+      <path d="M410,45 C480,50 530,90 535,136" class="line" marker-end="url(#ah3)"/>
+      <path d="M438,168 L214,168" class="line" marker-end="url(#ah3)"/>
+      <path d="M105,138 C110,90 160,48 226,40" class="line" marker-end="url(#ah3)"/>
+      <text x="320" y="160" text-anchor="middle" class="muted">then always redraw</text>
+      <text x="85" y="85" class="muted">player sees result</text>
+    </svg>
+    <figcaption>The code never edits "just this one card". It changes the data, then redraws the board from the data, so the screen always matches the state.</figcaption>
+  </figure>
+
+  <h3>Start screen</h3>
+<pre><code><span class="k">function</span> renderStats() {
+    <span class="k">const</span> played = stats.wins + stats.losses;
+    statsLine.textContent = played === 0
+        ? <span class="s">'Win battles to build your streak'</span>
+        : `Wins ${stats.wins} · Losses ${stats.losses} · Streak ${stats.streak} (best ${stats.best})`;
+}</code></pre>
+  <p>The <b>ternary</b> <code>condition ? a : b</code> is a one-line if/else that gives back a value.</p>
+  <ul>
+    <li><b>Difficulty button</b>: flips <code>difficulty</code>, saves it, then <code>renderDifficulty()</code> updates the text, <code>aria-pressed</code> (which also turns it red through CSS) and the tooltip.</li>
+    <li><b>JOIN</b>: hides the title and start screen, shows <code>#battle-phase</code>, calls <code>Sound.startMusic()</code> (allowed, because it's inside a tap), then <code>initWarHall()</code>.</li>
+    <li><b>⌂ Home</b>, <b>HOME</b>, <b>SURRENDER</b> all end in <code>showStartScreen()</code> = <code>resetDraftingUI()</code> + show start + <code>renderStats()</code>.</li>
+    <li>At the bottom of the start-screen section, <code>renderStats(); renderDifficulty();</code> run once at load, so saved values show straight away.</li>
+  </ul>
+
+  <h3>Anatomy of one draft card</h3>
+<pre><code><span class="k">const</span> card = document.createElement(<span class="s">'button'</span>);
+card.type = <span class="s">'button'</span>;
+card.className = <span class="s">'draft-card'</span> + (isPicked ? <span class="s">' picked'</span> : <span class="s">''</span>) + (isFull &amp;&amp; !isPicked ? <span class="s">' disabled'</span> : <span class="s">''</span>);
+card.disabled = isPicked || isFull;
+card.title = h.desc;                                  <span class="c">// hover tooltip</span>
+card.setAttribute(<span class="s">'aria-label'</span>, `${h.name}, ${ROLE_NAMES[h.role]} tier ${h.tier}, ${h.cost} gold. ...`);
+card.innerHTML = `${crestHTML(h)} &lt;span class="draft-name"&gt;${h.name}&lt;/span&gt; ...`;
+card.addEventListener(<span class="s">'click'</span>, () =&gt; draftHouse(h));   <span class="c">// each card remembers its own house (closure)</span>
+draftOptionsContainer.appendChild(card);</code></pre>
+  <div class="table-wrap"><table>
+    <tr><th>State</th><th>Condition</th><th>Looks</th><th>Clickable?</th></tr>
+    <tr><td>available</td><td>not picked, not full</td><td>normal, lifts on hover</td><td>yes</td></tr>
+    <tr><td>picked</td><td><code>playerRoster.some(r =&gt; r.id === h.id)</code></td><td>gold border + ✓</td><td>no</td></tr>
+    <tr><td>disabled</td><td>3 picked and this one isn't</td><td>faded 40%</td><td>no</td></tr>
+  </table></div>
+
+  <h3>Rosters</h3>
+  <ul>
+    <li><code>renderPlayerRoster()</code>: each picked house becomes a <b>button</b> showing its crest. Click → <code>removeHouse(index)</code>. When <code>battleLocked</code> is true the buttons are disabled and the label changes from "Remove X" to just "X".</li>
+    <li><code>renderEnemyRoster()</code>: plain <b>divs</b>, because you can't interact with the enemy.</li>
+    <li><code>crestHTML(house)</code> builds the crest markup once for cards and both rosters. <code>armyNames(roster)</code> builds "A + B + C" for the codewords.</li>
+  </ul>
+
+  <h3>The smart PREPARE button</h3>
+  <div class="flow col">
+    <div class="node">updateBattleButton()<small>runs after every pick or removal</small></div>
+    <div class="node gold">battleLocked? → do nothing</div>
+    <div class="node">fewer than 3? → disabled: "Pick 3 houses (2/3)"</div>
+    <div class="node red">gold &lt; 0? → disabled: "Over budget"</div>
+    <div class="node green">else → enabled: "Prepare for war"</div>
+  </div>
+  <div class="box why"><span class="box-title">&#128161; Why explain instead of hiding</span><p>A hidden button makes players wonder what's missing. A disabled button that says "Pick 3 houses (2/3)" tells them exactly what to do next. Notice you <i>can</i> go over budget while picking (gold turns red); you just can't start the war until you fix it.</p></div>
+
+  <h3>The rules panel (📜)</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Input</th><th>Handler</th><th>Result</th></tr>
+    <tr><td>Mouse moves onto 📜</td><td><code>mouseenter</code> + <code>matchMedia('(hover: hover)')</code></td><td>Opens (peek). Phones skip this.</td></tr>
+    <tr><td>Mouse leaves 📜</td><td><code>mouseleave</code></td><td>Closes, unless pinned.</td></tr>
+    <tr><td>Click/tap 📜</td><td><code>click</code> + <code>stopPropagation()</code></td><td>Toggles <code>infoPinned</code> and open state.</td></tr>
+    <tr><td>Click anywhere else</td><td><code>document</code> click + <code>!infoModal.contains(e.target)</code></td><td>Unpins and closes.</td></tr>
+    <tr><td>Escape key</td><td><code>keydown</code></td><td>Unpins and closes.</td></tr>
+  </table></div>
+  <p>Everything goes through <code>setInfoOpen(open)</code>, which toggles <code>.hidden</code> and keeps <code>aria-expanded</code> in sync. One function changes the state, so the rest can't get out of sync.</p>
+
+  <h3><code>initWarHall()</code> and <code>resetDraftingUI()</code></h3>
+  <p><code>initWarHall</code> starts a fresh game: reset the UI, full gold for both sides, empty rosters, enemy gold <code>???</code>, help text in the log, then draw. <code>resetDraftingUI</code> undoes everything a battle changed: it cancels pending timers, unlocks, removes the blood, brings music back up, restores the title, shows the cards, hides and re-enables the buttons, refills the health bars and hides the codewords. Both <b>BATTLE AGAIN</b> and <b>HOME</b> use these, so there's exactly one reset path.</p>
+
+  <div class="box remember"><span class="box-title">&#129504; Remember</span>
+    <ul>
+      <li><b>Action → change state → re-render from state.</b></li>
+      <li>Cards: createElement, set class/disabled/aria-label/innerHTML, add a click listener, appendChild.</li>
+      <li>Card states: available / picked (gold ✓) / disabled (faded).</li>
+      <li>PREPARE explains what's missing: "Pick 3 (x/3)", "Over budget", "Prepare for war".</li>
+      <li>Rules panel: hover peeks (mouse only), click pins, outside click or Escape closes; one <code>setInfoOpen()</code>.</li>
+      <li>One reset path: <code>resetDraftingUI()</code>.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================================================== STAGE 11 -->
+<section class="stage" id="s11" data-title="Combat maths and enemy AI">
+  <div class="stage-head">
+    <span class="badge">Stage 11</span><span class="maps">PROGRESS Phases 7–9</span>
+    <h2>Combat maths and enemy AI: <code>combat.js</code></h2>
+    <p class="lead">The rules engine: drafting, the strength formula, luck, and how Hard mode picks its counter. Worked through with real numbers.</p>
+    <label class="learned"><input type="checkbox" data-learn="s11"> I've learned this</label>
+  </div>
+
+  <h3>Drafting</h3>
+<pre><code><span class="k">function</span> draftHouse(house) {
+    <span class="k">if</span> (battleLocked || playerRoster.length &gt;= ARMY_SIZE) <span class="k">return</span>;
+    playerRoster.push(house);
+    playerGold -= house.cost;
+    updateGoldDisplay();
+    renderDraftingBoard();
+}
+<span class="k">function</span> removeHouse(index) {
+    <span class="k">if</span> (battleLocked) <span class="k">return</span>;
+    <span class="k">const</span> [house] = playerRoster.splice(index, 1);
+    playerGold += house.cost;          <span class="c">// refund</span>
+    updateGoldDisplay();
+    renderDraftingBoard();
+}</code></pre>
+
+  <h3>The strength formula</h3>
+  <div class="flow">
+    <div class="node">calculatePower<small>sum of power</small></div>
+    <div class="node gold">× (1 + typeEdge)<small>±5% per matchup</small></div>
+    <div class="node">= strength</div>
+    <div class="node red">× luck<small>0.85 – 1.15</small></div>
+    <div class="node green">final<small>higher wins</small></div>
+  </div>
+<pre><code><span class="k">function</span> typeEdge(army, foe) {
+    <span class="k">let</span> edge = 0;
+    army.forEach(a =&gt; foe.forEach(f =&gt; {          <span class="c">// every pair: 3 × 3 = 9 matchups</span>
+        <span class="k">if</span> (BEATS[a.role] === f.role) edge += TYPE_EDGE;       <span class="c">// mine beats theirs</span>
+        <span class="k">else if</span> (BEATS[f.role] === a.role) edge -= TYPE_EDGE;  <span class="c">// theirs beats mine</span>
+    }));
+    <span class="k">return</span> edge;
+}
+<span class="k">function</span> strength(army, foe) { <span class="k">return</span> calculatePower(army) * (1 + typeEdge(army, foe)); }</code></pre>
+
+  <h3>Worked example 1: pure Attack vs pure Mix</h3>
+  <p>You pick Targaryen (A, 3) + Dothraki (A, 2) + Dornish (A, 1) = 950G, power 6. The enemy has Pure Mix (power 6).</p>
+  <div class="table-wrap"><table>
+    <tr><th></th><th>vs Storm (M)</th><th>vs Iron (M)</th><th>vs Vale (M)</th></tr>
+    <tr><td>Targaryen (A)</td><td>+5%</td><td>+5%</td><td>+5%</td></tr>
+    <tr><td>Dothraki (A)</td><td>+5%</td><td>+5%</td><td>+5%</td></tr>
+    <tr><td>Dornish (A)</td><td>+5%</td><td>+5%</td><td>+5%</td></tr>
+  </table></div>
+  <p>Your edge = 9 × 5% = <b>+45%</b> → strength 6 × 1.45 = <b>8.7</b>. Enemy edge = <b>−45%</b> → 6 × 0.55 = <b>3.3</b>. Even with the worst luck for you (8.7 × 0.85 = 7.4) and the best for them (3.3 × 1.15 = 3.8), you win. Against Pure Defense the numbers swap, and you can't win.</p>
+
+  <h3>Worked example 2: a balanced army</h3>
+  <p>Stormlanders (M, 3, 400) + Dothraki (A, 2, 300) + Night's Watch (D, 2, 280) = <b>980G, power 7</b>. Against Pure Attack:</p>
+  <ul>
+    <li>Storm (M) vs 3× A: Attack beats Mix → −15%</li>
+    <li>Dothraki (A) vs 3× A: same type → 0%</li>
+    <li>Night's Watch (D) vs 3× A: Defense beats Attack → +15%</li>
+    <li>Total edge = <b>0%</b>. The same happens against Pure Defense and Pure Mix.</li>
+  </ul>
+  <div class="box why"><span class="box-title">&#128161; Insight: one of each type cancels every counter</span>
+    <p>An army with one Attack, one Defense and one Mix always has a 0% edge against the three pure enemy alliances. It wins one third of the matchups and loses one third. So Hard mode can't counter it, and 7 power beats the enemy's 6 most of the time: 7 × 0.85 = 5.95 at your worst vs 6 × 1.15 = 6.9 at their best, so luck can still flip it. Finding things like this is what <b>game balancing</b> is about.</p>
+  </div>
+
+  <h3>Luck</h3>
+<pre><code><span class="k">const</span> pFinal = strength(playerRoster, enemyRoster) * (Math.random() * 0.3 + 0.85);</code></pre>
+  <p><code>Math.random()</code> gives a number from 0 up to (not including) 1. × 0.3 → 0 to 0.3. + 0.85 → <b>0.85 to 1.15</b>. Each side rolls separately.</p>
+
+  <h3>Enemy AI</h3>
+<pre><code><span class="k">function</span> generateEnemyRoster() {
+    <span class="c">// ids → full house objects</span>
+    <span class="k">const</span> combos = ENEMY_COMBOS.map(c =&gt; c.ids.map(id =&gt; HOUSES_DATA.find(h =&gt; h.id === id)));
+    <span class="k">let</span> chosen;
+    <span class="k">if</span> (difficulty === <span class="s">'hard'</span>) {
+        chosen = combos.reduce((best, c) =&gt;
+            strength(c, playerRoster) - strength(playerRoster, c) &gt;
+            strength(best, playerRoster) - strength(playerRoster, best) ? c : best);
+    } <span class="k">else</span> {
+        chosen = combos[Math.floor(Math.random() * combos.length)];   <span class="c">// 0, 1 or 2</span>
+    }
+    enemyRoster = chosen;
+    enemyGold = STARTING_GOLD - chosen.reduce((sum, h) =&gt; sum + h.cost, 0);
+}</code></pre>
+  <p><b>Hard mode</b> scores each alliance as <i>(enemy strength − your strength)</i> and keeps the highest. <code>reduce</code> here means "walk the list and keep the best one so far". For your pure Attack army from example 1:</p>
+  <div class="table-wrap"><table>
+    <tr><th>Enemy option</th><th>Enemy strength</th><th>Your strength</th><th>Score</th></tr>
+    <tr><td>Pure Attack</td><td>6.0</td><td>6.0</td><td>0</td></tr>
+    <tr><td>Pure Defense</td><td>8.7</td><td>3.3</td><td><b>+5.4 ← chosen</b></td></tr>
+    <tr><td>Pure Mix</td><td>3.3</td><td>8.7</td><td>−5.4</td></tr>
+  </table></div>
+  <p>This is the simplest kind of AI: <b>try every option, score it, keep the best</b>. It's possible here because there are only 3 options.</p>
+  <p><code>formatEdge(0.15)</code> → <code>"+15%"</code>: <code>Math.round(edge * 100)</code> plus a "+" for positive numbers. It's shown in the battle log after PREPARE.</p>
+
+  <div class="box remember"><span class="box-title">&#129504; Remember</span>
+    <ul>
+      <li><b>final = Σpower × (1 + edge) × luck</b>, luck = <code>Math.random() * 0.3 + 0.85</code>.</li>
+      <li>Edge = 9 matchups × ±5% → between −45% and +45%.</li>
+      <li>Normal AI: <code>Math.floor(Math.random() * 3)</code>. Hard AI: highest (enemy − you) via <code>reduce</code>.</li>
+      <li>One of each type = 0% edge against every pure alliance.</li>
+      <li>The most power any affordable army can reach is 7 (e.g. 3+2+2 or 3+3+1, like Stormlanders + Unsullied + Riverlands = 980G). Power 8 would cost at least 1130G.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================================================== STAGE 12 -->
+<section class="stage" id="s12" data-title="The battle sequence">
+  <div class="stage-head">
+    <span class="badge">Stage 12</span><span class="maps">PROGRESS Phase 10</span>
+    <h2>The battle sequence</h2>
+    <p class="lead">The game as a state machine, and what happens, millisecond by millisecond, when you press PREPARE and FIGHT.</p>
+    <label class="learned"><input type="checkbox" data-learn="s12"> I've learned this</label>
+  </div>
+
+  <h3>The game as a state machine</h3>
+  <figure>
+    <svg class="wide-svg" viewBox="0 0 980 340" role="img" aria-label="States: Start, Drafting, Revealed, Fighting, Result, with the buttons that move between them">
+      <defs>
+        <marker id="ah4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="arrow-head"/></marker>
+        <marker id="ah4r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="arrow-head-red"/></marker>
+        <marker id="ah4m" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="arrow-head-muted"/></marker>
+      </defs>
+      <rect x="10" y="130" width="140" height="64" rx="10" class="box-blue"/>
+      <text x="80" y="158" text-anchor="middle" class="title">START</text>
+      <text x="80" y="178" text-anchor="middle" class="muted">stats, difficulty</text>
+      <rect x="210" y="130" width="150" height="64" rx="10" class="box-gold"/>
+      <text x="285" y="158" text-anchor="middle" class="title">DRAFTING</text>
+      <text x="285" y="178" text-anchor="middle" class="muted">battleLocked = false</text>
+      <rect x="420" y="130" width="150" height="64" rx="10" class="box"/>
+      <text x="495" y="158" text-anchor="middle" class="title">REVEALED</text>
+      <text x="495" y="178" text-anchor="middle" class="muted">battleLocked = true</text>
+      <rect x="630" y="130" width="140" height="64" rx="10" class="box-red"/>
+      <text x="700" y="158" text-anchor="middle" class="title">FIGHTING</text>
+      <text x="700" y="178" text-anchor="middle" class="muted">2.6 s of timers</text>
+      <rect x="830" y="130" width="140" height="64" rx="10" class="box-green"/>
+      <text x="900" y="158" text-anchor="middle" class="title">RESULT</text>
+      <text x="900" y="178" text-anchor="middle" class="muted">VICTORY / DEFEAT</text>
+
+      <path d="M150,162 L206,162" class="line" marker-end="url(#ah4)"/>
+      <text x="178" y="152" text-anchor="middle" class="muted">JOIN</text>
+      <path d="M360,162 L416,162" class="line" marker-end="url(#ah4)"/>
+      <text x="390" y="106" text-anchor="middle" class="muted">PREPARE</text>
+      <text x="390" y="124" text-anchor="middle" class="muted">(3 picked, gold ≥ 0)</text>
+      <path d="M570,162 L626,162" class="line" marker-end="url(#ah4)"/>
+      <text x="598" y="152" text-anchor="middle" class="muted">FIGHT!</text>
+      <path d="M770,162 L826,162" class="line" marker-end="url(#ah4)"/>
+      <text x="798" y="152" text-anchor="middle" class="muted">auto</text>
+
+      <path d="M250,130 C240,88 320,88 310,128" class="line-muted" marker-end="url(#ah4m)"/>
+      <text x="270" y="88" text-anchor="middle" class="muted">pick / remove</text>
+
+      <path d="M495,130 C495,15 80,15 80,128" class="line-red" marker-end="url(#ah4r)"/>
+      <text x="290" y="34" text-anchor="middle" class="muted" style="fill:var(--red)">SURRENDER = recorded as a loss</text>
+
+      <path d="M900,194 C900,270 330,270 290,198" class="line" marker-end="url(#ah4)"/>
+      <text x="600" y="254" text-anchor="middle" class="muted">BATTLE AGAIN → initWarHall()</text>
+      <path d="M900,194 C900,335 90,335 80,198" class="line-muted" marker-end="url(#ah4m)"/>
+      <text x="500" y="322" text-anchor="middle" class="muted">HOME / ⌂ (from any state) → showStartScreen()</text>
+    </svg>
+    <figcaption>Five states. Buttons are the arrows. The game never stores a "state name"; the state is implied by <code>battleLocked</code>, which buttons are visible and which are disabled.</figcaption>
+  </figure>
+
+  <h3>PREPARE FOR WAR (DRAFTING → REVEALED)</h3>
+  <ol class="steps">
+    <li>Check again: 3 houses and <code>playerGold &gt;= 0</code> (never trust that a button was disabled).</li>
+    <li><code>battleLocked = true</code>; hide PREPARE; clear the title; hide the draft cards (<code>.draft-hidden</code>), so the action bar moves up.</li>
+    <li><code>renderPlayerRoster()</code> again: sigils become read-only.</li>
+    <li><code>generateEnemyRoster()</code> → <code>renderEnemyRoster()</code>; show enemy gold.</li>
+    <li><code>Sound.playSword()</code>.</li>
+    <li>Codewords show both armies' names; the battle log shows both type edges, e.g. "Type edge: you +45% · enemy −45%".</li>
+    <li>Show the SURRENDER / FIGHT! row.</li>
+  </ol>
+
+  <h3>FIGHT! (REVEALED → FIGHTING → RESULT): the timeline</h3>
+  <div class="timeline">
+    <div class="tick" style="--x:0%"><span class="up">0 ms</span><span class="down">click: compute<br>+ save result</span></div>
+    <div class="tick" style="--x:15.4%"><span class="up">400</span><span class="down">round 1<br>75% / 60%</span></div>
+    <div class="tick" style="--x:42.3%"><span class="up">1100</span><span class="down">round 2<br>45% / 25%</span></div>
+    <div class="tick" style="--x:69.2%"><span class="up">1800</span><span class="down">round 3<br>15% / 0%</span></div>
+    <div class="tick" style="--x:100%"><span class="up">2600</span><span class="down">endGameInline<br>banner + horn</span></div>
+  </div>
+  <ol class="steps">
+    <li><b>0 ms</b>: disable FIGHT and SURRENDER (no double clicks); <code>Sound.fightStart()</code> lowers the music to 0.15.</li>
+    <li>Roll luck, compute <code>pFinal</code> and <code>eFinal</code>, decide <code>playerWon</code>.</li>
+    <li><b><code>recordResult(playerWon)</code> straight away</b>, before any animation. Leaving mid-fight can't dodge a loss.</li>
+    <li>Show both health bars. Schedule 3 rounds with <code>setTimeout</code>; each plays the sword and sets bar widths (winner 75→45→15%, loser 60→25→0%). CSS <code>transition: width 0.5s</code> slides them.</li>
+    <li><b>2600 ms</b>: <code>endGameInline()</code> hides the fight row, shows HOME / BATTLE AGAIN, writes "Strength 8.7 vs 3.3 · Streak 4", and shows <b>VICTORY</b> (horn) or <b>DEFEAT</b> (blood flash + horn).</li>
+    <li><b>2600 + 2500 ms</b>: <code>Sound.fightEnd()</code> brings the music back to 0.4.</li>
+  </ol>
+  <div class="box why"><span class="box-title">&#128161; Why the winner is decided first</span>
+    <p>The animation is just theatre. The result was fixed at 0 ms. That keeps the logic simple (no maths inside timers) and safe (the save already happened).</p>
+  </div>
+
+  <h3>Streaks</h3>
+<pre><code><span class="k">function</span> recordResult(playerWon) {
+    <span class="k">if</span> (playerWon) { stats.wins++; stats.streak++; stats.best = Math.max(stats.best, stats.streak); }
+    <span class="k">else</span>           { stats.losses++; stats.streak = 0; }
+    writeStore(STORE_KEYS.stats, stats);
+}</code></pre>
+
+  <h3>Why every timer is saved in <code>battleTimers</code></h3>
+  <div class="box warn"><span class="box-title">&#9888;&#65039; Gotcha: the "ghost timer" bug</span>
+    <p>Imagine pressing FIGHT, then HOME after 0.5 s, then starting a new game. Without cancelling, the old fight's timers would still fire: health bars appear in your new draft, a horn plays, "VICTORY" overwrites "MAKE YOUR ARMY". So every <code>setTimeout</code> id goes into <code>battleTimers</code>, and <code>resetDraftingUI()</code> runs <code>battleTimers.forEach(clearTimeout)</code>. This is the "fix crash issue" kind of bug: an old async task touching new state.</p>
+  </div>
+
+  <h3>SURRENDER</h3>
+<pre><code>document.getElementById(<span class="s">'btn-surrender'</span>).addEventListener(<span class="s">'click'</span>, () =&gt; {
+    <span class="k">if</span> (battleLocked) recordResult(<span class="k">false</span>);   <span class="c">// enemy already revealed → counts as a loss</span>
+    showStartScreen();
+});</code></pre>
+
+  <div class="box remember"><span class="box-title">&#129504; Remember</span>
+    <ul>
+      <li>States: <b>START → DRAFTING → REVEALED → FIGHTING → RESULT</b>.</li>
+      <li>PREPARE locks the army, hides the cards, runs the AI, reveals the enemy, shows the edges.</li>
+      <li>FIGHT decides and <b>saves first</b>, then animates: 400 / 1100 / 1800 / 2600 ms.</li>
+      <li>Every timeout id is stored in <code>battleTimers</code> and cancelled on reset, so there are no ghost timers.</li>
+      <li>Win: streak+1, best = max. Loss or surrender after the reveal: streak = 0.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================================================== STAGE 13 -->
+<section class="stage" id="s13" data-title="Sound and music (audio.js)">
+  <div class="stage-head">
+    <span class="badge">Stage 13</span><span class="maps">PROGRESS Phase 12</span>
+    <h2>Sound and music: <code>audio.js</code></h2>
+    <p class="lead">How the game plays music, fades it, dips it during fights, pauses it in background tabs, and makes war horns and drums out of pure maths.</p>
+    <label class="learned"><input type="checkbox" data-learn="s13"> I've learned this</label>
+  </div>
+
+  <h3>Rule number one: browsers block sound until the player taps</h3>
+  <p>Autoplay policy: a page may not make sound until the user interacts with it. That's why the music starts inside the <b>JOIN</b> click handler and the audio engine is created lazily in <code>ensureContext()</code>, which only runs from tap handlers. Trying earlier would silently fail.</p>
+
+  <h3>Two ways to control volume, and why both exist</h3>
+  <div class="trio">
+    <div style="--c: var(--green)"><h4>Plan A: Web Audio routing</h4><p>Plug the <code>&lt;audio&gt;</code> elements into an <code>AudioContext</code> and control volume with <b>gain nodes</b>. Smooth, precise fades. Works on iPhones.</p></div>
+    <div style="--c: var(--red)"><h4>Plan B: <code>audio.volume</code></h4><p>Used when Web Audio isn't available or the page is opened as <code>file://</code>. Fades are done by hand, frame by frame. <b>iPhones ignore <code>.volume</code></b>, which is why Plan A is preferred.</p></div>
+  </div>
+<pre><code><span class="k">const</span> AudioCtx = window.AudioContext || window.webkitAudioContext;   <span class="c">// old Safari uses the webkit name</span>
+<span class="k">const</span> canRoute = Boolean(AudioCtx) &amp;&amp; location.protocol !== <span class="s">'file:'</span>;</code></pre>
+
+  <h3>The audio graph (Plan A)</h3>
+  <figure>
+    <svg class="wide-svg" viewBox="0 0 900 330" role="img" aria-label="Audio graph: music, sword, horn and drum sources go through their own gain nodes into a master gain and then the speakers">
+      <defs><marker id="ah5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="arrow-head"/></marker></defs>
+      <rect x="10" y="20" width="150" height="50" rx="8" class="box-blue"/><text x="85" y="42" text-anchor="middle" class="title">&lt;audio&gt; bg-music</text><text x="85" y="60" text-anchor="middle" class="muted">got-theme.mp3, loop</text>
+      <rect x="195" y="20" width="170" height="50" rx="8" class="box"/><text x="280" y="42" text-anchor="middle" class="title">MediaElementSource</text><text x="280" y="60" text-anchor="middle" class="muted">plugs the element in</text>
+      <rect x="400" y="20" width="170" height="50" rx="8" class="box-gold"/><text x="485" y="42" text-anchor="middle" class="title">musicGain</text><text x="485" y="60" text-anchor="middle" class="muted">0 → 0.4, fights 0.15</text>
+
+      <rect x="10" y="95" width="150" height="50" rx="8" class="box-blue"/><text x="85" y="117" text-anchor="middle" class="title">&lt;audio&gt; sfx-sword</text><text x="85" y="135" text-anchor="middle" class="muted">sword-clash.mp3</text>
+      <rect x="195" y="95" width="170" height="50" rx="8" class="box"/><text x="280" y="117" text-anchor="middle" class="title">MediaElementSource</text>
+      <rect x="400" y="95" width="170" height="50" rx="8" class="box-gold"/><text x="485" y="117" text-anchor="middle" class="title">sfxGain</text><text x="485" y="135" text-anchor="middle" class="muted">0.7</text>
+
+      <rect x="10" y="170" width="150" height="50" rx="8" class="box-red"/><text x="85" y="192" text-anchor="middle" class="title">2× sawtooth osc</text><text x="85" y="210" text-anchor="middle" class="muted">detuned 0 / 7 cents</text>
+      <rect x="195" y="170" width="170" height="50" rx="8" class="box"/><text x="280" y="192" text-anchor="middle" class="title">lowpass filter</text><text x="280" y="210" text-anchor="middle" class="muted">200 → 900 → 450 Hz</text>
+      <rect x="400" y="170" width="170" height="50" rx="8" class="box-gold"/><text x="485" y="192" text-anchor="middle" class="title">envelope gain</text><text x="485" y="210" text-anchor="middle" class="muted">swell, hold, fade</text>
+      <text x="85" y="238" text-anchor="middle" class="muted">= WAR HORN</text>
+
+      <rect x="10" y="255" width="150" height="50" rx="8" class="box-red"/><text x="85" y="277" text-anchor="middle" class="title">sine osc</text><text x="85" y="295" text-anchor="middle" class="muted">110 → 40 Hz</text>
+      <rect x="400" y="255" width="170" height="50" rx="8" class="box-gold"/><text x="485" y="277" text-anchor="middle" class="title">envelope gain</text><text x="485" y="295" text-anchor="middle" class="muted">fast fade = "boom"</text>
+      <text x="85" y="322" text-anchor="middle" class="muted">= WAR DRUM</text>
+
+      <rect x="630" y="135" width="130" height="60" rx="8" class="box-green"/><text x="695" y="160" text-anchor="middle" class="title">master gain</text><text x="695" y="180" text-anchor="middle" class="muted">1, or 0 = muted</text>
+      <rect x="800" y="135" width="90" height="60" rx="8" class="box"/><text x="845" y="160" text-anchor="middle" class="title">🔊</text><text x="845" y="180" text-anchor="middle" class="muted">destination</text>
+
+      <path d="M160,45 L192,45" class="line" marker-end="url(#ah5)"/><path d="M365,45 L397,45" class="line" marker-end="url(#ah5)"/>
+      <path d="M160,120 L192,120" class="line" marker-end="url(#ah5)"/><path d="M365,120 L397,120" class="line" marker-end="url(#ah5)"/>
+      <path d="M160,195 L192,195" class="line" marker-end="url(#ah5)"/><path d="M365,195 L397,195" class="line" marker-end="url(#ah5)"/>
+      <path d="M160,280 L397,280" class="line" marker-end="url(#ah5)"/>
+      <path d="M570,45 C610,45 600,150 627,155" class="line" marker-end="url(#ah5)"/>
+      <path d="M570,120 C600,120 600,160 627,162" class="line" marker-end="url(#ah5)"/>
+      <path d="M570,195 C600,195 600,172 627,170" class="line" marker-end="url(#ah5)"/>
+      <path d="M570,280 C610,280 600,185 627,180" class="line" marker-end="url(#ah5)"/>
+      <path d="M760,165 L797,165" class="line" marker-end="url(#ah5)"/>
+    </svg>
+    <figcaption>Every sound has its own volume knob (gain node). They all meet at the master gain, so mute is one knob turned to 0.</figcaption>
+  </figure>
+<pre><code>ctx = <span class="k">new</span> AudioCtx();
+master = ctx.createGain();  master.connect(ctx.destination);
+musicGain = ctx.createGain();  musicGain.gain.value = 0;          <span class="c">// start silent, fade in</span>
+ctx.createMediaElementSource(bgMusic).connect(musicGain).connect(master);   <span class="c">// .connect() returns its target, so calls chain</span></code></pre>
+
+  <h3>Fades</h3>
+<pre><code><span class="k">function</span> rampGain(param, to, seconds) {
+    <span class="k">const</span> now = ctx.currentTime;
+    param.cancelScheduledValues(now);           <span class="c">// stop any fade already running</span>
+    param.setValueAtTime(param.value, now);     <span class="c">// start from where it is right now</span>
+    param.linearRampToValueAtTime(to, now + seconds);
+}</code></pre>
+  <p>Plan B (<code>fadeMusic</code> without <code>musicGain</code>) does the same with <code>requestAnimationFrame</code>: every frame it works out progress <code>p</code> from 0 to 1 and sets <code>volume = from + (to − from) × p</code>. That's <b>linear interpolation</b>, the basis of every animation.</p>
+
+  <h3>The public API: what the rest of the game calls</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Call</th><th>Called from</th><th>Does</th></tr>
+    <tr><td><code>Sound.startMusic()</code></td><td>JOIN</td><td>create the engine, play the theme, fade in over 2 s</td></tr>
+    <tr><td><code>Sound.fightStart()</code></td><td>FIGHT!</td><td>music to 0.15 over 0.6 s</td></tr>
+    <tr><td><code>Sound.fightEnd()</code></td><td>after the result; every reset</td><td>music back to 0.4 over 1.2 s</td></tr>
+    <tr><td><code>Sound.playSword()</code></td><td>PREPARE, each fight round</td><td>restart the clip (<code>currentTime = 0</code>) and play</td></tr>
+    <tr><td><code>Sound.victory()</code> / <code>defeat()</code></td><td><code>endGameInline</code></td><td>horn-and-drum sting (or an MP3 if <code>STING_FILES</code> is set)</td></tr>
+    <tr><td><code>Sound.toggleMute()</code></td><td>🔊 button</td><td>flip, save to <code>got-muted</code>, fade master, swap 🔊/🔇</td></tr>
+  </table></div>
+  <p><code>setLevel(to)</code> remembers the wanted level even before music has started (<code>started</code> flag), so a fade-in always goes to the right volume.</p>
+
+  <h3>Background tabs</h3>
+  <div class="flow">
+    <div class="node">tab hidden<small><code>document.hidden</code></small></div>
+    <div class="node gold">fade to 0 (0.4 s)</div>
+    <div class="node">pause</div>
+    <div class="node">tab visible again</div>
+    <div class="node green">play + fade to level (1.2 s)</div>
+  </div>
+
+  <h3>Making a war horn from maths</h3>
+<pre><code><span class="k">function</span> horn(t, freq, endFreq, dur, vol) {
+    <span class="c">// 1. volume envelope: swell in 0.25 s, hold, fade out in the last 0.4 s</span>
+    out.gain.setValueAtTime(0.0001, t);
+    out.gain.exponentialRampToValueAtTime(vol, t + 0.25);
+    ...
+    <span class="c">// 2. low-pass filter "opens" (200 → 900 Hz) then closes: like breath filling a horn</span>
+    filter.type = <span class="s">'lowpass'</span>;
+    <span class="c">// 3. two sawtooth waves 7 cents apart: the tiny mismatch makes a thick, brassy sound</span>
+    [0, 7].forEach(cents =&gt; { osc.type = <span class="s">'sawtooth'</span>; osc.detune.value = cents; ... });
+}</code></pre>
+  <ul>
+    <li><b>Oscillator</b> = a pure tone generator. Sawtooth is buzzy and rich; sine is smooth.</li>
+    <li><b>Low-pass filter</b> removes high frequencies, which turns the harsh saw into a mellow horn.</li>
+    <li><b>Envelope</b> = how volume changes over a note's life.</li>
+    <li><b>Exponential ramps</b>: ears hear volume and pitch on a log scale, so exponential sounds natural. They can't reach exactly 0, hence <code>0.0001</code>.</li>
+    <li><b>Drum</b>: a sine dropping 110 → 40 Hz in 0.5 s with a fast fade = a deep boom.</li>
+    <li><b>Victory</b>: drum, drum, horn on D (146.8 Hz), then a higher horn on A (220 Hz), rising and triumphant. <b>Defeat</b>: a boom and one long horn sliding down from A (110 Hz) to D (73.4 Hz), sinking.</li>
+  </ul>
+
+  <div class="box remember"><span class="box-title">&#129504; Remember</span>
+    <ul>
+      <li>No sound until a tap: music starts in JOIN, and the engine is created lazily.</li>
+      <li>Graph: <b>source → own gain → master gain → speakers</b>. Mute = master to 0.</li>
+      <li>Plan A gain nodes (work on iPhone) / Plan B <code>.volume</code> + rAF (for <code>file://</code>).</li>
+      <li>Levels: music 0.4, fight 0.15, sword 0.7. Saved key <code>got-muted</code>.</li>
+      <li>Horn = 2 detuned saws + low-pass + envelope. Drum = falling sine.</li>
+      <li><code>Sound</code> is an IIFE module: private state, 7 public functions.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================================================== STAGE 14 -->
+<section class="stage" id="s14" data-title="Responsive layout and motion">
+  <div class="stage-head">
+    <span class="badge">Stage 14</span><span class="maps">PROGRESS Phase 13</span>
+    <h2>Responsive layout and motion</h2>
+    <p class="lead">How one page works on phones, tablets and PCs, why nothing "jumps" when the window resizes or zooms, and how motion respects the user.</p>
+    <label class="learned"><input type="checkbox" data-learn="s14"> I've learned this</label>
+  </div>
+
+  <h3>The breakpoint</h3>
+  <p>One rule: <b>narrower than 56em</b> (≈ 896 px at 16 px, more if the root font is bigger) → one column. Using <code>em</code> means a PC zoomed in a lot also switches to the phone layout, which is exactly what you want.</p>
+
+  <h3>Why a <code>.narrow</code> class instead of a CSS media query</h3>
+  <p>A media query in CSS switches instantly, with no chance to animate. This project moves the decision into JS: JS watches <code>matchMedia('(max-width: 56em)')</code> and toggles <code>.narrow</code> on <code>&lt;html&gt;</code>, which gives it the moment to <b>morph</b> panels to their new spots.</p>
+
+  <h3>Before the first paint: the head script</h3>
+<pre><code>(<span class="k">function</span> () {
+    <span class="k">var</span> root = document.documentElement;                              <span class="c">// the &lt;html&gt; element</span>
+    root.classList.toggle(<span class="s">'narrow'</span>, matchMedia(<span class="s">'(max-width: 56em)'</span>).matches); <span class="c">// right layout from frame 1</span>
+    root.classList.add(<span class="s">'fonts-loading'</span>);                             <span class="c">// CSS: opacity 0</span>
+    <span class="k">var</span> show = <span class="k">function</span> () { root.classList.remove(<span class="s">'fonts-loading'</span>); };
+    <span class="k">if</span> (document.fonts &amp;&amp; document.fonts.load) {
+        Promise.all([document.fonts.load(<span class="s">'400 1em Cinzel'</span>), document.fonts.load(<span class="s">'700 1em Cinzel'</span>)]).then(show, show);
+    } <span class="k">else</span> { show(); }
+    setTimeout(show, 2500);                                             <span class="c">// never wait forever</span>
+})();</code></pre>
+  <p>It uses <code>var</code> and <code>function</code> (old syntax) on purpose, so it runs in every browser. It checks that <code>document.fonts</code> exists before using it (<b>feature detection</b>). Because <code>.content</code> has <code>transition: opacity 0.5s</code>, removing the class makes the page fade in.</p>
+
+  <h3><code>syncLayout()</code>: the decision tree</h3>
+  <div class="flow col">
+    <div class="node">window resized / query changed</div>
+    <div class="node">already the right layout? → stop</div>
+    <div class="node gold">reduced motion or tab hidden? → switch instantly</div>
+    <div class="node">cancel any zoom animation</div>
+    <div class="node blue">browser has <code>startViewTransition</code>? → View Transition morph</div>
+    <div class="node red">else → FLIP fallback morph (Firefox)</div>
+  </div>
+  <p>It listens to <b>both</b> the query's <code>change</code> event and <code>resize</code>, because some browsers don't fire the change event reliably.</p>
+
+  <h3>View Transitions: the browser does the morph</h3>
+<pre><code>document.startViewTransition(applyLayout);   <span class="c">// snapshot → change → animate between snapshots</span>
+
+<span class="c">/* CSS: name the panels the browser should track */</span>
+<span class="k">#player-side</span> { view-transition-name: player-side; }
+<span class="k">::view-transition-group(*)</span> { animation-duration: 0.45s; animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1); }</code></pre>
+  <p>The browser takes a picture of every named panel, applies the new layout, then animates each picture from its old box to its new box. <code>transition.ready.catch(() =&gt; {})</code> ignores the harmless error when a newer resize interrupts the animation.</p>
+
+  <h3>FLIP: the classic hand-made morph</h3>
+  <div class="flow">
+    <div class="node blue">First<small>measure each panel</small></div>
+    <div class="node gold">Last<small>switch layout, measure again</small></div>
+    <div class="node">Invert<small>offset = old − new</small></div>
+    <div class="node green">Play<small>animate offset → 0</small></div>
+  </div>
+<pre><code><span class="k">const</span> before = panels.map(el =&gt; el.getBoundingClientRect());   <span class="c">// First</span>
+applyLayout();
+panels.forEach((el, i) =&gt; {
+    <span class="k">const</span> after = el.getBoundingClientRect();                  <span class="c">// Last</span>
+    <span class="k">const</span> dx = before[i].left - after.left, dy = before[i].top - after.top;   <span class="c">// Invert</span>
+    el.animate([{ transform: `translate(${dx}px, ${dy}px)` }, { transform: <span class="s">'none'</span> }],
+               { duration: 450, easing: <span class="s">'cubic-bezier(0.2, 0.8, 0.2, 1)'</span> });   <span class="c">// Play</span>
+});</code></pre>
+  <p><code>element.animate()</code> is the Web Animations API: keyframes from JavaScript.</p>
+
+  <h3>Smooth browser zoom (Ctrl + / Ctrl −)</h3>
+  <p>Browser zoom redraws everything at the new size instantly, which feels like a jump. The trick:</p>
+  <ol class="steps">
+    <li>Zoom changes <code>window.devicePixelRatio</code> (e.g. 1 → 1.25) and fires <code>resize</code>.</li>
+    <li><code>startScale = lastRatio / newRatio</code> = 1 / 1.25 = <b>0.8</b>.</li>
+    <li>Instantly set <code>transform: scale(0.8)</code> on <code>.content</code> (no transition), so it looks the same size as before.</li>
+    <li>Call <code>getBoundingClientRect()</code> to <b>force a reflow</b>, so the browser applies the 0.8 right now.</li>
+    <li>Turn the transition on (0.35 s) and remove the transform → it glides to its real new size.</li>
+    <li>On <code>transitionend</code>, remove the inline transition.</li>
+  </ol>
+  <p><code>transformOrigin</code> is set to the middle of what's on screen, so the zoom grows from where you're looking.</p>
+
+  <h3>Smaller motion details</h3>
+  <ul>
+    <li><b>CSS transitions on <code>font-size</code>, <code>padding</code>, <code>gap</code>, <code>letter-spacing</code></b>: sizes that follow the window ease into place.</li>
+    <li><b><code>prefers-reduced-motion: reduce</code></b>: CSS turns off every animation and transition; JS skips the zoom and morph. People with motion sickness set this in their OS.</li>
+    <li><b><code>@media (hover: none)</code></b>: on touch screens hover effects would "stick" after a tap, so lift effects are cancelled.</li>
+    <li><b><code>touch-action: manipulation</code></b>: no 300 ms double-tap delay.</li>
+    <li><b><code>text-size-adjust: 100%</code></b>: phones don't enlarge text on rotation.</li>
+    <li><b>Hidden tab</b>: <code>syncLayout</code> switches instantly when <code>document.hidden</code>, so nothing animates where no one can see it.</li>
+  </ul>
+
+  <div class="box remember"><span class="box-title">&#129504; Remember</span>
+    <ul>
+      <li>Breakpoint <b>56em</b>; JS toggles <code>.narrow</code> so the switch can animate.</li>
+      <li>Head script sets <code>.narrow</code> and hides the page until the font loads (2.5 s max).</li>
+      <li>Morph: <b>View Transitions</b> if supported, else <b>FLIP</b> (First, Last, Invert, Play).</li>
+      <li>Zoom: scale to the old size → force reflow → transition to the new size.</li>
+      <li>Respect <code>prefers-reduced-motion</code> and <code>hover: none</code>.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================================================== STAGE 15 -->
+<section class="stage" id="s15" data-title="Accessibility">
+  <div class="stage-head">
+    <span class="badge">Stage 15</span><span class="maps">PROGRESS Phase 14</span>
+    <h2>Accessibility: playable by everyone</h2>
+    <p class="lead">Keyboard players, screen-reader users and people sensitive to motion can all play. Here is what makes that work.</p>
+    <label class="learned"><input type="checkbox" data-learn="s15"> I've learned this</label>
+  </div>
+  <div class="table-wrap"><table>
+    <tr><th>Technique</th><th>Where</th><th>Who it helps</th></tr>
+    <tr><td>Real <code>&lt;button&gt;</code>s everywhere (even cards and sigils)</td><td>HTML, ui.js</td><td>Keyboard: Tab to reach, Enter/Space to press. Screen readers announce "button".</td></tr>
+    <tr><td><code>aria-label</code></td><td>⌂ 🔊 📜, cards ("Unsullied, Defense tier 1, 450 gold…"), sigils ("Remove Iron Fleet")</td><td>Screen readers: icons and crests have no readable text otherwise.</td></tr>
+    <tr><td><code>aria-hidden="true"</code></td><td>crest emoji</td><td>Avoids reading "dragon emoji" on top of the label.</td></tr>
+    <tr><td><code>aria-pressed</code></td><td>difficulty button</td><td>Announces toggle state ("pressed" = Hard).</td></tr>
+    <tr><td><code>aria-expanded</code> + <code>aria-controls</code></td><td>📜 button</td><td>Announces whether the panel is open and which element it controls.</td></tr>
+    <tr><td><code>role="dialog"</code> + <code>aria-label</code></td><td>rules panel</td><td>Announced as a dialog called "Rules and prices".</td></tr>
+    <tr><td><code>aria-live="polite"</code></td><td>battle log, title</td><td>Changes ("Type edge: you +15%", "VICTORY") are read out automatically.</td></tr>
+    <tr><td><code>:focus-visible</code> gold outline</td><td>CSS</td><td>Keyboard users see where they are; mouse users don't get rings.</td></tr>
+    <tr><td>Escape closes the panel</td><td>ui.js</td><td>The standard keyboard way out.</td></tr>
+    <tr><td><code>disabled</code> + explanatory text</td><td>PREPARE</td><td>Everyone knows <i>why</i> they can't continue.</td></tr>
+    <tr><td><code>title</code> tooltips</td><td>cards, difficulty, icons</td><td>Mouse users get extra info on hover.</td></tr>
+    <tr><td>Text ≥ 16 px, shadows for contrast</td><td>CSS</td><td>Low vision; text over a busy picture.</td></tr>
+    <tr><td><code>prefers-reduced-motion</code></td><td>CSS + JS</td><td>Motion sensitivity.</td></tr>
+    <tr><td><code>lang="en"</code></td><td>HTML</td><td>Correct pronunciation by screen readers.</td></tr>
+  </table></div>
+  <div class="box remember"><span class="box-title">&#129504; Remember</span>
+    <ul>
+      <li>Use real buttons: keyboard and screen-reader support come free.</li>
+      <li>Icons need <code>aria-label</code>; decoration gets <code>aria-hidden</code>.</li>
+      <li>State attributes: <code>aria-pressed</code> (toggle), <code>aria-expanded</code> (open/closed).</li>
+      <li><code>aria-live</code> announces changing messages.</li>
+      <li><code>:focus-visible</code>, Escape, reduced motion.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================================================== STAGE 16 -->
+<section class="stage" id="s16" data-title="Performance, caching, deployment">
+  <div class="stage-head">
+    <span class="badge">Stage 16</span><span class="maps">PROGRESS Phases 15–16</span>
+    <h2>Performance, caching and deployment</h2>
+    <p class="lead">Getting the game to players quickly, and making sure they always get the newest version.</p>
+    <label class="learned"><input type="checkbox" data-learn="s16"> I've learned this</label>
+  </div>
+
+  <h3>What the player downloads</h3>
+  <div class="table-wrap"><table>
+    <tr><th>File</th><th>Size</th><th>Note</th></tr>
+    <tr><td>got-theme.mp3</td><td>≈ 6 MB</td><td><b>The heaviest by far.</b> Preloaded; a lower bitrate (96 kbps) or a shorter loop would speed up phones a lot.</td></tr>
+    <tr><td>iron-throne-bg-v2.jpg</td><td>≈ 114 KB</td><td>Already shrunk ("Shrank background image").</td></tr>
+    <tr><td>got-theme.css</td><td>≈ 18 KB</td><td></td></tr>
+    <tr><td>4 JS files</td><td>≈ 29 KB total</td><td></td></tr>
+    <tr><td>index.html</td><td>≈ 9 KB</td><td></td></tr>
+    <tr><td>sword-clash.mp3</td><td>≈ 10 KB</td><td></td></tr>
+    <tr><td>Cinzel font</td><td>small</td><td>From Google, with <code>preconnect</code>.</td></tr>
+  </table></div>
+  <p>Other speed choices: no frameworks (nothing extra to download), crests drawn in CSS instead of 9 images, horn sounds made in code instead of MP3s, an emoji favicon with no file.</p>
+
+  <h3>The caching problem and cache busting</h3>
+  <div class="flow">
+    <div class="node">Visit 1<small>browser saves got-theme.css</small></div>
+    <div class="node red">You push a fix<small>same file name</small></div>
+    <div class="node">Visit 2<small>browser reuses the OLD copy</small></div>
+    <div class="node gold">Fix: <code>?v=51</code><small>new URL = fresh download</small></div>
+  </div>
+  <p>Browsers cache files by their full URL. <code>got-theme.css?v=50</code> and <code>got-theme.css?v=51</code> count as different files, while the server ignores the <code>?v=</code> part and serves the same file. Changing the number forces everyone to download the new version.</p>
+
+  <h3><code>tools/bump-version.mjs</code>, line by line</h3>
+<pre><code><span class="k">import</span> { readFileSync, writeFileSync } <span class="k">from</span> <span class="s">'node:fs'</span>;       <span class="c">// Node's file-system functions</span>
+<span class="k">const</span> file = <span class="k">new</span> URL(<span class="s">'../index.html'</span>, <span class="k">import</span>.meta.url);   <span class="c">// path relative to THIS script, wherever you run it</span>
+<span class="k">const</span> html = readFileSync(file, <span class="s">'utf8'</span>);
+<span class="k">const</span> versions = [...html.matchAll(<span class="s">/\?v=(\d+)/g</span>)].map(m =&gt; Number(m[1]));  <span class="c">// every number after ?v=</span>
+<span class="k">if</span> (versions.length === 0) { console.error(<span class="s">'No ?v=N links found'</span>); process.exit(1); }
+<span class="k">const</span> next = Math.max(...versions) + 1;                    <span class="c">// highest + 1</span>
+writeFileSync(file, html.replace(<span class="s">/\?v=\d+/g</span>, `?v=${next}`)); <span class="c">// replace all</span>
+console.log(`index.html: ${versions.length} links now use ?v=${next}`);</code></pre>
+  <details class="deep"><summary>Deep dive: reading the regular expression <code>/\?v=(\d+)/g</code></summary>
+    <ul>
+      <li><code>\?</code>: a literal "?" (escaped, because <code>?</code> alone means "optional").</li>
+      <li><code>v=</code>: the literal text.</li>
+      <li><code>(\d+)</code>: one or more digits, <b>captured</b> as group 1 (<code>m[1]</code>).</li>
+      <li><code>g</code>: global; find every match, not only the first.</li>
+    </ul>
+    <p><code>.mjs</code> tells Node the file is an ES module, which is what allows <code>import</code> and <code>import.meta.url</code>.</p>
+  </details>
+
+  <h3>Deploying</h3>
+  <ol class="steps">
+    <li>Change CSS or JS → run <code>node tools/bump-version.mjs</code>.</li>
+    <li>Test on <code>http://localhost:5173</code> (PC, DevTools phone mode, and a real phone if you can).</li>
+    <li><code>git add</code> → <code>git commit</code> → <code>git push</code>.</li>
+    <li>GitHub Pages (Settings → Pages → branch <code>main</code>) rebuilds in about a minute.</li>
+    <li>Live at <code>https://redrighthand2007.github.io/GOT/</code>. The OG tags make the shared link show a preview card.</li>
+  </ol>
+
+  <h3>Docs and legal</h3>
+  <ul>
+    <li><b>README.md</b>: the repo's front page (badges, features, structure, how to run, how to play, how to change things, roadmap).</li>
+    <li><b>LICENSE (MIT)</b>: others may reuse your <i>code</i> if they keep your copyright notice.</li>
+    <li><b>Fan disclaimer</b>: Game of Thrones names, art and music belong to HBO / George R. R. Martin. MIT doesn't cover them; the game must stay non-commercial unless the setting is replaced with your own.</li>
+  </ul>
+
+  <div class="box remember"><span class="box-title">&#129504; Remember</span>
+    <ul>
+      <li>The 6 MB theme MP3 is the biggest download.</li>
+      <li>Browsers cache by URL → change <code>?v=N</code> to force fresh files.</li>
+      <li>Before every CSS/JS push: <code>node tools/bump-version.mjs</code>.</li>
+      <li>Deploy = push to <code>main</code>; GitHub Pages does the rest.</li>
+      <li>MIT covers your code, not HBO's names, art or music.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================================================== STAGE 17 -->
+<section class="stage" id="s17" data-title="The integrated view">
+  <div class="stage-head">
+    <span class="badge">Stage 17</span><span class="maps">Everything together</span>
+    <h2>The integrated view: how it all connects</h2>
+    <p class="lead">Every function, which file it lives in, who calls it and what it calls. Then two taps traced end to end through every layer.</p>
+    <label class="learned"><input type="checkbox" data-learn="s17"> I've learned this</label>
+  </div>
+
+  <h3>The layers</h3>
+  <figure>
+    <div class="flow col">
+      <div class="node red">Player<small>taps, keys, resizes, zooms, switches tabs</small></div>
+      <div class="node blue">Browser events<small>click · keydown · resize · visibilitychange · transitionend</small></div>
+      <div class="node gold">Logic: combat.js + handlers<small>rules, maths, AI, results</small></div>
+      <div class="node">State: data.js<small>gold, rosters, locked, timers, stats, difficulty</small></div>
+      <div class="node blue">Render: ui.js<small>cards, rosters, buttons, text, classes</small></div>
+      <div class="node gold">CSS: got-theme.css<small>classes → looks, layout, motion</small></div>
+      <div class="node green">Screen + speakers<small>audio.js runs alongside for sound</small></div>
+    </div>
+  </figure>
+
+  <h3>Function map</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Function</th><th>File</th><th>Called by</th><th>Calls</th></tr>
+    <tr><td><code>readStore / writeStore</code></td><td>data</td><td>load time, difficulty button, recordResult</td><td>localStorage, JSON</td></tr>
+    <tr><td><code>syncLayout</code></td><td>data</td><td>resize, media query change</td><td>startViewTransition or morphWithoutViewTransition</td></tr>
+    <tr><td><code>Sound.*</code></td><td>audio</td><td>JOIN, PREPARE, FIGHT, endGameInline, resetDraftingUI, 🔊</td><td>Web Audio / audio elements</td></tr>
+    <tr><td><code>crestHTML</code>, <code>armyNames</code></td><td>ui</td><td>render functions, PREPARE</td><td>—</td></tr>
+    <tr><td><code>renderStats</code>, <code>renderDifficulty</code></td><td>ui</td><td>load, showStartScreen, difficulty button</td><td>—</td></tr>
+    <tr><td><code>showStartScreen</code></td><td>ui</td><td>⌂, HOME, SURRENDER</td><td>resetDraftingUI, renderStats</td></tr>
+    <tr><td><code>initWarHall</code></td><td>ui</td><td>JOIN, BATTLE AGAIN</td><td>resetDraftingUI, updateGoldDisplay, renderDraftingBoard</td></tr>
+    <tr><td><code>renderDraftingBoard</code></td><td>ui</td><td>initWarHall, draftHouse, removeHouse</td><td>crestHTML, renderPlayerRoster, updateBattleButton</td></tr>
+    <tr><td><code>renderPlayerRoster</code></td><td>ui</td><td>renderDraftingBoard, PREPARE</td><td>crestHTML</td></tr>
+    <tr><td><code>renderEnemyRoster</code></td><td>ui</td><td>PREPARE</td><td>crestHTML</td></tr>
+    <tr><td><code>updateGoldDisplay</code></td><td>ui</td><td>initWarHall, draftHouse, removeHouse</td><td>—</td></tr>
+    <tr><td><code>updateBattleButton</code></td><td>ui</td><td>renderDraftingBoard</td><td>—</td></tr>
+    <tr><td><code>resetDraftingUI</code></td><td>ui</td><td>showStartScreen, initWarHall</td><td>clearTimeout, Sound.fightEnd</td></tr>
+    <tr><td><code>setInfoOpen</code></td><td>ui</td><td>📜 events, document click, Escape</td><td>—</td></tr>
+    <tr><td><code>draftHouse</code>, <code>removeHouse</code></td><td>combat</td><td>card click, sigil click</td><td>updateGoldDisplay, renderDraftingBoard</td></tr>
+    <tr><td><code>calculatePower</code>, <code>typeEdge</code>, <code>strength</code></td><td>combat</td><td>AI, PREPARE, FIGHT</td><td>—</td></tr>
+    <tr><td><code>generateEnemyRoster</code></td><td>combat</td><td>PREPARE</td><td>strength, Math.random</td></tr>
+    <tr><td><code>recordResult</code></td><td>combat</td><td>FIGHT, SURRENDER</td><td>writeStore</td></tr>
+    <tr><td><code>endGameInline</code></td><td>combat</td><td>FIGHT timer (2600 ms)</td><td>Sound.victory/defeat, flashBlood</td></tr>
+    <tr><td><code>flashBlood</code></td><td>combat</td><td>endGameInline (defeat)</td><td>—</td></tr>
+  </table></div>
+
+  <h3>Trace 1: tapping one draft card</h3>
+  <ol class="steps">
+    <li><b>Browser</b>: the tap on a <code>&lt;button class="draft-card"&gt;</code> fires <code>click</code>.</li>
+    <li><b>ui.js</b>: the listener created in <code>renderDraftingBoard</code> runs <code>() =&gt; draftHouse(h)</code>. It remembers <i>which</i> house through its closure.</li>
+    <li><b>combat.js</b>: <code>draftHouse</code>: guard (locked? full?) → <code>playerRoster.push(h)</code> → <code>playerGold -= h.cost</code>.</li>
+    <li><b>data.js state</b> has changed: roster has one more house, gold is lower.</li>
+    <li><b>ui.js</b>: <code>updateGoldDisplay()</code> writes the number and toggles <code>.over-budget</code>.</li>
+    <li><b>CSS</b>: if over budget, <code>.over-budget</code> turns the number red and glowing.</li>
+    <li><b>ui.js</b>: <code>renderDraftingBoard()</code> empties the grid and rebuilds 9 cards: this one is now <code>.picked</code> (gold, ✓); if 3 are picked the others get <code>.disabled</code>.</li>
+    <li><b>ui.js</b>: <code>renderPlayerRoster()</code> adds the crest to "YOUR ALLIANCE"; <code>updateBattleButton()</code> updates the text, e.g. "Pick 3 houses (2/3)".</li>
+    <li><b>Browser</b>: recalculates style → layout → paint. The player sees all of it in the same frame.</li>
+  </ol>
+
+  <h3>Trace 2: from JOIN to VICTORY</h3>
+  <ol class="steps">
+    <li>JOIN (<b>ui</b>) → hide start, show war hall → <code>Sound.startMusic()</code> (<b>audio</b>: create context, route, play, fade to 0.4) → <code>initWarHall()</code>.</li>
+    <li>Three card taps (Trace 1 ×3) → PREPARE enabled.</li>
+    <li>PREPARE (<b>combat</b>) → lock → <code>generateEnemyRoster()</code> reads <code>difficulty</code> (<b>data</b>) and uses <code>strength()</code> → <code>renderEnemyRoster()</code> (<b>ui</b>) → <code>Sound.playSword()</code> → edges in the log (<code>aria-live</code> announces them).</li>
+    <li>FIGHT! (<b>combat</b>) → <code>Sound.fightStart()</code> → luck → <code>recordResult()</code> → <code>writeStore()</code> (<b>data</b> → localStorage) → 4 timers saved in <code>battleTimers</code>.</li>
+    <li>Timers → bar widths change → <b>CSS</b> width transitions slide them → sword each round.</li>
+    <li><code>endGameInline()</code> → <code>.result-banner.victory</code> (<b>CSS</b> green glow) → <code>Sound.victory()</code> (<b>audio</b>: drums + horns built from oscillators) → 2.5 s later <code>Sound.fightEnd()</code>.</li>
+    <li>BATTLE AGAIN → <code>initWarHall()</code> → <code>resetDraftingUI()</code> cancels any timers left, and the loop begins again.</li>
+  </ol>
+
+  <h3>"I want to change X": where to look</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Change</th><th>Edit</th></tr>
+    <tr><td>House price, power, name, colours</td><td><code>HOUSES_DATA</code> in data.js <b>and</b> the table in index.html</td></tr>
+    <tr><td>Budget, army size, type bonus</td><td><code>STARTING_GOLD</code>, <code>ARMY_SIZE</code>, <code>TYPE_EDGE</code></td></tr>
+    <tr><td>Which type beats which</td><td><code>BEATS</code></td></tr>
+    <tr><td>Enemy alliances</td><td><code>ENEMY_COMBOS</code> + index.html table</td></tr>
+    <tr><td>Luck range</td><td><code>Math.random() * 0.3 + 0.85</code> in the FIGHT handler</td></tr>
+    <tr><td>Fight speed / bar steps</td><td><code>rounds</code> array and the 2600 ms timeout</td></tr>
+    <tr><td>Music volumes, custom victory clip</td><td>top of audio.js: <code>MUSIC_LEVEL</code>, <code>FIGHT_LEVEL</code>, <code>STING_FILES</code></td></tr>
+    <tr><td>Phone/PC switch width</td><td><code>56em</code> in <b>both</b> the head script and data.js</td></tr>
+    <tr><td>Colours, fonts, sizes</td><td>got-theme.css (then bump the version)</td></tr>
+  </table></div>
+
+  <div class="box remember"><span class="box-title">&#129504; Remember</span>
+    <ul>
+      <li>Flow of every interaction: <b>event → logic → state → render → CSS → screen</b>, with audio alongside.</li>
+      <li>ui.js draws, combat.js decides, data.js remembers, audio.js sounds, CSS dresses.</li>
+      <li>Some facts live in two places (prices in data.js and the HTML table; <code>56em</code> in two scripts). Change both together.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================================================== STAGE 18 -->
+<section class="stage" id="s18" data-title="Revision sheet and glossary">
+  <div class="stage-head">
+    <span class="badge">Stage 18</span><span class="maps">For revision</span>
+    <h2>Revision sheet and glossary</h2>
+    <p class="lead">The whole project on one screen. Read it before you start a study session and again at the end.</p>
+    <label class="learned"><input type="checkbox" data-learn="s18"> I've learned this</label>
+  </div>
+
+  <div class="cheat">
+    <div><h4>Game rules</h4><ul><li>3 houses, 999G</li><li>Tier 1/2/3 = power 3/2/1</li><li>A &gt; M &gt; D &gt; A, ±5% × 9 matchups</li><li>Luck 0.85–1.15 each side</li><li>Normal = random enemy, Hard = best counter</li><li>Max affordable power = 7; enemy always 6</li></ul></div>
+    <div><h4>Files</h4><ul><li>index.html: structure + loads all</li><li>data.js: rules, houses, state, storage, layout motion</li><li>audio.js: <code>Sound</code> module</li><li>ui.js: draw + navigate</li><li>combat.js: decide + fight</li><li>bump-version.mjs: cache busting</li></ul></div>
+    <div><h4>HTML</h4><ul><li>id → JS, class → CSS</li><li>Screens swapped with <code>.hidden</code></li><li>Scripts at the end of body, in order</li><li>Head script runs before the first paint</li><li>Real buttons + aria labels</li></ul></div>
+    <div><h4>CSS</h4><ul><li>Reset + border-box</li><li>rem + clamp on root = scale knob</li><li>!important → specificity → order</li><li>Flex = 1D, Grid = 2D</li><li>z: 1 bg · 2 content · 50 blood · 100 icons · 200 rules</li><li>Crest = CSS vars + radial gradient + cqi</li></ul></div>
+    <div><h4>JavaScript</h4><ul><li>Shared global scope across files</li><li>forEach · map · find · some · reduce · splice</li><li>Action → state → render</li><li>Guard clauses</li><li>try/catch around storage</li><li>IIFE + closure = module</li></ul></div>
+    <div><h4>Battle flow</h4><ul><li>START → DRAFT → REVEAL → FIGHT → RESULT</li><li>Save result before the animation</li><li>Timers 400/1100/1800/2600 ms</li><li>All timer ids in <code>battleTimers</code></li><li>Surrender after reveal = loss</li></ul></div>
+    <div><h4>Audio</h4><ul><li>Sound only after a tap</li><li>source → gain → master → speakers</li><li>Music 0.4 / fight 0.15 / sword 0.7</li><li>Horn = 2 saws + low-pass + envelope</li><li>Pause in hidden tabs</li></ul></div>
+    <div><h4>Responsive and motion</h4><ul><li>56em → <code>.narrow</code></li><li>View Transitions, else FLIP</li><li>Zoom: scale old → reflow → animate</li><li>Fonts: hide until loaded (2.5 s)</li><li>Reduced motion respected</li></ul></div>
+    <div><h4>Shipping</h4><ul><li>Local: <code>python -m http.server 5173</code></li><li>Bump <code>?v=</code> before pushing CSS/JS</li><li>Push → GitHub Pages</li><li>Storage keys: got-stats, got-difficulty, got-muted</li></ul></div>
+  </div>
+
+  <h3>Glossary</h3>
+  <dl class="gloss">
+    <dt>DOM</dt><dd>The browser's live tree of elements built from HTML. JS edits this, not the file.</dd>
+    <dt>CSSOM</dt><dd>The browser's parsed version of the CSS.</dd>
+    <dt>Selector</dt><dd>The part of a CSS rule that chooses which elements it applies to.</dd>
+    <dt>Specificity</dt><dd>The score (ids, classes, tags) that decides which competing CSS rule wins.</dd>
+    <dt>Cascade</dt><dd>The full set of rules for resolving conflicts: importance → specificity → order.</dd>
+    <dt>Box model</dt><dd>Content, padding, border, margin.</dd>
+    <dt>rem / em</dt><dd>Sizes relative to the root font / the element's own font.</dd>
+    <dt>dvh</dt><dd>1% of the real visible viewport height (handles mobile address bars).</dd>
+    <dt>cqi</dt><dd>1% of the inline size (width) of the nearest size container.</dd>
+    <dt>Custom property</dt><dd>A CSS variable like <code>--c1</code>, read with <code>var(--c1)</code>.</dd>
+    <dt>Pseudo-class / element</dt><dd><code>:hover</code> = a state; <code>::after</code> = a fake child element.</dd>
+    <dt>Transition</dt><dd>Smooth change when a property changes.</dd>
+    <dt>Keyframe animation</dt><dd>A sequence that plays by itself, defined with <code>@keyframes</code>.</dd>
+    <dt>Reflow / layout</dt><dd>The browser recalculating sizes and positions.</dd>
+    <dt>Global scope</dt><dd>Names visible everywhere; shared by classic scripts.</dd>
+    <dt>Closure</dt><dd>A function that remembers the variables around where it was created.</dd>
+    <dt>IIFE</dt><dd>A function that runs immediately: <code>(() =&gt; { ... })()</code>; used for modules.</dd>
+    <dt>Guard clause</dt><dd>An early <code>return</code> when an action isn't allowed.</dd>
+    <dt>Event bubbling</dt><dd>Events travel from the target up through its ancestors.</dd>
+    <dt>Promise</dt><dd>An object for a result that arrives later; <code>.then</code> / <code>.catch</code>.</dd>
+    <dt>localStorage</dt><dd>Per-site text storage in the browser that survives restarts.</dd>
+    <dt>JSON</dt><dd>Text format for objects: <code>stringify</code> to save, <code>parse</code> to load.</dd>
+    <dt>Render from state</dt><dd>Redraw the UI from data after every change instead of patching it.</dd>
+    <dt>State machine</dt><dd>A set of states plus the actions that move between them.</dd>
+    <dt>Autoplay policy</dt><dd>Browsers block sound until the user interacts.</dd>
+    <dt>AudioContext</dt><dd>The Web Audio engine; holds the graph of audio nodes.</dd>
+    <dt>Gain node</dt><dd>A volume knob in the audio graph.</dd>
+    <dt>Oscillator</dt><dd>Generates a tone (sine, sawtooth, …) at a frequency.</dd>
+    <dt>Envelope</dt><dd>How a sound's volume changes over its life (attack, hold, release).</dd>
+    <dt>Breakpoint</dt><dd>The width where the layout changes (56em here).</dd>
+    <dt>View Transition</dt><dd>Browser API that animates between two states of the page.</dd>
+    <dt>FLIP</dt><dd>First, Last, Invert, Play: a hand-made layout animation.</dd>
+    <dt>Feature detection</dt><dd>Checking that an API exists before using it.</dd>
+    <dt>Progressive enhancement</dt><dd>Basic version for everyone, extras where supported (e.g. <code>overflow: hidden; overflow: clip</code>).</dd>
+    <dt>Cache busting</dt><dd>Changing a file's URL (<code>?v=51</code>) so browsers fetch the new version.</dd>
+    <dt>Data URI</dt><dd>A file embedded directly in a URL (the favicon).</dd>
+    <dt>Static site</dt><dd>Plain files served as-is, with no server code (GitHub Pages).</dd>
+    <dt>Single-page app</dt><dd>One HTML page whose screens are switched by JS.</dd>
+  </dl>
+
+  <div class="box remember"><span class="box-title">&#129504; The project in five sentences</span>
+    <ol>
+      <li>One HTML page holds two screens and loads one stylesheet plus four scripts in order: data → audio → ui → combat.</li>
+      <li>The player drafts 3 houses with 999G; every tap changes state in data.js, and ui.js redraws from that state.</li>
+      <li>PREPARE locks the army and the enemy AI picks an alliance (random, or the best counter on Hard); FIGHT decides power × (1 + type edge) × luck, saves the result, then animates three rounds.</li>
+      <li>audio.js routes music and effects through gain nodes for smooth fades and builds war horns and drums from oscillators.</li>
+      <li>CSS with rem, clamp, grid and a JS-controlled <code>.narrow</code> class makes it fit any screen, and changes are animated with view transitions, FLIP and a zoom trick.</li>
+    </ol>
+  </div>
+</section>
+
+</main>
+</div>
+
+<script>
+(function () {
+  var STORE = 'got-guide-learned';
+  var REV = 'got-guide-revision';
+  var THEME = 'got-guide-theme';
+  function read(key, fallback) { try { var v = localStorage.getItem(key); return v === null ? fallback : JSON.parse(v); } catch (e) { return fallback; } }
+  function write(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) { /* storage blocked */ } }
+
+  var root = document.documentElement;
+  var sections = Array.prototype.slice.call(document.querySelectorAll('section.stage'));
+  var toc = document.getElementById('toc');
+  var learned = read(STORE, {});
+
+  // Sidebar list built from the stages
+  sections.forEach(function (s, i) {
+    var li = document.createElement('li');
+    var a = document.createElement('a');
+    a.href = '#' + s.id;
+    a.innerHTML = '<span class="num">' + (i + 1) + '</span><span>' + s.dataset.title + '</span><span class="tick" aria-hidden="true"></span>';
+    li.appendChild(a);
+    toc.appendChild(li);
+  });
+
+  function refreshProgress() {
+    var done = 0;
+    sections.forEach(function (s) {
+      var on = !!learned[s.id];
+      if (on) done++;
+      var tick = toc.querySelector('a[href="#' + s.id + '"] .tick');
+      if (tick) tick.textContent = on ? '✓' : '';
+    });
+    document.getElementById('progress-text').textContent = done + ' of ' + sections.length + ' stages learned';
+    document.getElementById('progress-fill').style.width = (done / sections.length * 100) + '%';
+  }
+
+  document.querySelectorAll('input[data-learn]').forEach(function (box) {
+    var id = box.getAttribute('data-learn');
+    box.checked = !!learned[id];
+    box.addEventListener('change', function () {
+      learned[id] = box.checked;
+      write(STORE, learned);
+      refreshProgress();
+    });
+  });
+  refreshProgress();
+
+  // Revision mode: only headings + Remember boxes
+  var revBtn = document.getElementById('revision-btn');
+  function setRevision(on) {
+    document.body.classList.toggle('revision', on);
+    revBtn.setAttribute('aria-pressed', String(on));
+    write(REV, on);
+  }
+  setRevision(read(REV, false) === true);
+  revBtn.addEventListener('click', function () { setRevision(!document.body.classList.contains('revision')); });
+
+  // Theme: follow the system, or a saved choice
+  var saved = read(THEME, null);
+  if (saved === 'light' || saved === 'dark') root.setAttribute('data-theme', saved);
+  document.getElementById('theme-btn').addEventListener('click', function () {
+    var current = root.getAttribute('data-theme') ||
+      (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    var next = current === 'light' ? 'dark' : 'light';
+    root.setAttribute('data-theme', next);
+    write(THEME, next);
+  });
+
+  // Phone menu
+  var menuBtn = document.getElementById('menu-btn');
+  function setMenu(open) {
+    document.body.classList.toggle('menu-open', open);
+    menuBtn.setAttribute('aria-expanded', String(open));
+  }
+  menuBtn.addEventListener('click', function () { setMenu(!document.body.classList.contains('menu-open')); });
+  toc.addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setMenu(false); });
+
+  // Highlight the stage being read
+  if ('IntersectionObserver' in window) {
+    var links = {};
+    toc.querySelectorAll('a').forEach(function (a) { links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) {
+          Object.keys(links).forEach(function (k) { links[k].classList.toggle('active', k === en.target.id); });
+        }
+      });
+    }, { rootMargin: '-35% 0px -60% 0px' });
+    sections.forEach(function (s) { obs.observe(s); });
+  }
+})();
+</script>
+</body>
+</html>
