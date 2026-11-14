@@ -54,7 +54,14 @@ The same page adapts to phones, tablets and PCs. Three columns on wide screens, 
 | **Responsive layout** | Sizes in `rem` and `clamp()`, so browser zoom scales smoothly. CSS Grid layout switch animated with the View Transitions API, with a hand-written fallback for browsers without it. Safe-area insets for phone notches. |
 | **Audio** | Web Audio API routing for smooth fades, the music dip during fights, and pausing in background tabs (which also makes volume work on iPhone). Victory and defeat war horns are synthesised in code, with no audio files. |
 | **Accessibility** | Every control is a real `<button>` with a label, keyboard focus is visible, screen readers hear results announced, and animations respect *reduce motion*. |
-| **Performance** | House crests are drawn in CSS instead of images. The background image went from 702 KB to 114 KB, and the page fades in only once its font has loaded, so nothing jumps. |
+| **Performance** | House crests are drawn in CSS instead of images, the background image went from 702 KB to 114 KB, scripts load with `defer`, and the music only downloads once you join the war. The page fades in only once its font has loaded, so nothing jumps. |
+
+### Lighthouse scores (PageSpeed Insights, November 2026)
+
+| | Performance | Accessibility | Best Practices | SEO |
+|---|:---:|:---:|:---:|:---:|
+| 🖥️ Desktop | **100** | **100** | **100** | **100** |
+| 📱 Mobile (slow 4G) | **98** | **100** | **100** | **100** |
 
 ## 📁 Project structure
 
