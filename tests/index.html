@@ -23,6 +23,9 @@
     <!-- Tiny test runner: test(name, fn) and assert helpers, results listed on the page -->
     <script>
         const TESTS = [];
+        // A file that fails to load or run must fail the suite, not silently skip its tests
+        const LOAD_ERRORS = [];
+        window.addEventListener('error', e => LOAD_ERRORS.push(e.message || 'failed to load ' + (e.target && e.target.src)), true);
         function test(name, fn) { TESTS.push({ name, fn }); }
         function assert(condition, message) {
             if (!condition) throw new Error(message || 'assertion failed');
@@ -53,10 +56,18 @@
                 }
                 list.appendChild(li);
             });
+            LOAD_ERRORS.forEach(message => {
+                failed++;
+                const li = document.createElement('li');
+                li.className = 'fail';
+                li.textContent = '✘ Script error: ' + message;
+                list.appendChild(li);
+            });
+            if (TESTS.length === 0) failed++;
             const summary = document.getElementById('summary');
             summary.className = failed ? 'fail' : 'pass';
-            summary.textContent = failed
-                ? `${failed} of ${TESTS.length} tests FAILED`
+            summary.textContent = TESTS.length === 0 ? 'No tests ran: check that the scripts loaded'
+                : failed ? `${failed} problem(s) in ${TESTS.length} tests: FAILED`
                 : `All ${TESTS.length} tests passed`;
             document.body.dataset.result = failed ? 'fail' : 'pass';
         }
