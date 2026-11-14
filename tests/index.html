@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Battle for Westeros - rule tests</title>
+    <style>
+        body { font-family: system-ui, sans-serif; background: #111; color: #ddd; max-width: 50rem; margin: 2rem auto; padding: 0 1rem; }
+        h1 { font-size: 1.4rem; }
+        #summary { font-size: 1.1rem; font-weight: bold; margin: 1rem 0; }
+        .pass { color: #6fdc6f; }
+        .fail { color: #ff6b6b; }
+        li { margin: 0.3rem 0; }
+        pre { white-space: pre-wrap; color: #ff9b9b; margin: 0.2rem 0 0 1rem; }
+    </style>
+</head>
+<body data-result="running">
+    <h1>Battle for Westeros: rule tests</h1>
+    <p>Open this file in any browser. GitHub runs it on every push (see <code>.github/workflows/tests.yml</code>).</p>
+    <div id="summary">Running...</div>
+    <ul id="results"></ul>
+
+    <!-- Tiny test runner: test(name, fn) and assert helpers, results listed on the page -->
+    <script>
+        const TESTS = [];
+        function test(name, fn) { TESTS.push({ name, fn }); }
+        function assert(condition, message) {
+            if (!condition) throw new Error(message || 'assertion failed');
+        }
+        function assertEqual(actual, expected, message) {
+            if (actual !== expected) throw new Error(`${message || 'values differ'}: expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`);
+        }
+        function assertClose(actual, expected, message) {
+            if (Math.abs(actual - expected) > 1e-9) throw new Error(`${message || 'numbers differ'}: expected ${expected}, got ${actual}`);
+        }
+
+        function runTests() {
+            const list = document.getElementById('results');
+            let failed = 0;
+            TESTS.forEach(({ name, fn }) => {
+                const li = document.createElement('li');
+                try {
+                    fn();
+                    li.className = 'pass';
+                    li.textContent = '✔ ' + name;
+                } catch (e) {
+                    failed++;
+                    li.className = 'fail';
+                    li.textContent = '✘ ' + name;
+                    const pre = document.createElement('pre');
+                    pre.textContent = e.message;
+                    li.appendChild(pre);
+                }
+                list.appendChild(li);
+            });
+            const summary = document.getElementById('summary');
+            summary.className = failed ? 'fail' : 'pass';
+            summary.textContent = failed
+                ? `${failed} of ${TESTS.length} tests FAILED`
+                : `All ${TESTS.length} tests passed`;
+            document.body.dataset.result = failed ? 'fail' : 'pass';
+        }
+    </script>
+
+    <script src="../js/rules.js"></script>
+    <script src="rules.test.js"></script>
+    <script>runTests();</script>
+</body>
+</html>
