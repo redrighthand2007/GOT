@@ -97,9 +97,6 @@ To change houses, prices or rules, edit [`js/rules.js`](js/rules.js), then open 
 - [x] Win streaks saved on the device
 - [x] Phone, tablet and PC layouts with smooth zoom
 - [x] Automated rule and balance tests
-- [ ] Campaign across Westeros battlefields
-- [ ] Animated battle scenes
-- [ ] Installable app (PWA) with offline play
 
 ## 📄 License & credits
 
