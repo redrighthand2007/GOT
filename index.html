@@ -39,8 +39,8 @@
     </script>
 </head>
 <body>
-    <!-- Preloaded so the theme can start the moment JOIN THE WORLD WAR is tapped -->
-    <audio id="bg-music" src="assets/audio/got-theme.mp3" loop preload="auto"></audio>
+    <!-- The theme only downloads once JOIN THE WORLD WAR is tapped, so the first visit stays light; it streams and starts within a second -->
+    <audio id="bg-music" src="assets/audio/got-theme.mp3" loop preload="none"></audio>
     <audio id="sfx-sword" src="assets/audio/sword-clash.mp3" preload="auto"></audio>
 
     <div id="game-container">
@@ -151,11 +151,11 @@
         <div id="blood-splatter"></div>
     </div>
 
-    <script src="js/rules.js"></script>
-    <script src="js/data.js"></script>
-    <script src="js/audio.js"></script>
-    <script src="js/ui.js"></script>
-    <script src="js/combat.js"></script>
+    <script src="js/rules.js" defer></script>
+    <script src="js/data.js" defer></script>
+    <script src="js/audio.js" defer></script>
+    <script src="js/ui.js" defer></script>
+    <script src="js/combat.js" defer></script>
 </div>
 </body>
 </html>
