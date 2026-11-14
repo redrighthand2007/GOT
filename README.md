@@ -5,14 +5,21 @@
 **A fast strategy game for the browser, built with plain HTML, CSS and JavaScript. No frameworks, no build step.**
 
 [![Play Game](https://img.shields.io/badge/Play-Live_Demo-E34F26?style=for-the-badge&logo=google-chrome&logoColor=white)](https://redrighthand2007.github.io/GOT/)
+[![Tests](https://img.shields.io/github/actions/workflow/status/redrighthand2007/GOT/tests.yml?branch=main&label=tests&style=for-the-badge)](https://github.com/redrighthand2007/GOT/actions/workflows/tests.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-323330?style=for-the-badge)](./LICENSE)
 
 </div>
 
-## 📸 Preview
+## 📸 Screenshots
 
 <div align="center">
-  <img src="assets/images/iron-throne-bg-v2.jpg" alt="Battle for Westeros start screen" width="100%">
+  <img src="docs/screenshots/desktop-start.jpg" alt="Start screen with difficulty choice and win streak" width="100%">
+  <br><br>
+  <img src="docs/screenshots/desktop-draft.jpg" alt="Drafting three houses within the 999 gold budget" width="49%">
+  <img src="docs/screenshots/desktop-result.jpg" alt="Victory screen with both alliances revealed" width="49%">
+  <br><br>
+  <img src="docs/screenshots/phone-draft.jpg" alt="Phone layout while drafting" width="32%">
+  <img src="docs/screenshots/phone-result.jpg" alt="Phone layout after a victory" width="32%">
 </div>
 
 ## ✨ Features
@@ -27,8 +34,10 @@
 
 ## 🛠️ Tech Stack
 
-- HTML5, CSS3, vanilla JavaScript (no dependencies)
+- HTML5, CSS3, vanilla JavaScript: no frameworks, libraries or build tools
 - Web Audio API for fades and the generated horn/drum sounds
+- View Transitions API (with a fallback) for smooth layout changes
+- Rule tests that run in the browser, checked on every push by GitHub Actions
 - Hosted on GitHub Pages
 
 ## 📁 Project Structure
@@ -41,12 +50,15 @@ GOT/
 ├── css/
 │   └── got-theme.css   # all styles, layout and animations
 ├── js/
-│   ├── data.js         # houses, rules, saved stats, layout/zoom motion
+│   ├── rules.js        # houses, prices, type triangle, battle maths, enemy AI (no page code)
+│   ├── data.js         # page elements, game state, saved stats, layout/zoom motion
 │   ├── audio.js        # music, sound effects, mute
 │   ├── ui.js           # screens, drafting board, info panel
-│   └── combat.js       # drafting rules, enemy AI, battle maths
-├── tools/
-│   └── bump-version.mjs  # cache-busting helper (see below)
+│   └── combat.js       # drafting, battle flow, results
+├── tests/
+│   ├── index.html      # open in a browser to run the rule tests
+│   └── rules.test.js   # 17 tests for js/rules.js
+├── docs/screenshots/   # images used in this README
 ├── index.html
 ├── LICENSE
 └── README.md
@@ -71,11 +83,14 @@ GOT/
 3. **Prepare for war** reveals the enemy alliance and both sides' type edge.
 4. **Fight!** Strength = total power × (1 + type edge) × luck (0.85x–1.15x). Higher strength wins.
 
+## 🧪 Tests
+
+Open `tests/index.html` in any browser. It checks the rules in `js/rules.js`: prices, the type triangle, luck range, the Hard-mode enemy, and game balance (for example, that no army you can afford is stronger than the Hard enemy before luck). The same page runs automatically on every push through GitHub Actions in headless Chrome.
+
 ## 🔧 Changing things
 
-- **Houses, prices, power, rules:** `HOUSES_DATA`, `ENEMY_COMBOS`, `STARTING_GOLD` and `TYPE_EDGE` in `js/data.js`.
+- **Houses, prices, power, rules:** `HOUSES_DATA`, `ENEMY_COMBOS`, `STARTING_GOLD` and `TYPE_EDGE` in `js/rules.js`. Open `tests/index.html` afterwards to check the balance still holds.
 - **Music levels or your own victory/defeat clips:** `MUSIC_LEVEL`, `FIGHT_LEVEL` and `STING_FILES` at the top of `js/audio.js`.
-- **After changing CSS or JS, before pushing:** run `node tools/bump-version.mjs` so players' browsers load the new files instead of cached old ones.
 
 ## 🗺️ Roadmap
 
@@ -83,6 +98,7 @@ GOT/
 - [x] Type triangle and difficulty levels
 - [x] Win/loss streaks saved on the device
 - [x] Phone, tablet and PC layouts with smooth zoom
+- [x] Automated rule and balance tests
 - [ ] Campaign across Westeros battlefields
 - [ ] Animated battle scenes
 - [ ] Installable app (PWA) with offline play
