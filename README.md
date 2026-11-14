@@ -1,114 +1,109 @@
 <div align="center">
 
-# ⚔️ Battle for Westeros ⚔️
+# ⚔️ Battle for Westeros
 
-**A fast strategy game for the browser, built with plain HTML, CSS and JavaScript. No frameworks, no build step.**
+**Draft three houses, out-think the enemy alliance, win the war.**<br>
+A strategy game for the browser, built with nothing but HTML, CSS and JavaScript.
 
-[![Play Game](https://img.shields.io/badge/Play-Live_Demo-E34F26?style=for-the-badge&logo=google-chrome&logoColor=white)](https://redrighthand2007.github.io/GOT/)
-[![Tests](https://img.shields.io/github/actions/workflow/status/redrighthand2007/GOT/tests.yml?branch=main&label=tests&style=for-the-badge)](https://github.com/redrighthand2007/GOT/actions/workflows/tests.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-323330?style=for-the-badge)](./LICENSE)
+[![Play now](https://img.shields.io/badge/▶_Play_now-redrighthand2007.github.io%2FGOT-E34F26?style=for-the-badge)](https://redrighthand2007.github.io/GOT/)
+
+[![Tests](https://img.shields.io/github/actions/workflow/status/redrighthand2007/GOT/tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/redrighthand2007/GOT/actions/workflows/tests.yml)
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
+![Dependencies](https://img.shields.io/badge/dependencies-0-brightgreen?style=flat-square)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](./LICENSE)
+
+<br>
+
+<img src="docs/screenshots/desktop-start.jpg" alt="Start screen with difficulty choice and win streak" width="100%">
 
 </div>
 
-## 📸 Screenshots
+## 🎮 How it plays
+
+1. **Draft:** pick **3 of 9 houses** with a budget of **999 gold**. Each house has a type, a tier and a price.
+2. **Counter:** types work like rock-paper-scissors. **Attack** beats **Mix**, **Mix** beats **Defense**, **Defense** beats **Attack**. Each of the 9 house-vs-house matchups is worth ±5% strength.
+3. **Prepare for war:** the enemy reveals its alliance, and you see both sides' type edge.
+4. **Fight:** strength = power × (1 + type edge) × luck (0.85–1.15). The stronger army wins.
+
+On **Normal** the enemy picks a random alliance. On **Hard** it picks the one that counters yours, so a balanced army is your best defence. Wins, losses and your best streak are saved on your device.
 
 <div align="center">
-  <img src="docs/screenshots/desktop-start.jpg" alt="Start screen with difficulty choice and win streak" width="100%">
-  <br><br>
   <img src="docs/screenshots/desktop-draft.jpg" alt="Drafting three houses within the 999 gold budget" width="49%">
   <img src="docs/screenshots/desktop-result.jpg" alt="Victory screen with both alliances revealed" width="49%">
-  <br><br>
-  <img src="docs/screenshots/phone-draft.jpg" alt="Phone layout while drafting" width="32%">
-  <img src="docs/screenshots/phone-result.jpg" alt="Phone layout after a victory" width="32%">
 </div>
 
-## ✨ Features
+## 📱 One game, every screen
 
-- **💰 Draft with a budget:** pick 3 of 9 houses with 999 gold. Every house has a type (Attack, Defense or Mix), a tier and a price.
-- **🔺 Type triangle:** Attack beats Mix, Mix beats Defense, Defense beats Attack. Every winning house-vs-house matchup gives +5% strength, every losing one -5%.
-- **🤖 Two difficulties:** on *Normal* the enemy picks a random alliance; on *Hard* it picks the alliance that counters yours.
-- **🏆 Win streaks:** wins, losses, current and best streak are saved on your device.
-- **📱 Works everywhere:** one layout for phones, tablets and PCs; browser zoom scales smoothly; layout changes animate instead of jumping.
-- **🎵 Sound:** theme music starts when you join the war, dips during fights, pauses in background tabs; war horns for victory and defeat are generated in the browser. Mute is remembered.
-- **♿ Keyboard and screen-reader friendly:** every control is a real button with a label.
+The same page adapts to phones, tablets and PCs. Three columns on wide screens, one scrolling column on narrow ones, with an animated switch between them.
 
-## 🛠️ Tech Stack
+<div align="center">
+  <img src="docs/screenshots/phone-draft.jpg" alt="Phone layout while drafting" width="30%">
+  &nbsp;&nbsp;
+  <img src="docs/screenshots/phone-result.jpg" alt="Phone layout after a victory" width="30%">
+</div>
 
-- HTML5, CSS3, vanilla JavaScript: no frameworks, libraries or build tools
-- Web Audio API for fades and the generated horn/drum sounds
-- View Transitions API (with a fallback) for smooth layout changes
-- Rule tests that run in the browser, checked on every push by GitHub Actions
-- Hosted on GitHub Pages
+## 🛠️ Technical highlights
 
-## 📁 Project Structure
+| Area | What's done |
+|---|---|
+| **No dependencies** | Plain HTML, CSS and JavaScript. No frameworks, libraries or build step. Open `index.html` and it runs. |
+| **Game logic** | Rules, prices, the type triangle, battle maths and the enemy AI live in [`js/rules.js`](js/rules.js), kept separate from the page code so they can be tested on their own. |
+| **Tests & CI** | 17 rule and balance tests in [`tests/`](tests/) run in any browser, and in headless Chrome on every push via GitHub Actions. They caught a real balance bug: a 980G army that beat every enemy. |
+| **Responsive layout** | Sizes in `rem` and `clamp()`, so browser zoom scales smoothly. CSS Grid layout switch animated with the View Transitions API, with a hand-written fallback for browsers without it. Safe-area insets for phone notches. |
+| **Audio** | Web Audio API routing for smooth fades, the music dip during fights, and pausing in background tabs (which also makes volume work on iPhone). Victory and defeat war horns are synthesised in code, with no audio files. |
+| **Accessibility** | Every control is a real `<button>` with a label, keyboard focus is visible, screen readers hear results announced, and animations respect *reduce motion*. |
+| **Performance** | House crests are drawn in CSS instead of images. The background image went from 702 KB to 114 KB, and the page fades in only once its font has loaded, so nothing jumps. |
+
+## 📁 Project structure
 
 ```text
-GOT/
-├── assets/
-│   ├── audio/          # theme music and sword sound
-│   └── images/         # background art
-├── css/
-│   └── got-theme.css   # all styles, layout and animations
+├── index.html            # the whole game is one page
+├── css/got-theme.css     # styles, layouts and animations
 ├── js/
-│   ├── rules.js        # houses, prices, type triangle, battle maths, enemy AI (no page code)
-│   ├── data.js         # page elements, game state, saved stats, layout/zoom motion
-│   ├── audio.js        # music, sound effects, mute
-│   ├── ui.js           # screens, drafting board, info panel
-│   └── combat.js       # drafting, battle flow, results
-├── tests/
-│   ├── index.html      # open in a browser to run the rule tests
-│   └── rules.test.js   # 17 tests for js/rules.js
-├── docs/screenshots/   # images used in this README
-├── index.html
-├── LICENSE
-└── README.md
+│   ├── rules.js          # houses, type triangle, battle maths, enemy AI
+│   ├── data.js           # page elements, game state, saved stats, zoom/layout motion
+│   ├── audio.js          # music, sound effects, mute
+│   ├── ui.js             # screens, drafting board, rules panel
+│   └── combat.js         # drafting, battle flow, results
+├── tests/                # open tests/index.html to run the rule tests
+├── assets/               # background image, music, sword sound
+└── docs/screenshots/     # images used in this README
 ```
 
-## ⚙️ Run it locally
+## ▶️ Run it locally
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/redrighthand2007/GOT.git
-   ```
-2. Open `index.html` in a browser, or serve the folder (recommended, so all sound features work):
-   ```bash
-   python -m http.server 5173
-   ```
-   then open `http://localhost:5173`.
+```bash
+git clone https://github.com/redrighthand2007/GOT.git
+cd GOT
+python -m http.server 5173
+```
 
-## 🚀 How to play
+Then open `http://localhost:5173`. Double-clicking `index.html` also works; serving the folder just enables the smoothest audio.
 
-1. Tap **JOIN THE WORLD WAR** (choose *Normal* or *Hard* first).
-2. Pick **3 houses** within **999G**. Tap a sigil in your alliance to remove it. The 📜 button shows all rules and prices.
-3. **Prepare for war** reveals the enemy alliance and both sides' type edge.
-4. **Fight!** Strength = total power × (1 + type edge) × luck (0.85x–1.15x). Higher strength wins.
-
-## 🧪 Tests
-
-Open `tests/index.html` in any browser. It checks the rules in `js/rules.js`: prices, the type triangle, luck range, the Hard-mode enemy, and game balance (for example, that no army you can afford is stronger than the Hard enemy before luck). The same page runs automatically on every push through GitHub Actions in headless Chrome.
-
-## 🔧 Changing things
-
-- **Houses, prices, power, rules:** `HOUSES_DATA`, `ENEMY_COMBOS`, `STARTING_GOLD` and `TYPE_EDGE` in `js/rules.js`. Open `tests/index.html` afterwards to check the balance still holds.
-- **Music levels or your own victory/defeat clips:** `MUSIC_LEVEL`, `FIGHT_LEVEL` and `STING_FILES` at the top of `js/audio.js`.
+To change houses, prices or rules, edit [`js/rules.js`](js/rules.js), then open `tests/index.html` to check the game is still balanced.
 
 ## 🗺️ Roadmap
 
-- [x] Core game, Iron Throne theme and enemy AI
-- [x] Type triangle and difficulty levels
-- [x] Win/loss streaks saved on the device
+- [x] Budget drafting, type triangle, Normal and Hard enemy AI
+- [x] Win streaks saved on the device
 - [x] Phone, tablet and PC layouts with smooth zoom
 - [x] Automated rule and balance tests
 - [ ] Campaign across Westeros battlefields
 - [ ] Animated battle scenes
 - [ ] Installable app (PWA) with offline play
 
-## 📄 License
+## 📄 License & credits
 
 The source code is released under the [MIT License](./LICENSE).
 
-**This is an unofficial fan project and is not affiliated with HBO.** *Game of Thrones* names, artwork and music belong to their respective owners (HBO / George R. R. Martin) and are **not** covered by the MIT license.
+This is an **unofficial, non-commercial fan project** and is not affiliated with HBO. *Game of Thrones* names and the theme music belong to their owners (HBO / George R. R. Martin) and are not covered by the MIT license.
 
-## 👨‍💻 Author
+---
 
-**Kush Aghera** · GitHub: [@redrighthand2007](https://github.com/redrighthand2007)
+<div align="center">
+
+Made by **Kush Aghera** · [@redrighthand2007](https://github.com/redrighthand2007)
+
+</div>
