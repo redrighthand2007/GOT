@@ -121,9 +121,9 @@ button:focus-visible {
 
 /* Typography Headings */
 #main-title {
-    font-size: clamp(2.25rem, 6.5vw, 6rem);
+    font-size: clamp(2rem, 5.2vw, 5rem);
     line-height: 1.15;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.12em;
     margin-top: clamp(0.5rem, 6vh, 4rem);
     color: #e0e0e0;
     text-shadow: 0 0 1.25rem rgba(176, 196, 222, 0.5), 0.125rem 0.125rem 0.6rem #000;

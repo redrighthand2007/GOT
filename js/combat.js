@@ -15,40 +15,10 @@ function removeHouse(index) {
     renderDraftingBoard();
 }
 
-// --- Battle math ---
-function calculatePower(roster) {
-    return roster.reduce((sum, h) => sum + h.power, 0);
-}
-
-// Net type edge of `army` over `foe`: +TYPE_EDGE for every house-vs-house
-// matchup it wins (Attack > Mix > Defense > Attack), -TYPE_EDGE for every one it loses
-function typeEdge(army, foe) {
-    let edge = 0;
-    army.forEach(a => foe.forEach(f => {
-        if (BEATS[a.role] === f.role) edge += TYPE_EDGE;
-        else if (BEATS[f.role] === a.role) edge -= TYPE_EDGE;
-    }));
-    return edge;
-}
-
-function strength(army, foe) {
-    return calculatePower(army) * (1 + typeEdge(army, foe));
-}
-
-// --- Enemy AI ---
-// Normal: a random standard alliance. Hard: the one that counters the player best.
+// --- Enemy AI (rules in js/rules.js) ---
 function generateEnemyRoster() {
-    const combos = ENEMY_COMBOS.map(c => c.ids.map(id => HOUSES_DATA.find(h => h.id === id)));
-    let chosen;
-    if (difficulty === 'hard') {
-        chosen = combos.reduce((best, c) =>
-            strength(c, playerRoster) - strength(playerRoster, c) >
-            strength(best, playerRoster) - strength(playerRoster, best) ? c : best);
-    } else {
-        chosen = combos[Math.floor(Math.random() * combos.length)];
-    }
-    enemyRoster = chosen;
-    enemyGold = STARTING_GOLD - chosen.reduce((sum, h) => sum + h.cost, 0);
+    enemyRoster = pickEnemyArmy(difficulty, playerRoster);
+    enemyGold = STARTING_GOLD - armyCost(enemyRoster);
 }
 
 function formatEdge(edge) {
@@ -90,9 +60,8 @@ btnFight.addEventListener('click', () => {
     document.getElementById('btn-surrender').disabled = true;
     Sound.fightStart(); // music dips so the clashes stand out
 
-    // Luck: each side rolls between 0.85x and 1.15x
-    const pFinal = strength(playerRoster, enemyRoster) * (Math.random() * 0.3 + 0.85);
-    const eFinal = strength(enemyRoster, playerRoster) * (Math.random() * 0.3 + 0.85);
+    const pFinal = strength(playerRoster, enemyRoster) * luckRoll();
+    const eFinal = strength(enemyRoster, playerRoster) * luckRoll();
     const playerWon = pFinal > eFinal;
     // Saved now, so leaving mid-fight can't dodge a loss
     recordResult(playerWon);
