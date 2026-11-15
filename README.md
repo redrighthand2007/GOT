@@ -7,7 +7,6 @@ A strategy game for the browser, built with nothing but HTML, CSS and JavaScript
 
 [![Play now](https://img.shields.io/badge/▶_Play_now-redrighthand2007.github.io%2FGOT-E34F26?style=for-the-badge)](https://redrighthand2007.github.io/GOT/)
 
-[![Tests](https://img.shields.io/github/actions/workflow/status/redrighthand2007/GOT/tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/redrighthand2007/GOT/actions/workflows/tests.yml)
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
@@ -50,7 +49,7 @@ The same page adapts to phones, tablets and PCs. Three columns on wide screens, 
 |---|---|
 | **No dependencies** | Plain HTML, CSS and JavaScript. No frameworks, libraries or build step. Open `index.html` and it runs. |
 | **Game logic** | Rules, prices, the type triangle, battle maths and the enemy AI live in [`js/rules.js`](js/rules.js), kept separate from the page code so they can be tested on their own. |
-| **Tests & CI** | 17 rule and balance tests in [`tests/`](tests/) run in any browser, and in headless Chrome on every push via GitHub Actions. They caught a real balance bug: a 980G army that beat every enemy. |
+| **Tests** | 17 rule and balance tests in [`tests/`](tests/) that run by opening one page in any browser. They caught a real balance bug: a 980G army that beat every enemy. |
 | **Responsive layout** | Sizes in `rem` and `clamp()`, so browser zoom scales smoothly. CSS Grid layout switch animated with the View Transitions API, with a hand-written fallback for browsers without it. Safe-area insets for phone notches. |
 | **Audio** | Web Audio API routing for smooth fades, the music dip during fights, and pausing in background tabs (which also makes volume work on iPhone). Victory and defeat war horns are synthesised in code, with no audio files. |
 | **Accessibility** | Every control is a real `<button>` with a label, keyboard focus is visible, screen readers hear results announced, and animations respect *reduce motion*. |
